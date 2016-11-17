@@ -265,6 +265,15 @@ if(isset($_POST['addreservation']))
     $guestInfantAge = $_POST['infant_age'];
     $guestPNR = $_POST['guest_pnr'];
 
+    //Phase2 Number of Total Guests
+    $totalNumberOfGuests = $_POST['totalGuests'];
+
+    if(empty($totalNumberOfGuests) or !is_numeric($totalNumberOfGuests)){
+        $total_guests = 1;
+    }else{
+        $total_guests = intval($totalNumberOfGuests);
+    }
+
     $guestsArray = array();
     foreach($guestFirstName as $key=>$val){
         $arrayToPush = array(
@@ -279,34 +288,7 @@ if(isset($_POST['addreservation']))
 
         array_push($guestsArray,$arrayToPush);
     }
-/*
 
-    //Guest 1
-    $guest_title_name1      = QuoteSmart(@$_POST['guest_title_name1']);
-    $guest_first_name1      = QuoteSmart(@$_POST['guest_first_name1']);
-    $guest_last_name1       = QuoteSmart(@$_POST['guest_last_name1']);
-    $guest_adult1           = isset($_POST['guest_adult1']) ? 1 : 0;
-    $child_age1             = QuoteSmart(@$_POST['child_age1']);
-    $infant_age1            = QuoteSmart(@$_POST['infant_age1']);
-    $guest_pnr1             = QuoteSmart(@$_POST['guest_pnr1']);
-    
-    //Guest 2
-    $guest_title_name2      = QuoteSmart(@$_POST['guest_title_name2']);
-    $guest_first_name2      = QuoteSmart(@$_POST['guest_first_name2']);
-    $guest_last_name2       = QuoteSmart(@$_POST['guest_last_name2']);
-    $guest_adult2           = isset($_POST['guest_adult2']) ? 1 : 0;
-    $child_age2             = QuoteSmart(@$_POST['child_age2']);
-    $infant_age2            = QuoteSmart(@$_POST['infant_age2']);
-    $guest_pnr2             = QuoteSmart(@$_POST['guest_pnr2']);
-    
-    //Guest3
-    $guest_title_name3      = QuoteSmart(@$_POST['guest_title_name3']);
-    $guest_first_name3      = QuoteSmart(@$_POST['guest_first_name3']);
-    $guest_last_name3       = QuoteSmart(@$_POST['guest_last_name3']);
-    $guest_adult3           = isset($_POST['guest_adult3']) ? 1 : 0;
-    $child_age3             = QuoteSmart(@$_POST['child_age3']);
-    $infant_age3            = QuoteSmart(@$_POST['infant_age3']);
-    $guest_pnr3             = QuoteSmart(@$_POST['guest_pnr3']);*/
     
     $user_action = "add new reservation: $title_name. $first_name $last_name #ref:$fsref";
     
@@ -442,8 +424,8 @@ if(isset($_POST['addreservation']))
 
     //Put all the remaining stuff into the database
 	$sql = "INSERT INTO fll_reservations ". 
-        "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, ftnotify, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no) ". 
-        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$ftnotify', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$room_no')";
+        "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, ftnotify, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests) ".
+        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$ftnotify', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$room_no', '$total_guests')";
         $retval = mysql_query( $sql, $conn );
 
     if(mysql_errno()){
