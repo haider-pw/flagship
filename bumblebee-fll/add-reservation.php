@@ -25,6 +25,9 @@ $loggedinas = $row->fname . ' ' . $row->lname;
 site_header('Add Reservations');
 
 
+/*echo '<pre>';
+var_dump($_POST['rep_type']);*/
+//exit;
 
 if(isset($_POST['addreservation']))
 {
@@ -63,7 +66,7 @@ if(isset($_POST['addreservation']))
         $room_type = '';
     }
 
-    $rep_type               = QuoteSmart(@$_POST['rep_type']);
+    $rep_type               = (isset($_POST['rep_type']) and !empty($_POST['rep_type']))?QuoteSmart(implode(', ',@$_POST['rep_type'])):'';
     $client_reqs            = QuoteSmart(implode(', ',@$_POST['client_reqs']));
     $infant_seats           = QuoteSmart(@$_POST['infant_seats']);
     $child_seats            = QuoteSmart(@$_POST['child_seats']);
@@ -106,7 +109,7 @@ if(isset($_POST['addreservation']))
     $arr_pickup1            = QuoteSmart(@$_POST['arr_pickup1']);
     $arr_dropoff1           = QuoteSmart(@$_POST['arr_dropoff1']);
     $room_type1             = QuoteSmart(@$_POST['room_type1']);
-    $rep_type1              = QuoteSmart(@$_POST['rep_type1']);
+    $rep_type1              = (isset($_POST['rep_type1']) and !empty($_POST['rep_type1']))?QuoteSmart(implode(', ',@$_POST['rep_type1'])):'';
     $client1_reqs           = !empty($_POST['client1_reqs'])?QuoteSmart(implode(', ',$_POST['client1_reqs'])):'';
     $arr_transport_notes1   = QuoteSmart(@$_POST['arr_transport_notes1']);
     $arr_hotel_notes1       = QuoteSmart(@$_POST['arr_hotel_notes1']);
@@ -130,7 +133,7 @@ if(isset($_POST['addreservation']))
     $arr_pickup2            = QuoteSmart(@$_POST['arr_pickup2']);
     $arr_dropoff2           = QuoteSmart(@$_POST['arr_dropoff2']);
     $room_type2             = QuoteSmart(@$_POST['room_type2']);
-    $rep_type2              = QuoteSmart(@$_POST['rep_type2']);
+    $rep_type2              = (isset($_POST['rep_type2']) and !empty($_POST['rep_type2']))?QuoteSmart(implode(', ',@$_POST['rep_type2'])):'';
     $client2_reqs           = !empty($_POST['client2_reqs'])?QuoteSmart(implode(', ',$_POST['client2_reqs'])):'';
     $arr_transport_notes2   = QuoteSmart(@$_POST['arr_transport_notes2']);
     $arr_hotel_notes2       = QuoteSmart(@$_POST['arr_hotel_notes2']);
@@ -154,7 +157,7 @@ if(isset($_POST['addreservation']))
     $arr_pickup3            = QuoteSmart(@$_POST['arr_pickup3']);
     $arr_dropoff3           = QuoteSmart(@$_POST['arr_dropoff3']);
     $room_type3             = QuoteSmart(@$_POST['room_type3']);
-    $rep_type3              = QuoteSmart(@$_POST['rep_type3']);
+    $rep_type3              =  (isset($_POST['rep_type3']) and !empty($_POST['rep_type3']))?QuoteSmart(implode(', ',@$_POST['rep_type3'])):'';
     $client3_reqs           = !empty($_POST['client3_reqs'])?QuoteSmart(implode(', ',$_POST['client3_reqs'])):'';
     $arr_transport_notes3   = QuoteSmart(@$_POST['arr_transport_notes3']);
     $arr_hotel_notes3       = QuoteSmart(@$_POST['arr_hotel_notes3']);
@@ -1358,7 +1361,7 @@ if(isset($_POST['addreservation']))
                                  </div>
                                 <div class="form-group col-xs-7"><!-- representation type selection -->
                                     <label for="rep_type">Representation Type</label>
-                                    <select multiple class="form-control rep-type" id="rep_type" name="rep_type">
+                                    <select multiple class="form-control rep-type" id="rep_type" name="rep_type[]">
                                         <option value="0">Select Representation</option>
                                     <?php include ('reptype_select_multiple.php'); ?>
                                     </select>
@@ -1516,7 +1519,7 @@ if(isset($_POST['addreservation']))
                                 <div class="form-group col-xs-7">
                                     <!-- representation type selection -->
                                     <label for="rep_type1">Representation Type</label>
-                                    <select multiple class="form-control rep-type" id="rep_type1" name="rep_type1">
+                                    <select multiple class="form-control rep-type" id="rep_type1" name="rep_type1[]">
                                         <option value="0">Select Representation</option>
                                         <?php include('reptype_select_multiple.php'); ?>
                                     </select>
@@ -1684,7 +1687,7 @@ if(isset($_POST['addreservation']))
                                  </div>
                                 <div class="form-group col-xs-7"><!-- representation type selection -->
                                     <label for="rep_type2">Representation Type</label>
-                                    <select multiple class="form-control rep-type" id="rep_type2" name="rep_type2">
+                                    <select multiple class="form-control rep-type" id="rep_type2" name="rep_type2[]">
                                         <option value="0">Select Representation</option>
                                         <?php include('reptype_select_multiple.php'); ?>
                                     </select>
@@ -1853,7 +1856,7 @@ if(isset($_POST['addreservation']))
                                 <div class="form-group col-xs-7">
                                     <!-- representation type selection -->
                                     <label for="rep_type3">Representation Type</label>
-                                    <select multiple class="form-control rep-type" id="rep_type3" name="rep_type3">
+                                    <select multiple class="form-control rep-type" id="rep_type3" name="rep_type3[]">
                                         <option value="0">Select Representation</option>
                                         <?php include('reptype_select_multiple.php'); ?>
                                     </select>
