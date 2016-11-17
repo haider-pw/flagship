@@ -445,8 +445,6 @@ if(isset($_POST['addreservation']))
             }
     mysql_close($conn);
         echo "<script>window.location='add-reservation.php?ok=1'</script>";
-
-
 	}
 ?>
 
@@ -2751,6 +2749,8 @@ if(isset($_POST['addreservation']))
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-file-input.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-select.js"></script>
         <script type="text/javascript" src="js/plugins/tagsinput/jquery.tagsinput.min.js"></script>
+        <!--Select2-->
+        <script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
         <!-- END THIS PAGE PLUGINS -->       
         
         <!-- START TEMPLATE -->
@@ -2762,7 +2762,12 @@ if(isset($_POST['addreservation']))
 <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
 <script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->  
+    <!-- END SCRIPTS -->
+<script type="text/javascript">
+    $('#tour-oper').select2({
+        minimumInputLength: 3
+    });
+</script>
         <?php 
         $ok= isset($_GET['ok']);
         if($ok)  {

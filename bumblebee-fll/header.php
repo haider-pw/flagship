@@ -37,6 +37,7 @@ function site_header($title) {
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script> 
 		<script type="text/javascript" src="console_chat/js/scripts.js"></script> 
         <link href="js/plugins/jquery-ui/jquery-ui.min.css" rel="stylesheet">
+        <link href="js/plugins/select2/dist/css/select2.min.css" rel="stylesheet">
         <link href="css/bootstrap-editable.css" rel="stylesheet">
         <link href="console_chat/css/styles.css" rel="stylesheet">
         <style type="text/css">
