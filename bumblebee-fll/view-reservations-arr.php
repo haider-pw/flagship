@@ -184,6 +184,7 @@ site_header('Reservation List - Arrivals');
                                                 <th>Arr Date</th>
                                                 <th>Arr Flight#</th>
                                                 <th>Arr Time</th>
+                                                <th>Luggage Vehicle</th>
                                                 <th>Class</th>
                                                 <th>Dpt Date</th>
                                                 <th>Dpt Flight #</th>
@@ -333,6 +334,7 @@ site_header('Reservation List - Arrivals');
                                                         <td>' . $arr_date . '</td>
                                                         <td>' . $arr_flight_no[1] . '</td>
                                                         <td>' . $arr_time[2] . '</td>
+                                                        <td>' . $row['luggage_vehicle'] . '</td>                                                        
                                                         <td>' . $flight_class[1] . '</td>
                                                         <td>' . $dpt_date . '</td>
                                                         <td>' . $dpt_flight_no[1] . '</td>

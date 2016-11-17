@@ -38,6 +38,9 @@ if(isset($_POST['fromDate'])){
 //echo $reservationQuery;
 //Grab all reservation info
 $reservations = mysql_query($reservationQuery);
+/*echo '<pre>';
+print_r(mysql_fetch_array($reservations));
+exit;*/
 if(mysql_errno()){
     echo mysql_error();
 }
@@ -151,6 +154,7 @@ if(mysql_errno()){
                                                 <th>Arr Date</th>
                                                 <th>Arr Flight#</th>
                                                 <th>Arr Time</th>
+                                                <th>Luggage Vehicle</th>
                                                 <th>Class</th>
                                                 <th>Dpt Date</th>
                                                 <th>Arr &amp; Trans Notes</th>
@@ -242,6 +246,7 @@ if(mysql_errno()){
                                                         <td>' . $arr_date . '</td>
                                                         <td>' . $arr_flight_no[1] . '</td>
                                                         <td>' . $arr_time[2] . '</td>
+                                                        <td>' . $row['luggage_vehicle'] . '</td>                                                        
                                                         <td>' . $flight_class[1] . '</td>
                                                         <td>' . $dpt_date . '</td>
                                                         <td class="arrNotes" data-placement="top" data-toggle="tooltip" data-original-title="Click to See All">' . $arr_notes . '</td>
