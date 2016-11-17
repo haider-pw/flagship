@@ -867,21 +867,36 @@ if(isset($_POST['addreservation']))
                                         /* guest hide show */
                                         $('body').on('click','#guest1,.addGuest',function(e) {
                                             e.preventDefault();
-                                            var currentBtn = $(this);
-                                            var guestsDiv = $("#guestPlaceHolder");
-                                            var totalCurrentDivs = guestsDiv.find('div.guestShow').length;
-                                            console.log(totalCurrentDivs);
+                                            var NumberOfGuests = $("#totalGuests");
+                                            var totalGuests = NumberOfGuests.val();
+                                            if(totalGuests) {
+                                                //Lets Find Out How Many No of Guests have been Assigned so far.
+                                                totalGuests = parseInt(totalGuests) - 1;
+                                                var currentBtn = $(this);
+                                                var guestsDiv = $("#guestPlaceHolder");
+                                                var totalCurrentDivs = guestsDiv.find('div.guestShow').length;
+                                                console.log(totalCurrentDivs);
 
-                                            //New Way, Now More Guests Forms will be added through the jquery/ajax
-                                            $.ajax({
-                                                url:"<?=$url?>/custom_updates/sub_guest_form.php",
-                                                type:"POST",
-                                                data:{req:"guestCount",dataID:totalCurrentDivs},
-                                                success:function(output){
-                                                    guestsDiv.append(output);
-                                                    currentBtn.hide();
+                                                var applicableDivs = totalCurrentDivs + 1;
+                                                if (totalGuests < (applicableDivs)) {
+                                                    console.log('totalGuests:' + totalGuests);
+                                                    console.log('applicableGuests:' + applicableDivs);
+                                                    return false;
                                                 }
-                                            });
+
+                                                //New Way, Now More Guests Forms will be added through the jquery/ajax
+                                                $.ajax({
+                                                    url: "<?=$url?>/custom_updates/sub_guest_form.php",
+                                                    type: "POST",
+                                                    data: {req: "guestCount", dataID: totalCurrentDivs},
+                                                    success: function (output) {
+                                                        guestsDiv.append(output);
+                                                        currentBtn.hide();
+                                                    }
+                                                });
+                                            }else{
+                                                return false;
+                                            }
                                         });
                                         $('body').on("click",".removeGuest",function(e){
                                             e.preventDefault();
@@ -1181,6 +1196,7 @@ if(isset($_POST['addreservation']))
                                             </label>
                                             <input type="number" min=0 max=11 class="form-control" id="child_age" name="child_age[]" value="" placeholder="Child - 13 months - 11 yrs"> Years
                                             <input type="number" min=0 max=23 class="left20 form-control" id="infant_age" name="infant_age[]" value="" placeholder="Infant - 12 months or less"> Months
+                                            <input type="number" min=0 max=23 class="left20 form-control" id="totalGuests" name="totalGuests" value="" placeholder="Guests Total No"> Guests
                                         </div>
                                     </div>
                                     <div><button id="guest1" class="btn btn-warning">Add guest</button></div>

@@ -913,25 +913,34 @@ if(isset($_POST['addreservation']))
                                         /* guest hide show */
                                         $('body').on('click','#guest1,.addGuest',function(e) {
                                             e.preventDefault();
-                                            var currentBtn = $(this);
-                                            var guestsDiv = $("#guestPlaceHolder");
-/*                                            $('#guest1show').show();
-                                            $('#guest1').hide();
-                                            document.getElementById('guest1active').value="1";*/
-
-                                            var totalCurrentDivs = guestsDiv.find('div.guestShow').length;
-                                            console.log(totalCurrentDivs);
-
-                                            //New Way, Now More Guests Forms will be added through the jquery/ajax
-                                            $.ajax({
-                                                url:"<?=$url?>/custom_updates/sub_guest_form.php",
-                                                type:"POST",
-                                                data:{req:"guestCount",dataID:totalCurrentDivs},
-                                                success:function(output){
-                                                    guestsDiv.append(output);
-                                                    currentBtn.hide();
+                                            var NumberOfGuests = $("#totalGuests");
+                                            var totalGuests = NumberOfGuests.val();
+                                            if(totalGuests){
+                                                //Lets Find Out How Many No of Guests have been Assigned so far.
+                                                totalGuests = parseInt(totalGuests) - 1;
+                                                var currentBtn = $(this);
+                                                var guestsDiv = $("#guestPlaceHolder");
+                                                var totalCurrentDivs = guestsDiv.find('div.guestShow').length;
+                                                var applicableDivs = totalCurrentDivs + 1;
+                                                if(totalGuests < (applicableDivs)){
+                                                    console.log('totalGuests:'+totalGuests);
+                                                    console.log('applicableGuests:'+applicableDivs);
+                                                    return false;
                                                 }
-                                            });
+
+                                                //New Way, Now More Guests Forms will be added through the jquery/ajax
+                                                $.ajax({
+                                                    url:"<?=$url?>/custom_updates/sub_guest_form.php",
+                                                    type:"POST",
+                                                    data:{req:"guestCount",dataID:totalCurrentDivs},
+                                                    success:function(output){
+                                                        guestsDiv.append(output);
+                                                        currentBtn.hide();
+                                                    }
+                                                });
+                                            }else{
+                                                return false;
+                                            }
                                         });
 
                                         $('body').on("click",".removeGuest",function(e){
