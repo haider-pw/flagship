@@ -1247,7 +1247,7 @@ if(isset($_POST['addreservation']))
                                     <?php include ('flightclass_select.php'); ?>
                                 </div>
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->                                      
-                                    <label>Transport mode</label>
+                                    <label>Transport mode 0</label>
                                     <?php include ('transport_mode_arr.php'); ?>
                                 </div>
                                 <div class="clearfix"></div>
@@ -1386,7 +1386,7 @@ if(isset($_POST['addreservation']))
                                     ?>
                                 </div>
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->                                      
-                                    <label>Transport mode</label>
+                                    <label>Transport mode 1</label>
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
@@ -1556,7 +1556,7 @@ if(isset($_POST['addreservation']))
                                     ?>
                                 </div>
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->                                      
-                                    <label>Transport mode</label>
+                                    <label>Transport mode 2</label>
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
@@ -1726,12 +1726,12 @@ if(isset($_POST['addreservation']))
                                     ?>
                                 </div>
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->                                      
-                                    <label>Transport mode</label>
+                                    <label>Transport mode 3</label>
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="arr-transport3" name="arr3_transport[]">
+                                    echo '<select class="form-control select" id="arr-transport3" name="arr3_transport[]">
                                         <option selected="true">Arrival Transport mode</option>';
                                         while ($row = mysql_fetch_array($result)) {
                                             echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -1895,13 +1895,13 @@ if(isset($_POST['addreservation']))
                                     </div>
 
                                 <div class="form-group col-xs-5"> <!-- transport mode field -->                                      
-                                    <label class="left20">Transport mode</label>
+                                    <label class="left20">Transport mode 4</label>
                                     <div class="left20">
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="transfer-transport" name="transfer_transport[]">
+                                    echo '<select class="form-control select" id="transfer-transport" name="transfer_transport[]">
                                             <option selected="true">Transfer Transport mode</option>';
                                             while ($row = mysql_fetch_array($result)) {
                                                 echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -1983,13 +1983,13 @@ if(isset($_POST['addreservation']))
                                     </div>
 
                                 <div class="form-group col-xs-5"> <!-- transport mode field -->                                      
-                                    <label class="left20">Transport mode</label>
+                                    <label class="left20">Transport mode 5</label>
                                     <div class="left20">
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="transfer-transport1" name="transfer1_transport[]">
+                                    echo '<select class="form-control select" id="transfer-transport1" name="transfer1_transport[]">
                                             <option selected="true">Transfer Transport mode</option>';
                                             while ($row = mysql_fetch_array($result)) {
                                                 echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -2071,13 +2071,13 @@ if(isset($_POST['addreservation']))
                                     </div>
 
                                 <div class="form-group col-xs-5"> <!-- transport mode field -->                                      
-                                    <label class="left20">Transport mode</label>
+                                    <label class="left20">Transport mode 6</label>
                                     <div class="left20">
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="transfer-transport2" name="transfer2_transport[]">
+                                    echo '<select class="form-control select" id="transfer-transport2" name="transfer2_transport[]">
                                             <option selected="true">Transfer Transport mode</option>';
                                             while ($row = mysql_fetch_array($result)) {
                                                 echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -2159,13 +2159,13 @@ if(isset($_POST['addreservation']))
                                     </div>
 
                                 <div class="form-group col-xs-5"> <!-- transport mode field -->                                      
-                                    <label class="left20">Transport mode</label>
+                                    <label class="left20">Transport mode 7</label>
                                     <div class="left20">
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="transfer-transport3" name="transfer3_transport[]">
+                                    echo '<select class="form-control select" id="transfer-transport3" name="transfer3_transport[]">
                                             <option selected="true">Transfer Transport mode</option>';
                                             while ($row = mysql_fetch_array($result)) {
                                                 echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -2247,7 +2247,7 @@ if(isset($_POST['addreservation']))
                                     ?>
                                 </div>
                                 <div class="form-group col-xs-7">                                       
-                                    <label>Transport mode</label>
+                                    <label>Transport mode 8</label>
                                     <?php include ('transport_mode_dpt.php'); ?>
                                 </div>
                                 <div class="clearfix"></div>
@@ -2332,7 +2332,7 @@ if(isset($_POST['addreservation']))
                                     ?>
                                 </div>
                                 <div class="form-group col-xs-7">                                       
-                                    <label>Transport mode</label>
+                                    <label>Transport mode 9</label>
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
@@ -2449,12 +2449,12 @@ if(isset($_POST['addreservation']))
                                     ?>
                                 </div>
                                 <div class="form-group col-xs-7">                                       
-                                    <label>Transport mode</label>
+                                    <label>Transport mode 10</label>
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="dpt-transport2" name="dpt2_transport[]">
+                                    echo '<select class="form-control select" id="dpt-transport2" name="dpt2_transport[]">
                                         <option selected="true">Departure Transport mode</option>';
                                     while ($row = mysql_fetch_array($result)) {
                                         echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -2566,12 +2566,12 @@ if(isset($_POST['addreservation']))
                                     ?>
                                 </div>
                                 <div class="form-group col-xs-7">                                       
-                                    <label>Transport mode</label>
+                                    <label>Transport mode 11</label>
                                     <?php
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="dpt-transport3" name="dpt3_transport[]">
+                                    echo '<select class="form-control select" id="dpt-transport3" name="dpt3_transport[]">
                                         <option selected="true">Departure Transport mode</option>';
                                     while ($row = mysql_fetch_array($result)) {
                                         echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
