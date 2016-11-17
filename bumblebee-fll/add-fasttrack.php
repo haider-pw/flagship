@@ -242,7 +242,16 @@ if(isset($_POST['addreservation']))
     $guestInfantAge = $_POST['infant_age'];
     $guestPNR = $_POST['guest_pnr'];
 
-    //Phase2 Number of Total Guests
+    //Phase2
+    //Luggage Vehicle Check
+    $luggageVehicle = (isset($_POST['luggageVehicle']) and !empty($_POST['luggageVehicle']))?'Yes':'No';
+    $luggageVehicle1 = (isset($_POST['luggageVehicle1']) and !empty($_POST['luggageVehicle1']))?'Yes':'No';
+    $luggageVehicle2 = (isset($_POST['luggageVehicle2']) and !empty($_POST['luggageVehicle2']))?'Yes':'No';
+    $luggageVehicle3 = (isset($_POST['luggageVehicle3']) and !empty($_POST['luggageVehicle3']))?'Yes':'No';
+
+
+
+    // Number of Total Guests
     $totalNumberOfGuests = $_POST['totalGuests'];
 
     if(empty($totalNumberOfGuests) or !is_numeric($totalNumberOfGuests)){
@@ -286,32 +295,32 @@ if(isset($_POST['addreservation']))
 
 
     $sql_5 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main) ". 
-        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle) ".
+        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main',$luggageVehicle)";
         $retval5 = mysql_query( $sql_5, $conn );
     
     
     $arrival1active = QuoteSmart($_POST['arrival1active']);
     if($arrival1active == 1){    
     $sql_6 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no) ". 
-        "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, luggage_vehicle) ".
+        "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1','$luggageVehicle1')";
         $retval6 = mysql_query( $sql_6, $conn );
     }
     
     $arrival2active = QuoteSmart($_POST['arrival2active']);
     if($arrival2active == 1){
     $sql_7 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no) ". 
-        "VALUES ('$fsref', '$arr_date2', '$arr_time2', '$arr_flight_no2', '$flight_class2', '$arr2_transport', '$arr_driver2', '$arr_vehicle_no2', '$arr_pickup2', '$arr_dropoff2', '$room_type2', '$rep_type2', '$client2_reqs', '$arr_transport_notes2', '$arr_hotel_notes2', '$infant_seats2', '$child_seats2', '$booster_seats2', '$vouchers2', '$cold_towels2', '$bottled_water2', '$rooms2', '$room_no2')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, luggage_vehicle) ".
+        "VALUES ('$fsref', '$arr_date2', '$arr_time2', '$arr_flight_no2', '$flight_class2', '$arr2_transport', '$arr_driver2', '$arr_vehicle_no2', '$arr_pickup2', '$arr_dropoff2', '$room_type2', '$rep_type2', '$client2_reqs', '$arr_transport_notes2', '$arr_hotel_notes2', '$infant_seats2', '$child_seats2', '$booster_seats2', '$vouchers2', '$cold_towels2', '$bottled_water2', '$rooms2', '$room_no2', '$luggageVehicle2')";
         $retval7 = mysql_query( $sql_7, $conn );
     }
     
     $arrival3active = QuoteSmart($_POST['arrival3active']);
     if($arrival3active == 1){
     $sql_8 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no) ". 
-        "VALUES ('$fsref', '$arr_date3', '$arr_time3', '$arr_flight_no3', '$flight_class3', '$arr3_transport', '$arr_driver3', '$arr_vehicle_no3', '$arr_pickup3', '$arr_dropoff3', '$room_type3', '$rep_type3', '$client3_reqs', '$arr_transport_notes3', '$arr_hotel_notes3', '$infant_seats3', '$child_seats3', '$booster_seats3', '$vouchers3', '$cold_towels3', '$bottled_water3', '$rooms3', '$room_no3')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle) ".
+        "VALUES ('$fsref', '$arr_date3', '$arr_time3', '$arr_flight_no3', '$flight_class3', '$arr3_transport', '$arr_driver3', '$arr_vehicle_no3', '$arr_pickup3', '$arr_dropoff3', '$room_type3', '$rep_type3', '$client3_reqs', '$arr_transport_notes3', '$arr_hotel_notes3', '$infant_seats3', '$child_seats3', '$booster_seats3', '$vouchers3', '$cold_towels3', '$bottled_water3', '$rooms3', '$room_no3', '$luggageVehicle3')";
         $retval8 = mysql_query( $sql_8, $conn );
     }
     
@@ -1311,6 +1320,11 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
+                                    <div class="form-group col-lg-8">
+                                        <label>
+                                            <input type="checkbox" id="luggageVehicle" name="luggageVehicle"> Luggage Vehicle
+                                        </label>
+                                    </div>
                                 <div class="form-group col-xs-7 checkbox"><!-- additional requirements show -->
                                 <label>
                                  <input type="checkbox" value="clientreqs"> Add Requirements
@@ -1470,6 +1484,11 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
+                                    <div class="form-group col-lg-8">
+                                        <label>
+                                            <input type="checkbox" id="luggageVehicle1" name="luggageVehicle1"> Luggage Vehicle
+                                        </label>
+                                    </div>
                                 <div class="form-group col-xs-7 checkbox"><!-- additional requirements show -->
                                 <label>
                                  <input type="checkbox" value="clientreqs1"> Add Requirements
@@ -1640,6 +1659,11 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
+                                    <div class="form-group col-lg-8">
+                                        <label>
+                                            <input type="checkbox" id="luggageVehicle2" name="luggageVehicle2"> Luggage Vehicle
+                                        </label>
+                                    </div>
                                 <div class="form-group col-xs-7 checkbox"><!-- additional requirements show -->
                                 <label>
                                  <input type="checkbox" value="clientreqs2"> Add Requirements
@@ -1810,6 +1834,11 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
+                                    <div class="form-group col-lg-8">
+                                        <label>
+                                            <input type="checkbox" id="luggageVehicle3" name="luggageVehicle3"> Luggage Vehicle
+                                        </label>
+                                    </div>
                                 <div class="form-group col-xs-7 checkbox"><!-- additional requirements show -->
                                 <label>
                                  <input type="checkbox" value="clientreqs3"> Add Requirements
