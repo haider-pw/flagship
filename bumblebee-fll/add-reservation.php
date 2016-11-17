@@ -1357,8 +1357,11 @@ if(isset($_POST['addreservation']))
                                     </div>
                                  </div>
                                 <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label>Representation Type</label>
-                                    <?php include ('reptype_select.php'); ?>
+                                    <label for="rep_type">Representation Type</label>
+                                    <select multiple class="form-control rep-type" id="rep_type" name="rep_type">
+                                        <option value="0">Select Representation</option>
+                                    <?php include ('reptype_select_multiple.php'); ?>
+                                    </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
@@ -1510,19 +1513,13 @@ if(isset($_POST['addreservation']))
                                         <textarea class="form-control text-lowercase" rows="5" id="arr-hotel-notes1" name="arr_hotel_notes1" placeholder="Hotel notes: additional hotel comments and details here"></textarea>
                                     </div>
                                  </div>
-                                <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label>Represetation Type</label>
-                                    <?php
-                                    $sql = "SELECT * FROM fll_reptype ORDER BY id ASC";
-                                    $result = mysql_query($sql);
-                                    
-                                    echo '<select class="form-control" id="rep-type1" name="rep_type1">
-                                            <option>Representation</option>';
-                                            while ($row = mysql_fetch_array($result)) {
-                                                echo "<option value='" . $row['id'] . "'>" . $row['rep_type'] . "</option>";
-                                            }
-                                    echo "</select>";
-                                    ?>
+                                <div class="form-group col-xs-7">
+                                    <!-- representation type selection -->
+                                    <label for="rep_type1">Representation Type</label>
+                                    <select multiple class="form-control rep-type" id="rep_type1" name="rep_type1">
+                                        <option value="0">Select Representation</option>
+                                        <?php include('reptype_select_multiple.php'); ?>
+                                    </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
@@ -1686,18 +1683,11 @@ if(isset($_POST['addreservation']))
                                     </div>
                                  </div>
                                 <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label>Represetation Type</label>
-                                    <?php
-                                    $sql = "SELECT * FROM fll_reptype ORDER BY id ASC";
-                                    $result = mysql_query($sql);
-                                    
-                                    echo '<select class="form-control" id="rep-type2" name="rep_type2">
-                                            <option>Representation</option>';
-                                            while ($row = mysql_fetch_array($result)) {
-                                                echo "<option value='" . $row['id'] . "'>" . $row['rep_type'] . "</option>";
-                                            }
-                                    echo "</select>";
-                                    ?>
+                                    <label for="rep_type2">Representation Type</label>
+                                    <select multiple class="form-control rep-type" id="rep_type2" name="rep_type2">
+                                        <option value="0">Select Representation</option>
+                                        <?php include('reptype_select_multiple.php'); ?>
+                                    </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
@@ -1860,19 +1850,13 @@ if(isset($_POST['addreservation']))
                                         <textarea class="form-control text-lowercase" rows="5" id="arr-hotel-notes3" name="arr_hotel_notes3" placeholder="Hotel notes: additional hotel comments and details here"></textarea>
                                     </div>
                                  </div>
-                                <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label>Represetation Type</label>
-                                    <?php
-                                    $sql = "SELECT * FROM fll_reptype ORDER BY id ASC";
-                                    $result = mysql_query($sql);
-                                    
-                                    echo '<select class="form-control" id="rep-type3" name="rep_type3">
-                                            <option>Representation</option>';
-                                            while ($row = mysql_fetch_array($result)) {
-                                                echo "<option value='" . $row['id'] . "'>" . $row['rep_type'] . "</option>";
-                                            }
-                                    echo "</select>";
-                                    ?>
+                                <div class="form-group col-xs-7">
+                                    <!-- representation type selection -->
+                                    <label for="rep_type3">Representation Type</label>
+                                    <select multiple class="form-control rep-type" id="rep_type3" name="rep_type3">
+                                        <option value="0">Select Representation</option>
+                                        <?php include('reptype_select_multiple.php'); ?>
+                                    </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
@@ -2796,6 +2780,7 @@ if(isset($_POST['addreservation']))
     $('#tour-oper').select2({
         minimumInputLength: 3
     });
+    $('.rep-type').select2();
 </script>
         <?php 
         $ok= isset($_GET['ok']);
