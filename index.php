@@ -1,0 +1,1 @@
+<?php header('Location: /flights_project/bumblebee-fll'); ?>
