@@ -18,7 +18,8 @@ include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
 $reservation_id = $_GET['reservation'];
-$reservation = mysql_fetch_row(mysql_query("SELECT * FROM fll_arrivals WHERE id='" . QuoteSmart($_GET['arrival_id']) . "'"));
+$getArrivalQuery = "SELECT * FROM fll_arrivals WHERE id='" . QuoteSmart($_GET['arrival_id']) . "'";
+$reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
 $get_arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $reservation[4] . "'"));
 $get_arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $reservation[3] . "'"));
 $get_arr_pickup = mysql_fetch_row(mysql_query("SELECT * FROM fll_location WHERE id_location='" . $reservation[9] . "'"));  
@@ -27,9 +28,21 @@ $get_arr_roomtype = mysql_fetch_row(mysql_query("SELECT * FROM fll_roomtypes WHE
 $get_arr_driver = mysql_fetch_row(mysql_query("SELECT * FROM fll_transport WHERE id_transport='" . $reservation[7] . "'"));
 $get_arr_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM fll_vehicles WHERE id_vehicle='" . $reservation[8] ."'"));
 $get_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM fll_flightclass WHERE id='" . $reservation[5] . "'"));
-$get_reptype = mysql_fetch_row(mysql_query("SELECT * FROM fll_reptype WHERE id='" . $reservation[12] . "'"));
-$flagship_ref = $reservation[1];
 
+//Need to get rep type.
+$repTypeQuery = "SELECT * FROM fll_reptype WHERE id IN (" . $reservation[12] . ")";
+$get_reptype = mysql_query($repTypeQuery);
+$selectedRepTypesArray = array();
+while($repTypeRow=mysql_fetch_array($get_reptype)){
+    $selectedRepTypesArray[] = $repTypeRow['id'];
+}
+/*echo '<pre>';
+var_dump($getArrivalQuery);
+var_dump($repTypeQuery);
+echo '</pre>';
+exit;*/
+
+$flagship_ref = $reservation[1];
 $transport_arr = mysql_query("SELECT * FROM fll_resdrivers WHERE ref_no_sys='$flagship_ref' AND res_type=1");
 $arr_count = mysql_numrows($transport_arr);
 
@@ -326,15 +339,15 @@ if(isset($_POST['update']))
                                             }
                                             
                                             //Show selected flight class and list all the others 
-                                            echo '<select class="form-control select" id="rep-type" name="rep_type">';
+                                            echo '<select multiple class="form-control rep-type" id="rep-type" name="rep_type[]">';
                                             while ($row = mysql_fetch_array($reptypeselect)) {
-                                                if ($row['id'] == $get_reptype[0]) {
-                                                echo "<option value='" . $row['id'] . "' selected>" . $row['rep_type'] . "</option>";
+                                                if (in_array($row['id'],$selectedRepTypesArray)) {
+                                                echo "<option value='" . $row['id'] . "' selected='selected'>" . $row['rep_type'] . "</option>";
                                                 } else {
                                                 echo "<option value='" . $row['id'] . "'>" . $row['rep_type'] . "</option>";
                                                 }
                                             }
-                                                echo "</select>"
+                                                echo "</select>";
                                             ?>
                                 </div>
                                 <div class="clearfix"></div>
@@ -435,6 +448,8 @@ if(isset($_POST['update']))
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-file-input.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-select.js"></script>
         <script type="text/javascript" src="js/plugins/tagsinput/jquery.tagsinput.min.js"></script>
+<!--Select2-->
+<script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
         <!-- END THIS PAGE PLUGINS -->       
         
         <!-- START TEMPLATE -->      
@@ -442,6 +457,13 @@ if(isset($_POST['update']))
         <script type="text/javascript" src="js/actions.js"></script>        
         <!-- END TEMPLATE -->
         <!-- END SCRIPTS -->
+
+<script type="text/javascript">
+    $(function () {
+        $('.rep-type').select2();
+    });
+</script>
+
         <?php
             if(isset($_GET['ok'])){
                 $ok = $_GET['ok'];

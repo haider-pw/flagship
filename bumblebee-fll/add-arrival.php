@@ -312,8 +312,11 @@ if(isset($_POST['addarrival']))
                                     </div>
                                  </div>
                                 <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label>Represetation Type</label>
-                                    <?php include ('reptype_select.php'); ?>
+                                    <label>Representation Type</label>
+                                    <select multiple class="form-control rep-type" id="rep_type" name="rep_type[]">
+                                        <option value="0">Select Representation</option>
+                                    <?php include ('reptype_select_multiple.php'); ?>
+                                        </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr />
@@ -402,6 +405,8 @@ if(isset($_POST['addarrival']))
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-file-input.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-select.js"></script>
         <script type="text/javascript" src="js/plugins/tagsinput/jquery.tagsinput.min.js"></script>
+<!--Select2-->
+<script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
         <!-- END THIS PAGE PLUGINS -->       
         
         <!-- START TEMPLATE -->
@@ -413,7 +418,10 @@ if(isset($_POST['addarrival']))
 <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
 <script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->  
+    <!-- END SCRIPTS -->
+<script type="text/javascript">
+    $('.rep-type').select2();
+</script>
         <?php 
 $ok= isset($_GET['ok']);
 if($ok)  {
