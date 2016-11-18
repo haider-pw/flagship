@@ -429,6 +429,9 @@ if(isset($_POST['addreservation']))
     .reqs-box {
         display: none;
     }
+    .numericCol{
+        width:100px !important;
+    }
 </style>
     <!-- start additional requirements toggle -->           
     <script type="text/javascript">
@@ -1341,16 +1344,16 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-9">
-                                                <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control" id="cold-towels" name="cold_towels" value="" placeholder="Cold Towels">
-                                                <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control" id="bottled-water" name="bottled_water" value="" placeholder="Bottled Water">
-                                                <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control" id="vouchers" name="vouchers" value="" placeholder="Vouchers">
+                                                <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels" name="cold_towels" value="" placeholder="Cold Towels">
+                                                <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water" name="bottled_water" value="" placeholder="Bottled Water">
+                                                <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="vouchers" name="vouchers" value="" placeholder="Vouchers">
                                             </div>
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-9">
-                                                <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control" id="infant-seats" name="infant_seats" value="" placeholder="Infant Seats">
-                                                <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control" id="child-seats" name="child_seats" value="" placeholder="Child Seats">
-                                                <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
+                                                <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats" name="infant_seats" value="" placeholder="Infant Seats">
+                                                <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats" name="child_seats" value="" placeholder="Child Seats">
+                                                <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
                                 </div>
@@ -1508,16 +1511,16 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-9">
-                                                <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control" id="cold-towels1" name="cold_towels1" value="" placeholder="Cold Towels">
-                                                <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control" id="bottled-water1" name="bottled_water1" value="" placeholder="Bottled Water">
-                                                <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control" id="vouchers1" name="vouchers1" value="" placeholder="Vouchers">
+                                                <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels1" name="cold_towels1" value="" placeholder="Cold Towels">
+                                                <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water1" name="bottled_water1" value="" placeholder="Bottled Water">
+                                                <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="vouchers1" name="vouchers1" value="" placeholder="Vouchers">
                                             </div>
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-9">
-                                                <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control" id="infant-seats1" name="infant_seats1" value="" placeholder="Infant Seats">
-                                                <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control" id="child-seats1" name="child_seats1" value="" placeholder="Child Seats">
-                                                <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control" id="booster-seats1" name="booster_seats1" value="" placeholder="Booster Seats">
+                                                <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats1" name="infant_seats1" value="" placeholder="Infant Seats">
+                                                <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats1" name="child_seats1" value="" placeholder="Child Seats">
+                                                <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats1" name="booster_seats1" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
                                 </div>
@@ -1676,16 +1679,16 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-9">
-                                                <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control" id="cold-towels2" name="cold_towels2" value="" placeholder="Cold Towels">
-                                                <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control" id="bottled-water2" name="bottled_water2" value="" placeholder="Bottled Water">
-                                                <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control" id="vouchers2" name="vouchers2" value="" placeholder="Vouchers">
+                                                <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels2" name="cold_towels2" value="" placeholder="Cold Towels">
+                                                <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water2" name="bottled_water2" value="" placeholder="Bottled Water">
+                                                <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="vouchers2" name="vouchers2" value="" placeholder="Vouchers">
                                             </div>
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-9">
-                                                <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control" id="infant-seats2" name="infant_seats2" value="" placeholder="Infant Seats">
-                                                <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control" id="child-seats2" name="child_seats2" value="" placeholder="Child Seats">
-                                                <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control" id="booster-seats2" name="booster_seats2" value="" placeholder="Booster Seats">
+                                                <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats2" name="infant_seats2" value="" placeholder="Infant Seats">
+                                                <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats2" name="child_seats2" value="" placeholder="Child Seats">
+                                                <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats2" name="booster_seats2" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
                                 </div>
@@ -1845,16 +1848,16 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-9">
-                                                <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control" id="cold-towels3" name="cold_towels3" value="" placeholder="Cold Towels">
-                                                <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control" id="bottled-water3" name="bottled_water3" value="" placeholder="Bottled Water">
-                                                <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control" id="vouchers3" name="vouchers3" value="" placeholder="Vouchers">
+                                                <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels3" name="cold_towels3" value="" placeholder="Cold Towels">
+                                                <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water3" name="bottled_water3" value="" placeholder="Bottled Water">
+                                                <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="vouchers3" name="vouchers3" value="" placeholder="Vouchers">
                                             </div>
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-9">
-                                                <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control" id="infant-seats3" name="infant_seats3" value="" placeholder="Infant Seats">
-                                                <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control" id="child-seats3" name="child_seats3" value="" placeholder="Child Seats">
-                                                <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control" id="booster-seats3" name="booster_seats3" value="" placeholder="Booster Seats">
+                                                <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats3" name="infant_seats3" value="" placeholder="Infant Seats">
+                                                <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats3" name="child_seats3" value="" placeholder="Child Seats">
+                                                <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats3" name="booster_seats3" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
                                 </div>
@@ -2742,6 +2745,18 @@ if(isset($_POST['addreservation']))
         minimumInputLength: 3
     });
     $('.rep-type').select2();
+    $(function(){
+        $('.numericCol').keypress(function(e) {
+            var tval = $(this).val(),
+                tlength = tval.length,
+                set = 3,
+                remain = parseInt(set - tlength);
+            $('p').text(remain);
+            if (remain <= 0 && e.which !== 0 && e.charCode !== 0) {
+                $(this).val((tval).substring(0, tlength - 1))
+            }
+        });
+    });
 </script>
      <?php 
     $ok= isset($_GET['ok']);
