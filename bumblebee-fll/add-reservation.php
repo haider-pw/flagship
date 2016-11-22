@@ -121,6 +121,14 @@ if(isset($_POST['addreservation']))
     $rooms1                 = QuoteSmart(@$_POST['no_of_rooms1']);
     $room_no1               = QuoteSmart(@$_POST['room_no1']);
     
+    //Excursion
+    $excursion_name = QuoteSmart(@$_POST['excursion_name']);
+    $excursion_date = QuoteSmart(@$_POST['excursion_date']);
+    $excursion_pickup = QuoteSmart(@$_POST['excursion_pickup']);
+    $excursion_confirm_by = QuoteSmart(@$_POST['excursion_confirm_by']);
+    $excursion_confirm_date = QuoteSmart(@$_POST['excursion_confirm_date']);
+    $excursion_guests = QuoteSmart(@$_POST['excursion_guests']);
+
     //Arrival 2
     $arr_date2              = QuoteSmart(@$_POST['arr_date2']);
     $arr_time2              = QuoteSmart(@$_POST['arr_time2']);
@@ -1409,14 +1417,14 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group">
                                         <div class="form-inline col-xs-6">
-                                            <label class="right20">Pickup Time</label><input type="text" class="form-control" id="booster-seats" name="pickup_time" value="" placeholder="Booster Seats">
+                                            <label class="right20">Pickup Time</label><input type="text" class="form-control" id="pickup_time" name="pickup_time" placeholder="Pickup Time">
                                             <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by" name="excursion_confirm_by" placeholder="Confirmed By Whom">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-inline col-xs-6">
                                             <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date" name="excursion_confirm_date" placeholder="Excursion Confirm Date">
-                                            <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests" name="excursion_guests" placeholder="Booster Seats">
+                                            <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests" name="excursion_guests" placeholder="Number of Guests">
                                         </div>
                                     </div>
                                 </div>
