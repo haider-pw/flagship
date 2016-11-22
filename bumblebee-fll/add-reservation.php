@@ -1401,6 +1401,24 @@ if(isset($_POST['addreservation']))
                                                 <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
+                                    <div class="form-group">
+                                            <div class="form-inline col-xs-6">
+                                                <label class="right20">Excursion Name</label><input type="text" min=0 max=99 class="right20 form-control" id="infant-seats" name="infant_seats" value="" placeholder="Infant Seats">
+                                                <label class="right20">Excursion Date</label><input type="text" min=0 max=99 class="right20 form-control" id="child-seats" name="child_seats" value="" placeholder="Child Seats">
+                                            </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Pickup Time</label><input type="text" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
+                                            <label class="right20">Confirmed By Whom</label><input type="text" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Date of Confirmation</label><input type="text" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
+                                            <label class="right20">Number of Guests</label><input type="number" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
+                                        </div>
+                                    </div>
                                 </div>
                                 <br />
                                 <button id="arrival1" class="btn btn-warning">Add Arrival</button>
@@ -2811,6 +2829,8 @@ if(isset($_POST['addreservation']))
         minimumInputLength: 3
     });
     $('.rep-type').select2();
+    $('.clientReqs').select2();
+    $('.clientReqs').next().css('width','100%');
 
     $(function(){
         $('.numericCol').keypress(function(e) {
@@ -2823,6 +2843,19 @@ if(isset($_POST['addreservation']))
                 $(this).val((tval).substring(0, tlength - 1))
             }
         });
+
+        $('.clientReqs').on('change',function(){
+            console.log('value changed');
+            var selectedValues = $(this).val();
+            var available = $.inArray('Pre booked excursion',selectedValues);
+            console.log(available);
+            if(available === -1){
+                console.log('value does not exist');
+            }else{
+                console.log('value exists in array');
+            }
+        });
+
     });
 </script>
         <?php 

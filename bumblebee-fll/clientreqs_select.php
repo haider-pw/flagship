@@ -11,7 +11,7 @@ mysql_select_db ("cocoa_fll");
 $sql = "SELECT * FROM fll_clientreqs ORDER BY id ASC";
 $result = mysql_query($sql);
 
-echo '<select multiple class="form-control select" id="client-reqs" name="client_reqs[]">
+echo '<select multiple class="form-control clientReqs" id="client-reqs" name="client_reqs[]">
         <option selected="true">Additional Requirements</option>';
 while ($row = mysql_fetch_array($result)) {
     echo "<option value='" . $row['reqs'] . "'>" . $row['reqs'] . "</option>";
