@@ -331,9 +331,6 @@ if(isset($_POST['update']))
                                         <div class="form-inline col-xs-9"><!-- first name / last name fields -->
                                             <label class="left20">First name</label> <input type="text" class="form-control right20 text-capitalize" placeholder="First name" id="first_name" name="first_name" value="<?php echo $reservation[2]; ?>">
                                             <label>Last name</label> <input type="text" class="form-control text-capitalize right20" placeholder="Last name" id="last_name" name="last_name" value="<?php echo $reservation[3]; ?>">
-                                            <label class="checkbox-inline label_checkboxitem">
-                                            <input class="icheckbox" type="checkbox" id="ftres" name="ftres" <?php echo ($reservation[12] > 0) ? 'checked' : ''; ?>> Fast Track
-                                        </label><i class="fa fa-question-circle left20" data-toggle="tooltip" data-placement="top" title="Check the box if this is a Fast Track reservation"></i>
                                             <div class="form-group col-xs-3"><!-- title selection -->
                                             <select class="form-control select" id="title-name" name="title_name">
                                                 <option value="" <?php echo ($reservation[1] == '') ? 'selected' : ''; ?>>Select title</option>
@@ -469,6 +466,7 @@ if(isset($_POST['update']))
                                                 <th>Flight class</th>
                                                 <th>Rep Service</th>
                                                 <th>Transport</th>
+                                                <th>FSFT</th>
                                                 <th>Driver</th>
                                                 <th>Vehicle</th>
                                                 <th>PU Location</th>
@@ -504,6 +502,7 @@ if(isset($_POST['update']))
                                                 $arr_transnotes = $row[14];
                                                 $hotel_notes = $row[15];
                                                 $arr_transport =  $row[6];
+                                                $arrFastTrack = empty($row['fast_track'])?'N':'Y';
                                                 
                                                 if ($row[24] == 1){
                                                     $arrmain = '*';
@@ -523,6 +522,7 @@ if(isset($_POST['update']))
                                                         <td>' . $arr_flightclass[1] . '</td>
                                                         <td>' . $arr_reptype[1] . '</td>
                                                         <td>' . $arr_transport . '</td>
+                                                        <td>' . $arrFastTrack . '</td>
                                                         <td>' . $arr_driver[1] . '</td>
                                                         <td>' . $arr_vehicle[2] . '</td>
                                                         <td>' . $arr_pickup[1] . '</td>

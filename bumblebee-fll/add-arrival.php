@@ -30,6 +30,7 @@ if(isset($_POST['addarrival']))
 //Sanitize data
 
     $arr_date           = QuoteSmart($_POST['arr_date']);
+    $fast_track           = QuoteSmart($_POST['ftres']);
     $arr_time           = QuoteSmart($_POST['arr_time']);
     $arr_flight_no      = QuoteSmart($_POST['arr_flight_no']);
     $flight_class       = QuoteSmart($_POST['flight_class']);
@@ -53,7 +54,7 @@ if(isset($_POST['addarrival']))
     $room_no       = QuoteSmart($_POST['room_no']);
     
     $user_action = "add new arrival: #ref:$fsref";
-    
+    $fast_track = empty($fast_track) ? 0 : 1;
     $ftres = isset($_POST['ftres']) ? 1 : 0;
     if ($ftres > 0){
         $ftnotify = 1;
@@ -61,8 +62,8 @@ if(isset($_POST['addarrival']))
    
         //Put all the remaining stuff into the database
 	$sql = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no) ". 
-        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, fast_track) ".
+        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no','$fast_track')";
         $retval = mysql_query( $sql, $conn );
 
     if(!empty(mysql_errno())){
@@ -236,6 +237,14 @@ if(isset($_POST['addarrival']))
                                                 <input type="text" class="form-control datepicker" name="arr_date" id="arr-date" placeholder="Arrival date"/>
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
+                                        <!-- Fasttrack Checkbox-->
+                                        <label class="checkbox-inline label_checkboxitem">
+                                            <input class="icheckbox" type="checkbox" id="ftres" name="ftres">
+                                            Fast Track
+                                        </label>
+                                        <i class="fa fa-question-circle left20" data-toggle="tooltip"
+                                                   data-placement="top" title="Check the box if this is a Fast Track reservation">
+                                        </i>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->

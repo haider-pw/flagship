@@ -19,6 +19,7 @@ include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
 $reservation_id = $_GET['reservation'];
 $getArrivalQuery = "SELECT * FROM fll_arrivals WHERE id='" . QuoteSmart($_GET['arrival_id']) . "'";
+//$reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
 $reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
 $get_arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $reservation[4] . "'"));
 $get_arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $reservation[3] . "'"));
@@ -28,6 +29,7 @@ $get_arr_roomtype = mysql_fetch_row(mysql_query("SELECT * FROM fll_roomtypes WHE
 $get_arr_driver = mysql_fetch_row(mysql_query("SELECT * FROM fll_transport WHERE id_transport='" . $reservation[7] . "'"));
 $get_arr_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM fll_vehicles WHERE id_vehicle='" . $reservation[8] ."'"));
 $get_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM fll_flightclass WHERE id='" . $reservation[5] . "'"));
+$selectedFastTrack = $reservation[26];
 
 //Need to get rep type.
 $repTypeQuery = "SELECT * FROM fll_reptype WHERE id IN (" . $reservation[12] . ")";
@@ -56,7 +58,6 @@ if(!$reservation) {
 	exit;
 }
 site_header('Arrival Details');
-
 if(isset($_POST['update']))
 {
 
@@ -85,7 +86,7 @@ if(isset($_POST['update']))
     $rooms       = QuoteSmart($_POST['no_of_rooms']);
     $room_no       = QuoteSmart($_POST['room_no']);        
     $user_action = "update arrival details: #ref:$flagship_ref";
-    $ftres = isset($_POST['ftres']) ? 1 : 0;
+    $ftres = empty($_POST['ftres']) ? 0 : 1;
     if ($ftres > 0){
         $ftnotify = 1;
     } else {
@@ -93,13 +94,14 @@ if(isset($_POST['update']))
     }
     
     $sql = "UPDATE fll_arrivals ".
-    "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no'".
+    "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no', fast_track = '$ftres'".
     "WHERE id = '$reservation[0]'";
     $retval = mysql_query( $sql, $conn );
-    
+
+    //check if its main arrival.
     if ($reservation[24] == 1){
     $sql_1 = "UPDATE fll_reservations ".
-    "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no'".
+    "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no', fast_track = '$ftres'".
     "WHERE ref_no_sys = '$reservation[1]'";
     $retval1 = mysql_query( $sql_1, $conn );
     }
@@ -217,6 +219,15 @@ if(isset($_POST['update']))
                                                 <input type="text" class="form-control datepicker" name="arr_date" id="arr-date" placeholder="Arrival date" value="<?php echo $reservation[2]; ?>"/>
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
+
+                                        <!-- Fasttrack Checkbox-->
+                                        <label class="checkbox-inline label_checkboxitem">
+                                            <input class="icheckbox" type="checkbox" id="ftres" name="ftres" <?=empty($selectedFastTrack)?'':'checked="checked"'?>>
+                                            Fast Track
+                                        </label>
+                                        <i class="fa fa-question-circle left20" data-toggle="tooltip"
+                                           data-placement="top" title="Check the box if this is a Fast Track reservation">
+                                        </i>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->
