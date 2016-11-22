@@ -1403,20 +1403,20 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group">
                                             <div class="form-inline col-xs-6">
-                                                <label class="right20">Excursion Name</label><input type="text" min=0 max=99 class="right20 form-control" id="infant-seats" name="infant_seats" value="" placeholder="Infant Seats">
-                                                <label class="right20">Excursion Date</label><input type="text" min=0 max=99 class="right20 form-control" id="child-seats" name="child_seats" value="" placeholder="Child Seats">
+                                                <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name" name="excursion_name" value="" placeholder="Excursion Name">
+                                                <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date" name="excursion_date" value="" placeholder="Excursion Date">
                                             </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-inline col-xs-6">
-                                            <label class="right20">Pickup Time</label><input type="text" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
-                                            <label class="right20">Confirmed By Whom</label><input type="text" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
+                                            <label class="right20">Pickup Time</label><input type="text" class="form-control" id="booster-seats" name="pickup_time" value="" placeholder="Booster Seats">
+                                            <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by" name="excursion_confirm_by" placeholder="Confirmed By Whom">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-inline col-xs-6">
-                                            <label class="right20">Date of Confirmation</label><input type="text" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
-                                            <label class="right20">Number of Guests</label><input type="number" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
+                                            <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date" name="excursion_confirm_date" placeholder="Excursion Confirm Date">
+                                            <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests" name="excursion_guests" placeholder="Booster Seats">
                                         </div>
                                     </div>
                                 </div>
