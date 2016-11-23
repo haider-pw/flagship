@@ -1406,7 +1406,9 @@ if(isset($_POST['addreservation']))
                                         <input type="text" class="form-control right20" id="room_last_name" name="room_last_name" placeholder="Guest last name">
                                     </div>
                                     <div class="form-group col-lg-1">
-                                        <a class="btn btn-default" id="addRoomBtn"><i class="fa fa-plus"></i> Add Room</a>
+                                        <a class="btn btn-default addRoomBtn"><i class="fa fa-plus"></i> Add Room</a>
+                                    </div>
+                                    <div id="sub-forms-div">
                                     </div>
                                     <div class="clearfix"></div>
                                  <div class="form-group"><!-- hotel notes -->
@@ -2938,6 +2940,7 @@ if(isset($_POST['addreservation']))
     $('.rep-type').select2();
     $('.clientReqs').select2();
     $('.clientReqs').next().css('width','100%');
+    body = $('body');
 
     $(function(){
         $('.numericCol').keypress(function(e) {
@@ -2964,8 +2967,36 @@ if(isset($_POST['addreservation']))
         });
 
     });
-    $('.addRoomBtn').on('click',function(){
-        console.log('btn clicked');
+    body.on('click','.addRoomBtn',function(){
+        var currentBtn = $(this);
+        var subRoomsDiv = $('#sub-forms-div');
+        var totalCurrentDivs = subRoomsDiv.find('div.roomDiv').length + 1;
+        var maxRooms = 5;
+
+
+        if(totalCurrentDivs<maxRooms){
+            //We Would be Adding More Guests Now to our specified Div.
+            //New Way, Now More Guests Forms will be added through the jquery/ajax
+            $.ajax({
+                url: "<?=$url?>/custom_updates/sub_room_form.php",
+                type: "POST",
+                data: {req: "roomCount", dataID: totalCurrentDivs},
+                success: function (output) {
+                    subRoomsDiv.append(output);
+                    currentBtn.parent().hide();
+                    console.log(totalCurrentDivs);
+                    console.log(maxRooms);
+                    if(totalCurrentDivs==(maxRooms-1)){
+                        subRoomsDiv.find('div.roomDiv').last().find('.addRoomBtn').hide();
+                        console.log('total 5 added');
+                    }
+                }
+            });
+        }
+    });
+    body.on('click','.removeBtn',function(){
+        $(this).parents('.roomDiv').remove();
+        $(this).parents('#sub-forms-div').find('.roomDiv').last().find('.actionButtons').show();
     });
 </script>
         <?php 
