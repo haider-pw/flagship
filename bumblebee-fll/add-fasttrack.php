@@ -1291,14 +1291,14 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
-                                    <select class="form-control" id="arr-dropoff" name="arr_dropoff">
+                                    <label for="arr-dropoff">Dropoff Location</label>
+                                    <select class="form-control dropSelect" id="arr-dropoff" name="arr_dropoff">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-3"><!-- room type selection -->
-                                    <label>Room type</label>
+                                    <label for="room-type">Room type</label>
                                     <select class="form-control" id="room-type" name="room_type">
                                         <option>Room Type</option>     
                                     </select>
@@ -1448,8 +1448,8 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
-                                    <select class="form-control" id="arr-dropoff1" name="arr_dropoff1">
+                                    <label for="arr-dropoff1">Dropoff Location</label>
+                                    <select class="form-control dropSelect" id="arr-dropoff1" name="arr_dropoff1">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -1616,14 +1616,14 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
-                                    <select class="form-control" id="arr-dropoff2" name="arr_dropoff2">
+                                    <label for="arr-dropoff2">Dropoff Location</label>
+                                    <select class="form-control dropSelect" id="arr-dropoff2" name="arr_dropoff2">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-3"><!-- room type selection -->
-                                    <label>Room type</label>
+                                    <label for="room-type2">Room type</label>
                                     <select class="form-control" id="room-type2" name="room_type2">
                                         <option>Room Type</option>     
                                     </select>
@@ -1784,8 +1784,8 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
-                                    <select class="form-control" id="arr-dropoff3" name="arr_dropoff3">
+                                    <label for="arr-dropoff3">Dropoff Location</label>
+                                    <select class="form-control dropSelect" id="arr-dropoff3" name="arr_dropoff3">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -1927,8 +1927,8 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                  <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
-                                    <select class="form-control" id="transfer-dropoff" name="transfer_dropoff">
+                                    <label for="transfer-dropoff">Dropoff Location</label>
+                                    <select class="form-control dropSelect" id="transfer-dropoff" name="transfer_dropoff">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -2015,8 +2015,8 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                  <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
-                                    <select class="form-control" id="transfer-dropoff1" name="transfer_dropoff1">
+                                    <label for="transfer-dropoff1">Dropoff Location</label>
+                                    <select class="form-control dropSelect" id="transfer-dropoff1" name="transfer_dropoff1">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -2103,8 +2103,8 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                  <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
-                                    <select class="form-control" id="transfer-dropoff2" name="transfer_dropoff2">
+                                    <label for="transfer-dropoff2">Dropoff Location</label>
+                                    <select class="form-control dropSelect" id="transfer-dropoff2" name="transfer_dropoff2">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -2191,8 +2191,8 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                  <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
-                                    <select class="form-control" id="transfer-dropoff3" name="transfer_dropoff3">
+                                    <label for="transfer-dropoff3">Dropoff Location</label>
+                                    <select class="form-control dropSelect" id="transfer-dropoff3" name="transfer_dropoff3">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -2408,7 +2408,7 @@ if(isset($_POST['addreservation']))
                                         $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                         $result = mysql_query($sql);
                                         
-                                        echo '<select class="form-control select" id="dpt-dropoff1" name="dpt_dropoff1">
+                                        echo '<select class="form-control dropSelect" id="dpt-dropoff1" name="dpt_dropoff1">
                                                 <option>Dropoff Location</option>';
                                             while ($row = mysql_fetch_array($result)) {
                                                 echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -2525,7 +2525,7 @@ if(isset($_POST['addreservation']))
                                         $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                         $result = mysql_query($sql);
                                         
-                                        echo '<select class="form-control select" id="dpt-dropoff2" name="dpt_dropoff2">
+                                        echo '<select class="form-control dropSelect" id="dpt-dropoff2" name="dpt_dropoff2">
                                                 <option>Dropoff Location</option>';
                                             while ($row = mysql_fetch_array($result)) {
                                                 echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -2642,7 +2642,7 @@ if(isset($_POST['addreservation']))
                                         $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                         $result = mysql_query($sql);
                                         
-                                        echo '<select class="form-control select" id="dpt-dropoff3" name="dpt_dropoff3">
+                                        echo '<select class="form-control dropSelect" id="dpt-dropoff3" name="dpt_dropoff3">
                                                 <option>Dropoff Location</option>';
                                             while ($row = mysql_fetch_array($result)) {
                                                 echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -2741,7 +2741,7 @@ if(isset($_POST['addreservation']))
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
 <script type="text/javascript">
-    $('#tour-oper').select2({
+    $('#tour-oper,.dropSelect').select2({
         minimumInputLength: 3
     });
     $('.rep-type').select2();
