@@ -1453,13 +1453,13 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group">
                                         <div class="form-inline col-xs-6">
-                                            <label class="right20">Pickup Time</label><input type="text" class="form-control" id="pickup_time" name="pickup_time" placeholder="Pickup Time">
+                                            <label class="right20">Pickup Time</label><input type="text" class="form-control timepicker24" id="pickup_time" name="pickup_time" placeholder="Pickup Time">
                                             <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by" name="excursion_confirm_by" placeholder="Confirmed By Whom">
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <div class="form-inline col-xs-6">
-                                            <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date" name="excursion_confirm_date" placeholder="Excursion Confirm Date">
+                                            <label class="right20">Date of Confirmation</label><input type="text" class="form-control datepicker" id="excursion_confirm_date" name="excursion_confirm_date" placeholder="Excursion Confirm Date">
                                             <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests" name="excursion_guests" placeholder="Number of Guests">
                                         </div>
                                     </div>
