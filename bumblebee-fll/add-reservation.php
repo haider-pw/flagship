@@ -91,6 +91,13 @@ if(isset($_POST['addreservation']))
     $room_no                = QuoteSmart(@$_POST['room_no']);
     $arr_main               = 1;
     $dpt_main               = 1;
+    //Excursion
+    $excursion_name = QuoteSmart(@$_POST['excursion_name']);
+    $excursion_date = QuoteSmart(@$_POST['excursion_date']);
+    $excursion_pickup1 = QuoteSmart(@$_POST['excursion_pickup']);
+    $excursion_confirm_by = QuoteSmart(@$_POST['excursion_confirm_by']);
+    $excursion_confirm_date = QuoteSmart(@$_POST['excursion_confirm_date']);
+    $excursion_guests = QuoteSmart(@$_POST['excursion_guests']);
     
     //Arrival 1
     $arr_date1              = QuoteSmart(@$_POST['arr_date1']);
@@ -120,14 +127,14 @@ if(isset($_POST['addreservation']))
     $bottled_water1         = QuoteSmart(@$_POST['bottled_water1']);
     $rooms1                 = QuoteSmart(@$_POST['no_of_rooms1']);
     $room_no1               = QuoteSmart(@$_POST['room_no1']);
-    
-    //Excursion
-    $excursion_name = QuoteSmart(@$_POST['excursion_name']);
-    $excursion_date = QuoteSmart(@$_POST['excursion_date']);
-    $excursion_pickup = QuoteSmart(@$_POST['excursion_pickup']);
-    $excursion_confirm_by = QuoteSmart(@$_POST['excursion_confirm_by']);
-    $excursion_confirm_date = QuoteSmart(@$_POST['excursion_confirm_date']);
-    $excursion_guests = QuoteSmart(@$_POST['excursion_guests']);
+
+    //Excursion 1
+    $excursion_name1 = QuoteSmart(@$_POST['excursion_name1']);
+    $excursion_date1 = QuoteSmart(@$_POST['excursion_date1']);
+    $excursion_pickup1 = QuoteSmart(@$_POST['excursion_pickup1']);
+    $excursion_confirm_by1 = QuoteSmart(@$_POST['excursion_confirm_by1']);
+    $excursion_confirm_date1 = QuoteSmart(@$_POST['excursion_confirm_date1']);
+    $excursion_guests1 = QuoteSmart(@$_POST['excursion_guests1']);
 
     //Arrival 2
     $arr_date2              = QuoteSmart(@$_POST['arr_date2']);
@@ -152,6 +159,13 @@ if(isset($_POST['addreservation']))
     $bottled_water2         = QuoteSmart(@$_POST['bottled_water2']);
     $rooms2                 = QuoteSmart(@$_POST['no_of_rooms2']);
     $room_no2               = QuoteSmart(@$_POST['room_no2']);
+    //Excursion 2
+    $excursion_name2 = QuoteSmart(@$_POST['excursion_name2']);
+    $excursion_date2 = QuoteSmart(@$_POST['excursion_date2']);
+    $excursion_pickup2 = QuoteSmart(@$_POST['excursion_pickup2']);
+    $excursion_confirm_by2 = QuoteSmart(@$_POST['excursion_confirm_by2']);
+    $excursion_confirm_date2 = QuoteSmart(@$_POST['excursion_confirm_date2']);
+    $excursion_guests2 = QuoteSmart(@$_POST['excursion_guests2']);
     
     //Arrival 3
     $arr_date3              = QuoteSmart(@$_POST['arr_date3']);
@@ -176,6 +190,13 @@ if(isset($_POST['addreservation']))
     $bottled_water3         = QuoteSmart(@$_POST['bottled_water3']);
     $rooms3                 = QuoteSmart(@$_POST['no_of_rooms3']);
     $room_no3               = QuoteSmart(@$_POST['room_no3']);
+    //Excursion 2
+    $excursion_name3 = QuoteSmart(@$_POST['excursion_name3']);
+    $excursion_date3 = QuoteSmart(@$_POST['excursion_date3']);
+    $excursion_pickup3 = QuoteSmart(@$_POST['excursion_pickup3']);
+    $excursion_confirm_by3 = QuoteSmart(@$_POST['excursion_confirm_by3']);
+    $excursion_confirm_date3 = QuoteSmart(@$_POST['excursion_confirm_date3']);
+    $excursion_guests3 = QuoteSmart(@$_POST['excursion_guests3']);
 
     //Departure 1
     $dpt_date1              = QuoteSmart(@$_POST['dpt_date1']);
@@ -328,35 +349,43 @@ if(isset($_POST['addreservation']))
         }
     }
 
+    //Excursion 2
+    $excursion_name = QuoteSmart(@$_POST['excursion_name']);
+    $excursion_date = QuoteSmart(@$_POST['excursion_date']);
+    $excursion_pickup = QuoteSmart(@$_POST['excursion_pickup']);
+    $excursion_confirm_by = QuoteSmart(@$_POST['excursion_confirm_by']);
+    $excursion_confirm_date = QuoteSmart(@$_POST['excursion_confirm_date']);
+    $excursion_guests = QuoteSmart(@$_POST['excursion_guests']);
+
     //Other Queries
     //
     $sql_5 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle, fast_track) ".
-        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main', '$luggageVehicle','$ftres')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
+        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main', '$luggageVehicle','$ftres','$excursion_name','$excursion_date','$excursion_pickup','$excursion_confirm_by','$excursion_confirm_date','$excursion_guests')";
         $retval5 = mysql_query( $sql_5, $conn );
     
     
     $arrival1active = QuoteSmart($_POST['arrival1active']);
     if($arrival1active == 1){    
     $sql_6 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track) ".
-        "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1', '$luggageVehicle1','$ftres1')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
+        "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1', '$luggageVehicle1','$ftres1','$excursion_name1','$excursion_date1','$excursion_pickup1','$excursion_confirm_by1','$excursion_confirm_date1','$excursion_guests1')";
         $retval6 = mysql_query( $sql_6, $conn );
     }
     
     $arrival2active = QuoteSmart($_POST['arrival2active']);
     if($arrival2active == 1){
     $sql_7 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track) ".
-        "VALUES ('$fsref', '$arr_date2', '$arr_time2', '$arr_flight_no2', '$flight_class2', '$arr2_transport', '$arr_driver2', '$arr_vehicle_no2', '$arr_pickup2', '$arr_dropoff2', '$room_type2', '$rep_type2', '$client2_reqs', '$arr_transport_notes2', '$arr_hotel_notes2', '$infant_seats2', '$child_seats2', '$booster_seats2', '$vouchers2', '$cold_towels2', '$bottled_water2', '$rooms2', '$room_no2', '$luggageVehicle2','$ftres2')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
+        "VALUES ('$fsref', '$arr_date2', '$arr_time2', '$arr_flight_no2', '$flight_class2', '$arr2_transport', '$arr_driver2', '$arr_vehicle_no2', '$arr_pickup2', '$arr_dropoff2', '$room_type2', '$rep_type2', '$client2_reqs', '$arr_transport_notes2', '$arr_hotel_notes2', '$infant_seats2', '$child_seats2', '$booster_seats2', '$vouchers2', '$cold_towels2', '$bottled_water2', '$rooms2', '$room_no2', '$luggageVehicle2','$ftres2','$excursion_name2','$excursion_date2','$excursion_pickup2','$excursion_confirm_by2','$excursion_confirm_date2','$excursion_guests2')";
         $retval7 = mysql_query( $sql_7, $conn );
     }
     
     $arrival3active = QuoteSmart($_POST['arrival3active']);
     if($arrival3active == 1){
     $sql_8 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, luggage_vehicle, fast_track) ".
-        "VALUES ('$fsref', '$arr_date3', '$arr_time3', '$arr_flight_no3', '$flight_class3', '$arr3_transport', '$arr_driver3', '$arr_vehicle_no3', '$arr_pickup3', '$arr_dropoff3', '$room_type3', '$rep_type3', '$client3_reqs', '$arr_transport_notes3', '$arr_hotel_notes3', '$infant_seats3', '$child_seats3', '$booster_seats3', '$vouchers3', '$cold_towels3', '$bottled_water3', '$rooms3', '$room_no3', '$luggageVehicle3','$ftres3')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
+        "VALUES ('$fsref', '$arr_date3', '$arr_time3', '$arr_flight_no3', '$flight_class3', '$arr3_transport', '$arr_driver3', '$arr_vehicle_no3', '$arr_pickup3', '$arr_dropoff3', '$room_type3', '$rep_type3', '$client3_reqs', '$arr_transport_notes3', '$arr_hotel_notes3', '$infant_seats3', '$child_seats3', '$booster_seats3', '$vouchers3', '$cold_towels3', '$bottled_water3', '$rooms3', '$room_no3', '$luggageVehicle3','$ftres3','$excursion_name3','$excursion_date3','$excursion_pickup3','$excursion_confirm_by3','$excursion_confirm_date3','$excursion_guests3')";
         $retval8 = mysql_query( $sql_8, $conn );
     }
     
@@ -1411,8 +1440,8 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group">
                                             <div class="form-inline col-xs-6">
-                                                <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name" name="excursion_name" value="" placeholder="Excursion Name">
-                                                <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date" name="excursion_date" value="" placeholder="Excursion Date">
+                                                <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name" name="excursion_name" placeholder="Excursion Name">
+                                                <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date" name="excursion_date" placeholder="Excursion Date">
                                             </div>
                                     </div>
                                     <div class="form-group">
@@ -1603,6 +1632,24 @@ if(isset($_POST['addreservation']))
                                                 <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats1" name="booster_seats1" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name1" name="excursion_name1" placeholder="Excursion Name">
+                                            <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date1" name="excursion_date1" placeholder="Excursion Date">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Pickup Time</label><input type="text" class="form-control" id="pickup_time1" name="pickup_time1" placeholder="Pickup Time">
+                                            <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by1" name="excursion_confirm_by1" placeholder="Confirmed By Whom">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date1" name="excursion_confirm_date1" placeholder="Excursion Confirm Date">
+                                            <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests1" name="excursion_guests1" placeholder="Number of Guests">
+                                        </div>
+                                    </div>
                                 </div>
                                 <br />
                                 <div><button id="remarrival1" class="btn btn-danger right20">Remove Arrival</button> <button id="arrival2" class="btn btn-warning">Add Arrival</button></div>
@@ -1778,6 +1825,24 @@ if(isset($_POST['addreservation']))
                                                 <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats2" name="child_seats2" value="" placeholder="Child Seats">
                                                 <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats2" name="booster_seats2" value="" placeholder="Booster Seats">
                                             </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name2" name="excursion_name2" placeholder="Excursion Name">
+                                            <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date2" name="excursion_date2" placeholder="Excursion Date">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Pickup Time</label><input type="text" class="form-control" id="pickup_time2" name="pickup_time2" placeholder="Pickup Time">
+                                            <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by2" name="excursion_confirm_by2" placeholder="Confirmed By Whom">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date2" name="excursion_confirm_date2" placeholder="Excursion Confirm Date">
+                                            <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests2" name="excursion_guests2" placeholder="Number of Guests">
+                                        </div>
                                     </div>
                                 </div>
                                 <br />
@@ -1955,6 +2020,24 @@ if(isset($_POST['addreservation']))
                                                 <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats3" name="child_seats3" value="" placeholder="Child Seats">
                                                 <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats3" name="booster_seats3" value="" placeholder="Booster Seats">
                                             </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name3" name="excursion_name3" placeholder="Excursion Name">
+                                            <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date3" name="excursion_date3" placeholder="Excursion Date">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Pickup Time</label><input type="text" class="form-control" id="pickup_time3" name="pickup_time3" placeholder="Pickup Time">
+                                            <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by3" name="excursion_confirm_by3" placeholder="Confirmed By Whom">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="form-inline col-xs-6">
+                                            <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date3" name="excursion_confirm_date3" placeholder="Excursion Confirm Date">
+                                            <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests3" name="excursion_guests3" placeholder="Number of Guests">
+                                        </div>
                                     </div>
                                 </div>
                                 <br />
