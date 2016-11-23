@@ -94,7 +94,7 @@ if(isset($_POST['addreservation']))
     //Excursion
     $excursion_name = QuoteSmart(@$_POST['excursion_name']);
     $excursion_date = QuoteSmart(@$_POST['excursion_date']);
-    $excursion_pickup1 = QuoteSmart(@$_POST['excursion_pickup']);
+    $excursion_pickup = QuoteSmart(@$_POST['excursion_pickup']);
     $excursion_confirm_by = QuoteSmart(@$_POST['excursion_confirm_by']);
     $excursion_confirm_date = QuoteSmart(@$_POST['excursion_confirm_date']);
     $excursion_guests = QuoteSmart(@$_POST['excursion_guests']);
@@ -349,20 +349,18 @@ if(isset($_POST['addreservation']))
         }
     }
 
-    //Excursion 2
-    $excursion_name = QuoteSmart(@$_POST['excursion_name']);
-    $excursion_date = QuoteSmart(@$_POST['excursion_date']);
-    $excursion_pickup = QuoteSmart(@$_POST['excursion_pickup']);
-    $excursion_confirm_by = QuoteSmart(@$_POST['excursion_confirm_by']);
-    $excursion_confirm_date = QuoteSmart(@$_POST['excursion_confirm_date']);
-    $excursion_guests = QuoteSmart(@$_POST['excursion_guests']);
-
     //Other Queries
     //
     $sql_5 = "INSERT INTO fll_arrivals ". 
         "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
         "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main', '$luggageVehicle','$ftres','$excursion_name','$excursion_date','$excursion_pickup','$excursion_confirm_by','$excursion_confirm_date','$excursion_guests')";
         $retval5 = mysql_query( $sql_5, $conn );
+/*    echo $sql_5;
+    exit;*/
+    if(mysql_errno()){
+        echo $sql_5;
+        echo "<br/>".mysql_error();
+    }
     
     
     $arrival1active = QuoteSmart($_POST['arrival1active']);
@@ -371,6 +369,9 @@ if(isset($_POST['addreservation']))
         "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
         "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1', '$luggageVehicle1','$ftres1','$excursion_name1','$excursion_date1','$excursion_pickup1','$excursion_confirm_by1','$excursion_confirm_date1','$excursion_guests1')";
         $retval6 = mysql_query( $sql_6, $conn );
+        if(mysql_errno()){
+            echo "<br/>".mysql_error();
+        }
     }
     
     $arrival2active = QuoteSmart($_POST['arrival2active']);
@@ -379,6 +380,9 @@ if(isset($_POST['addreservation']))
         "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
         "VALUES ('$fsref', '$arr_date2', '$arr_time2', '$arr_flight_no2', '$flight_class2', '$arr2_transport', '$arr_driver2', '$arr_vehicle_no2', '$arr_pickup2', '$arr_dropoff2', '$room_type2', '$rep_type2', '$client2_reqs', '$arr_transport_notes2', '$arr_hotel_notes2', '$infant_seats2', '$child_seats2', '$booster_seats2', '$vouchers2', '$cold_towels2', '$bottled_water2', '$rooms2', '$room_no2', '$luggageVehicle2','$ftres2','$excursion_name2','$excursion_date2','$excursion_pickup2','$excursion_confirm_by2','$excursion_confirm_date2','$excursion_guests2')";
         $retval7 = mysql_query( $sql_7, $conn );
+        if(mysql_errno()){
+            echo "<br/>".mysql_error();
+        }
     }
     
     $arrival3active = QuoteSmart($_POST['arrival3active']);
@@ -387,6 +391,9 @@ if(isset($_POST['addreservation']))
         "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
         "VALUES ('$fsref', '$arr_date3', '$arr_time3', '$arr_flight_no3', '$flight_class3', '$arr3_transport', '$arr_driver3', '$arr_vehicle_no3', '$arr_pickup3', '$arr_dropoff3', '$room_type3', '$rep_type3', '$client3_reqs', '$arr_transport_notes3', '$arr_hotel_notes3', '$infant_seats3', '$child_seats3', '$booster_seats3', '$vouchers3', '$cold_towels3', '$bottled_water3', '$rooms3', '$room_no3', '$luggageVehicle3','$ftres3','$excursion_name3','$excursion_date3','$excursion_pickup3','$excursion_confirm_by3','$excursion_confirm_date3','$excursion_guests3')";
         $retval8 = mysql_query( $sql_8, $conn );
+        if(mysql_errno()){
+            echo "<br/>".mysql_error();
+        }
     }
     
     $sql_9 = "INSERT INTO fll_departures ". 
@@ -1441,7 +1448,7 @@ if(isset($_POST['addreservation']))
                                     <div class="form-group">
                                             <div class="form-inline col-xs-6">
                                                 <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name" name="excursion_name" placeholder="Excursion Name">
-                                                <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date" name="excursion_date" placeholder="Excursion Date">
+                                                <label class="right20">Excursion Date</label><input type="text" class="right20 form-control datepicker" id="excursion_date" name="excursion_date" placeholder="Excursion Date">
                                             </div>
                                     </div>
                                     <div class="form-group">
