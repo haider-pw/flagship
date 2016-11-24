@@ -31,7 +31,6 @@ var_dump($_POST['rep_type']);*/
 
 if(isset($_POST['addreservation']))
 {
-
     //Sanitize data
     $title_name             = QuoteSmart(@$_POST['title_name']);
     $first_name             = QuoteSmart(@$_POST['first_name']);
@@ -98,7 +97,33 @@ if(isset($_POST['addreservation']))
     $excursion_confirm_by = QuoteSmart(@$_POST['excursion_confirm_by']);
     $excursion_confirm_date = QuoteSmart(@$_POST['excursion_confirm_date']);
     $excursion_guests = QuoteSmart(@$_POST['excursion_guests']);
-    
+
+    //Arrival Rooms
+        //Room0
+    $roomType = $_POST['arr0_room_type'];
+    $roomNo = $_POST['arr0_room_no'];
+    $roomLastName = $_POST['arr0_room_last_name'];
+        //Room1
+    $roomType = $_POST['arr0_room_type1'];
+    $roomNo = $_POST['arr0_room_no1'];
+    $roomLastName = $_POST['arr0_room_last_name1'];
+        //Room2
+    $roomType = $_POST['arr0_room_type2'];
+    $roomNo = $_POST['arr0_room_no2'];
+    $roomLastName = $_POST['arr0_room_last_name2'];
+        //Room3
+    $roomType = $_POST['arr0_room_type3'];
+    $roomNo = $_POST['arr0_room_no3'];
+    $roomLastName = $_POST['arr0_room_last_name3'];
+        //Room4
+    $roomType = $_POST['arr0_room_type4'];
+    $roomNo = $_POST['arr0_room_no4'];
+    $roomLastName = $_POST['arr0_room_last_name4'];
+        //Room5
+    $roomType = $_POST['arr0_room_type5'];
+    $roomNo = $_POST['arr0_room_no5'];
+    $roomLastName = $_POST['arr0_room_last_name5'];
+
     //Arrival 1
     $arr_date1              = QuoteSmart(@$_POST['arr_date1']);
     $arr_time1              = QuoteSmart(@$_POST['arr_time1']);
@@ -135,6 +160,31 @@ if(isset($_POST['addreservation']))
     $excursion_confirm_by1 = QuoteSmart(@$_POST['excursion_confirm_by1']);
     $excursion_confirm_date1 = QuoteSmart(@$_POST['excursion_confirm_date1']);
     $excursion_guests1 = QuoteSmart(@$_POST['excursion_guests1']);
+    //Arrival Rooms
+    //Room0
+    $roomType = $_POST['arr1_room_type'];
+    $roomNo = $_POST['arr1_room_no'];
+    $roomLastName = $_POST['arr1_room_last_name'];
+    //Room1
+    $roomType = $_POST['arr1_room_type1'];
+    $roomNo = $_POST['arr1_room_no1'];
+    $roomLastName = $_POST['arr1_room_last_name1'];
+    //Room2
+    $roomType = $_POST['arr1_room_type2'];
+    $roomNo = $_POST['arr1_room_no2'];
+    $roomLastName = $_POST['arr1_room_last_name2'];
+    //Room3
+    $roomType = $_POST['arr1_room_type3'];
+    $roomNo = $_POST['arr1_room_no3'];
+    $roomLastName = $_POST['arr1_room_last_name3'];
+    //Room4
+    $roomType = $_POST['arr1_room_type4'];
+    $roomNo = $_POST['arr1_room_no4'];
+    $roomLastName = $_POST['arr1_room_last_name4'];
+    //Room5
+    $roomType = $_POST['arr1_room_type5'];
+    $roomNo = $_POST['arr1_room_no5'];
+    $roomLastName = $_POST['arr1_room_last_name5'];
 
     //Arrival 2
     $arr_date2              = QuoteSmart(@$_POST['arr_date2']);
@@ -166,6 +216,31 @@ if(isset($_POST['addreservation']))
     $excursion_confirm_by2 = QuoteSmart(@$_POST['excursion_confirm_by2']);
     $excursion_confirm_date2 = QuoteSmart(@$_POST['excursion_confirm_date2']);
     $excursion_guests2 = QuoteSmart(@$_POST['excursion_guests2']);
+    //Arrival Rooms
+    //Room0
+    $roomType = $_POST['arr2_room_type'];
+    $roomNo = $_POST['arr2_room_no'];
+    $roomLastName = $_POST['arr2_room_last_name'];
+    //Room1
+    $roomType = $_POST['arr2_room_type1'];
+    $roomNo = $_POST['arr2_room_no1'];
+    $roomLastName = $_POST['arr2_room_last_name1'];
+    //Room2
+    $roomType = $_POST['arr2_room_type2'];
+    $roomNo = $_POST['arr2_room_no2'];
+    $roomLastName = $_POST['arr2_room_last_name2'];
+    //Room3
+    $roomType = $_POST['arr2_room_type3'];
+    $roomNo = $_POST['arr2_room_no3'];
+    $roomLastName = $_POST['arr2_room_last_name3'];
+    //Room4
+    $roomType = $_POST['arr2_room_type4'];
+    $roomNo = $_POST['arr2_room_no4'];
+    $roomLastName = $_POST['arr2_room_last_name4'];
+    //Room5
+    $roomType = $_POST['arr2_room_type5'];
+    $roomNo = $_POST['arr2_room_no5'];
+    $roomLastName = $_POST['arr2_room_last_name5'];
     
     //Arrival 3
     $arr_date3              = QuoteSmart(@$_POST['arr_date3']);
@@ -197,6 +272,31 @@ if(isset($_POST['addreservation']))
     $excursion_confirm_by3 = QuoteSmart(@$_POST['excursion_confirm_by3']);
     $excursion_confirm_date3 = QuoteSmart(@$_POST['excursion_confirm_date3']);
     $excursion_guests3 = QuoteSmart(@$_POST['excursion_guests3']);
+    //Arrival Rooms
+    //Room0
+    $roomType = $_POST['arr3_room_type'];
+    $roomNo = $_POST['arr3_room_no'];
+    $roomLastName = $_POST['arr3_room_last_name'];
+    //Room1
+    $roomType = $_POST['arr3_room_type1'];
+    $roomNo = $_POST['arr3_room_no1'];
+    $roomLastName = $_POST['arr3_room_last_name1'];
+    //Room2
+    $roomType = $_POST['arr3_room_type2'];
+    $roomNo = $_POST['arr3_room_no2'];
+    $roomLastName = $_POST['arr3_room_last_name2'];
+    //Room3
+    $roomType = $_POST['arr3_room_type3'];
+    $roomNo = $_POST['arr3_room_no3'];
+    $roomLastName = $_POST['arr3_room_last_name3'];
+    //Room4
+    $roomType = $_POST['arr3_room_type4'];
+    $roomNo = $_POST['arr3_room_no4'];
+    $roomLastName = $_POST['arr3_room_last_name4'];
+    //Room5
+    $roomType = $_POST['arr3_room_type5'];
+    $roomNo = $_POST['arr3_room_no5'];
+    $roomLastName = $_POST['arr3_room_last_name5'];
 
     //Departure 1
     $dpt_date1              = QuoteSmart(@$_POST['dpt_date1']);
@@ -1392,18 +1492,18 @@ if(isset($_POST['addreservation']))
                                     </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
-                                    <label for="arr_room_type">Room type</label>
-                                    <select class="form-control right20" id="arr_room_type" name="arr_room_type">
+                                    <label for="arr0_room_type">Room type</label>
+                                    <select class="form-control right20" id="arr0_room_type" name="arr0_room_type">
                                         <option>Room Type</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
-                                    <label class="right20">Room number</label>
-                                    <input class="form-control right20" id="arr_room-no" name="arr_room_no" placeholder="Room number">
+                                    <label for="arr0_room_no" class="right20">Room number</label>
+                                    <input class="form-control right20" id="arr0_room-no" name="arr0_room_no" placeholder="Room number">
                                 </div>
                                     <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
-                                        <label>Last Name</label>
-                                        <input type="text" class="form-control right20" id="arr_room_last_name" name="arr_room_last_name" placeholder="Guest last name">
+                                        <label for="arr0_room_last_name">Last Name</label>
+                                        <input type="text" class="form-control right20" id="arr0_room_last_name" name="arr0_room_last_name" placeholder="Guest last name">
                                     </div>
                                     <div class="form-group col-lg-1" style="margin-top: 20px;">
                                         <a class="btn btn-default addRoomBtn" data-id="0"><i class="fa fa-plus"></i> Add Room</a>
