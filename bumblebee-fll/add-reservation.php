@@ -636,7 +636,7 @@ if(isset($_POST['addreservation']))
                                             });
                                         });
                                         
-                                        $("#room-type").attr("disabled","disabled");
+                                        $("#arr_room_type").attr("disabled","disabled");
                                         
                                         $("#arr-dropoff").change(function(){
                                             $("#room-type").attr("disabled","disabled");
@@ -1392,20 +1392,20 @@ if(isset($_POST['addreservation']))
                                     </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
-                                    <label for="room-type">Room type</label>
-                                    <select class="form-control right20" id="room-type" name="room_type">
+                                    <label for="arr_room_type">Room type</label>
+                                    <select class="form-control right20" id="arr_room_type" name="arr_room_type">
                                         <option>Room Type</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
                                     <label class="right20">Room number</label>
-                                    <input class="form-control right20" id="room-no" name="room_no" placeholder="Room number">
+                                    <input class="form-control right20" id="arr_room-no" name="arr_room_no" placeholder="Room number">
                                 </div>
                                     <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
                                         <label>Last Name</label>
-                                        <input type="text" class="form-control right20" id="room_last_name" name="room_last_name" placeholder="Guest last name">
+                                        <input type="text" class="form-control right20" id="arr_room_last_name" name="arr_room_last_name" placeholder="Guest last name">
                                     </div>
-                                    <div class="form-group col-lg-1">
+                                    <div class="form-group col-lg-1" style="margin-top: 20px;">
                                         <a class="btn btn-default addRoomBtn"><i class="fa fa-plus"></i> Add Room</a>
                                     </div>
                                     <div id="sub-forms-div">
@@ -2973,7 +2973,6 @@ if(isset($_POST['addreservation']))
         var totalCurrentDivs = subRoomsDiv.find('div.roomDiv').length + 1;
         var maxRooms = 5;
 
-
         if(totalCurrentDivs<maxRooms){
             //We Would be Adding More Guests Now to our specified Div.
             //New Way, Now More Guests Forms will be added through the jquery/ajax
@@ -2995,8 +2994,20 @@ if(isset($_POST['addreservation']))
         }
     });
     body.on('click','.removeBtn',function(){
-        $(this).parents('.roomDiv').remove();
-        $(this).parents('#sub-forms-div').find('.roomDiv').last().find('.actionButtons').show();
+        var removeBtn = $(this);
+        var mainDiv = $('#sub-forms-div');
+        removeBtn.parents('.roomDiv').remove();
+
+        //Now we need to check what button to show
+        var totalCurrentDivs = mainDiv.find('div.roomDiv').length;
+        console.log(totalCurrentDivs);
+        if(totalCurrentDivs){
+            mainDiv.find('.roomDiv').last().find('.actionButtons').show();
+        }else{
+            $('a.addRoomBtn').parent().show();
+        }
+
+
     });
 </script>
         <?php 
