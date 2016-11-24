@@ -3,6 +3,7 @@
 if($_POST){
     $request = $_POST['req'];
     $roomCount = $_POST['dataID'];
+    $arrID = $_POST['arrID'];
 }
 ?>
 <div class="clearfix"></div>
@@ -22,7 +23,7 @@ if($_POST){
     <input type="text" class="form-control right20" id="arr_room_last_name<?=isset($roomCount)?$roomCount:''?>" name="arr_room_last_name<?=isset($roomCount)?$roomCount:''?>" placeholder="Guest last name">
 </div>
 <div class="form-group col-lg-3 actionButtons" style="margin-top: 21px;">
-    <a class="btn btn-default removeBtn"><i class="fa fa-minus"></i> Remove Room</a>
-    <a class="btn btn-default addRoomBtn"><i class="fa fa-plus"></i> Add Room</a>
+    <a class="btn btn-default removeBtn" data-id="<?=$arrID?>"><i class="fa fa-minus"></i> Remove Room</a>
+    <a class="btn btn-default addRoomBtn" data-id="<?=$arrID?>"><i class="fa fa-plus"></i> Add Room</a>
 </div>
 </div>

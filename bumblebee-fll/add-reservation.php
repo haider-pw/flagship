@@ -1406,9 +1406,9 @@ if(isset($_POST['addreservation']))
                                         <input type="text" class="form-control right20" id="arr_room_last_name" name="arr_room_last_name" placeholder="Guest last name">
                                     </div>
                                     <div class="form-group col-lg-1" style="margin-top: 20px;">
-                                        <a class="btn btn-default addRoomBtn"><i class="fa fa-plus"></i> Add Room</a>
+                                        <a class="btn btn-default addRoomBtn" data-id="0"><i class="fa fa-plus"></i> Add Room</a>
                                     </div>
-                                    <div id="sub-forms-div">
+                                    <div id="sub-forms-div0" data-id="0">
                                     </div>
                                     <div class="clearfix"></div>
                                  <div class="form-group"><!-- hotel notes -->
@@ -1574,26 +1574,37 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
+                                    <label for="arr-dropoff1">Dropoff Location</label>
                                     <select class="form-control dropSelect" id="arr-dropoff1" name="arr_dropoff1">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="form-group col-xs-3"><!-- room type selection -->
-                                    <label>Room type</label>
-                                    <select class="form-control" id="room-type1" name="room_type1">
-                                        <option>Room Type</option>     
-                                    </select>
-                                </div>
-                                <div class="form-group col-xs-2"><!-- room number -->
-                                    <label class="left20 right20">Room number</label>
-                                    <input class="form-control left20" id="room-no1" name="room_no1" placeholder="Room number">
-                                </div>
-                                <div class="form-group col-xs-2"><!-- number of rooms -->
-                                    <label style="margin-left: 40px;">Number of Rooms</label>
-                                    <input type="number" min=0 max=99 class="form-control" style="margin-left: 40px;" id="no-of-rooms1" name="no_of_rooms1" value="" placeholder="Number of Rooms">
-                                </div>
+                                    <div class="form-group col-lg-2 col-md-6 col-xs-6"><!-- number of rooms -->
+                                        <label>Number of Rooms</label>
+                                        <input type="number" min=0 max=99 class="form-control" id="no-of-rooms" name="no_of_rooms" value="" placeholder="Number of Rooms">
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
+                                        <label for="arr1_room_type">Room type</label>
+                                        <select class="form-control right20" id="arr1_room_type" name="arr1_room_type">
+                                            <option>Room Type</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
+                                        <label for="arr1_room_no" class="right20">Room number</label>
+                                        <input class="form-control right20" id="arr1_room-no" name="arr1_room_no" placeholder="Room number">
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
+                                        <label>Last Name</label>
+                                        <input type="text" class="form-control right20" id="arr1_room_last_name" name="arr1_room_last_name" placeholder="Guest last name">
+                                    </div>
+                                    <div class="form-group col-lg-1" style="margin-top: 20px;">
+                                        <a class="btn btn-default addRoomBtn" data-id="1"><i class="fa fa-plus"></i> Add Room</a>
+                                    </div>
+                                    <div id="sub-forms-div1" data-id="1">
+                                    </div>
+                                    <div class="clearfix"></div>
                                  <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
                                         <label>Hotel notes</label>
@@ -2969,7 +2980,9 @@ if(isset($_POST['addreservation']))
     });
     body.on('click','.addRoomBtn',function(){
         var currentBtn = $(this);
-        var subRoomsDiv = $('#sub-forms-div');
+        var currentArrivalID = currentBtn.attr('data-id');
+        var subRoomsDiv = $('#sub-forms-div'+currentArrivalID);
+        console.log(subRoomsDiv);
         var totalCurrentDivs = subRoomsDiv.find('div.roomDiv').length + 1;
         var maxRooms = 5;
 
@@ -2979,7 +2992,7 @@ if(isset($_POST['addreservation']))
             $.ajax({
                 url: "<?=$url?>/custom_updates/sub_room_form.php",
                 type: "POST",
-                data: {req: "roomCount", dataID: totalCurrentDivs},
+                data: {req: "roomCount", dataID: totalCurrentDivs, arrID:currentArrivalID},
                 success: function (output) {
                     subRoomsDiv.append(output);
                     currentBtn.parent().hide();
@@ -2995,7 +3008,8 @@ if(isset($_POST['addreservation']))
     });
     body.on('click','.removeBtn',function(){
         var removeBtn = $(this);
-        var mainDiv = $('#sub-forms-div');
+        var currentArrivalID = removeBtn.attr('data-id');
+        var mainDiv = $('#sub-forms-div'+currentArrivalID);
         removeBtn.parents('.roomDiv').remove();
 
         //Now we need to check what button to show
@@ -3004,7 +3018,9 @@ if(isset($_POST['addreservation']))
         if(totalCurrentDivs){
             mainDiv.find('.roomDiv').last().find('.actionButtons').show();
         }else{
-            $('a.addRoomBtn').parent().show();
+            console.log(mainDiv);
+            console.log(currentArrivalID);
+            mainDiv.prev().show();
         }
 
 
