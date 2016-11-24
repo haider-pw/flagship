@@ -19,7 +19,7 @@ if($_POST){
     <input class="form-control right20" id="arr<?=$arrID?>_room-no<?=isset($roomCount)?$roomCount:''?>" name="arr<?=$arrID?>_room_no<?=isset($roomCount)?$roomCount:''?>" placeholder="Room number">
 </div>
 <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
-    <label>Last Name</label>
+    <label for="arr<?=$arrID?>_room_last_name<?=isset($roomCount)?$roomCount:''?>">Last Name</label>
     <input type="text" class="form-control right20" id="arr<?=$arrID?>_room_last_name<?=isset($roomCount)?$roomCount:''?>" name="arr<?=$arrID?>_room_last_name<?=isset($roomCount)?$roomCount:''?>" placeholder="Guest last name">
 </div>
 <div class="form-group col-lg-3 actionButtons" style="margin-top: 21px;">
