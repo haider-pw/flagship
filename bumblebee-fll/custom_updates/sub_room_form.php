@@ -9,13 +9,13 @@ if($_POST){
 <div class="clearfix"></div>
 <div class="roomDiv">
 <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
-    <label for="arr_room_type<?=isset($roomCount)?$roomCount:''?>">Room type</label>
+    <label for="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>">Room type</label>
     <select class="form-control right20" id="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>" name="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>">
         <option>Room Type</option>
     </select>
 </div>
 <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
-    <label class="right20">Room number</label>
+    <label for="arr<?=$arrID?>_room-no<?=isset($roomCount)?$roomCount:''?>" class="right20">Room number</label>
     <input class="form-control right20" id="arr<?=$arrID?>_room-no<?=isset($roomCount)?$roomCount:''?>" name="arr<?=$arrID?>_room_no<?=isset($roomCount)?$roomCount:''?>" placeholder="Room number">
 </div>
 <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">

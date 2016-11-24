@@ -1491,13 +1491,13 @@ if(isset($_POST['addreservation']))
                                         <input type="number" min=0 max=99 class="form-control" id="no-of-rooms" name="no_of_rooms" value="" placeholder="Number of Rooms">
                                     </div>
                                 <div class="clearfix"></div>
-                                <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
+                                    <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
                                     <label for="arr0_room_type">Room type</label>
                                     <select class="form-control right20" id="arr0_room_type" name="arr0_room_type">
                                         <option>Room Type</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
                                     <label for="arr0_room_no" class="right20">Room number</label>
                                     <input class="form-control right20" id="arr0_room-no" name="arr0_room_no" placeholder="Room number">
                                 </div>
@@ -1696,7 +1696,7 @@ if(isset($_POST['addreservation']))
                                         <input class="form-control right20" id="arr1_room-no" name="arr1_room_no" placeholder="Room number">
                                     </div>
                                     <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
-                                        <label>Last Name</label>
+                                        <label for="arr1_room_last_name">Last Name</label>
                                         <input type="text" class="form-control right20" id="arr1_room_last_name" name="arr1_room_last_name" placeholder="Guest last name">
                                     </div>
                                     <div class="form-group col-lg-1" style="margin-top: 20px;">
@@ -1811,7 +1811,7 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <!-- initiate chained selection flight# -->
                                 <div class="form-group col-xs-4"><!-- flight # selection -->
-                                    <label>Flight number</label>
+                                    <label for="arr_flight_no2">Flight number</label>
                                     <select class="form-control" id="arr-flight-no2" name="arr_flight_no2">
                                         <?php echo $opt->ShowFlight(); ?>     
                                     </select>
@@ -1854,7 +1854,7 @@ if(isset($_POST['addreservation']))
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label for="arr_driver2">Driver</label>
                                     <select class="form-control" id="arr-driver2" name="arr_driver2">
                                         <?php echo $opt->ShowTransport(); ?>     
                                     </select>
@@ -1886,20 +1886,26 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="form-group col-xs-3"><!-- room type selection -->
-                                    <label>Room type</label>
-                                    <select class="form-control" id="room-type2" name="room_type2">
-                                        <option>Room Type</option>     
-                                    </select>
-                                </div>
-                                <div class="form-group col-xs-2"><!-- room number -->
-                                    <label class="left20 right20">Room number</label>
-                                    <input class="form-control left20" id="room-no2" name="room_no2" placeholder="Room number">
-                                </div>
-                                <div class="form-group col-xs-2"><!-- number of rooms -->
-                                    <label style="margin-left: 40px;">Number of Rooms</label>
-                                    <input type="number" min=0 max=99 class="form-control" style="margin-left: 40px;" id="no-of-rooms2" name="no_of_rooms2" value="" placeholder="Number of Rooms">
-                                </div>
+                                    <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
+                                        <label for="arr2_room_type">Room type</label>
+                                        <select class="form-control right20" id="arr2_room_type" name="arr2_room_type">
+                                            <option>Room Type</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
+                                        <label for="arr2_room_no" class="right20">Room number</label>
+                                        <input class="form-control right20" id="arr2_room-no" name="arr2_room_no" placeholder="Room number">
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
+                                        <label for="arr2_room_last_name">Last Name</label>
+                                        <input type="text" class="form-control right20" id="arr2_room_last_name" name="arr2_room_last_name" placeholder="Guest last name">
+                                    </div>
+                                    <div class="form-group col-lg-1" style="margin-top: 20px;">
+                                        <a class="btn btn-default addRoomBtn" data-id="2"><i class="fa fa-plus"></i> Add Room</a>
+                                    </div>
+                                    <div id="sub-forms-div2" data-id="2">
+                                    </div>
+                                    <div class="clearfix"></div>
                                  <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
                                         <label>Hotel notes</label>
