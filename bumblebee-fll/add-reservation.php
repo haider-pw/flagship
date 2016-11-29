@@ -973,8 +973,7 @@ if(isset($_POST['addreservation']))
                 die('Could not enter data: ' . mysql_error());
             }
     mysql_close($conn);
-//        echo "<script>window.location='add-reservation.php?ok=1'</script>";
-    exit;
+        echo "<script>window.location='add-reservation.php?ok=1'</script>";
 	}
 ?>
 
