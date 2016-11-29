@@ -592,7 +592,6 @@ if(isset($_POST['addreservation']))
 
 
         //Now we need to check if we have rooms.
-
         if(!empty($lastArrival1ID)) {
             //Insert the First Arrival Room Details.
             //For Room 0
