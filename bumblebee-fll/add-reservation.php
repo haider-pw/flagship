@@ -3007,6 +3007,10 @@ if(isset($_POST['addreservation']))
                                         <?php include ('dpt_location_select.php'); ?>
                                     </div>
                                     <div class="clearfix"></div>
+                                    <label>
+                                        <input type="checkbox" name="jetCenter" value="jetCenter"> IAM Jet Center
+                                    </label>
+                                    <div class="clearfix"></div>
                                     <div><button id="departure1" class="btn btn-warning">Add Departure</button></div>
                                     <!-- end departure main -->
                                     
@@ -3121,6 +3125,10 @@ if(isset($_POST['addreservation']))
                                             echo "</select>";
                                         ?>
                                     </div>
+                                    <div class="clearfix"></div>
+                                    <label>
+                                        <input type="checkbox" name="jetCenter1" value="jetCenter"> IAM Jet Center
+                                    </label>
                                     <div class="clearfix"></div>
                                     <br />
                                      <div><button id="remdeparture1" class="btn btn-danger right20">Remove Departure</button> <button id="departure2" class="btn btn-warning">Add Departure</button></div>
@@ -3239,6 +3247,9 @@ if(isset($_POST['addreservation']))
                                         ?>
                                     </div>
                                     <div class="clearfix"></div>
+                                    <label>
+                                        <input type="checkbox" name="jetCenter2" value="jetCenter"> IAM Jet Center
+                                    </label>
                                     <br />
                                      <div><button id="remdeparture2" class="btn btn-danger right20">Remove Departure</button> <button id="departure3" class="btn btn-warning">Add Departure</button></div>
                                     </div>
