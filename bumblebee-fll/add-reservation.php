@@ -134,6 +134,13 @@ if(isset($_POST['addreservation']))
         $arr0_room_last_name5 = $_POST['arr0_room_last_name5'];
     }
 
+    //JetCenter
+    if(isset($_POST['jetCenter'])){
+        $jetCenter   = 1;
+    }else{
+        $jetCenter   = 0;
+    }
+
 
     //Arrival 1
     $arr_date1              = QuoteSmart(@$_POST['arr_date1']);
@@ -356,6 +363,12 @@ if(isset($_POST['addreservation']))
     $dpt_dropoff1           = QuoteSmart(@$_POST['dpt_dropoff1']);
     $pickup_time1           = QuoteSmart(@$_POST['pickup_time1']);
     $dpt_transport_notes1   = QuoteSmart(@$_POST['dpt_transport_notes1']);
+    //JetCenter 1
+    if(isset($_POST['jetCenter1'])){
+        $jetCenter1   = 1;
+    }else{
+        $jetCenter1   = 0;
+    }
     
     //Departure 2
     $dpt_date2              = QuoteSmart(@$_POST['dpt_date2']);
@@ -369,6 +382,12 @@ if(isset($_POST['addreservation']))
     $dpt_dropoff2           = QuoteSmart(@$_POST['dpt_dropoff2']);
     $pickup_time2           = QuoteSmart(@$_POST['pickup_time2']);
     $dpt_transport_notes2   = QuoteSmart(@$_POST['dpt_transport_notes2']);
+    //JetCenter 2
+    if(isset($_POST['jetCenter2'])){
+        $jetCenter2   = 1;
+    }else{
+        $jetCenter2   = 0;
+    }
     
     //Departure 3
     $dpt_date3              = QuoteSmart(@$_POST['dpt_date3']);
@@ -382,6 +401,12 @@ if(isset($_POST['addreservation']))
     $dpt_dropoff3           = QuoteSmart(@$_POST['dpt_dropoff3']);
     $pickup_time3           = QuoteSmart(@$_POST['pickup_time3']);
     $dpt_transport_notes3   = QuoteSmart(@$_POST['dpt_transport_notes3']);
+    //JetCenter 3
+    if(isset($_POST['jetCenter3'])){
+        $jetCenter3   = 1;
+    }else{
+        $jetCenter3   = 0;
+    }
     
     //Transfer
     $transfer_pickup        = QuoteSmart(@$_POST['transfer_pickup']);
@@ -874,31 +899,31 @@ if(isset($_POST['addreservation']))
     }
     
     $sql_9 = "INSERT INTO fll_departures ". 
-        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main) ". 
-        "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main')";
+        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center) ".
+        "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter')";
         $retval9 = mysql_query( $sql_9, $conn );
     
     $departure1active = QuoteSmart($_POST['departure1active']);
     if($departure1active == 1){
     $sql_10 = "INSERT INTO fll_departures ". 
-        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes) ". 
-        "VALUES ('$fsref', '$dpt_date1', '$dpt_time1', '$dpt_flight_no1', '$dpt_flight_class1', '$dpt1_transport', '$dpt_driver1', '$dpt_vehicle_no1', '$dpt_pickup1', '$dpt_dropoff1', '$pickup_time1', '$dpt_transport_notes1')";
+        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
+        "VALUES ('$fsref', '$dpt_date1', '$dpt_time1', '$dpt_flight_no1', '$dpt_flight_class1', '$dpt1_transport', '$dpt_driver1', '$dpt_vehicle_no1', '$dpt_pickup1', '$dpt_dropoff1', '$pickup_time1', '$dpt_transport_notes1','$jetCenter1')";
         $retval10 = mysql_query( $sql_10, $conn );
     }
     
     $departure2active = QuoteSmart($_POST['departure2active']);
     if($departure2active == 1){
     $sql_11 = "INSERT INTO fll_departures ". 
-        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes) ". 
-        "VALUES ('$fsref', '$dpt_date2', '$dpt_time2', '$dpt_flight_no2', '$dpt_flight_class2', '$dpt2_transport', '$dpt_driver2', '$dpt_vehicle_no2', '$dpt_pickup2', '$dpt_dropoff2', '$pickup_time2', '$dpt_transport_notes2')";
+        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
+        "VALUES ('$fsref', '$dpt_date2', '$dpt_time2', '$dpt_flight_no2', '$dpt_flight_class2', '$dpt2_transport', '$dpt_driver2', '$dpt_vehicle_no2', '$dpt_pickup2', '$dpt_dropoff2', '$pickup_time2', '$dpt_transport_notes2','$jetCenter2')";
         $retval11 = mysql_query( $sql_11, $conn );
     }
     
     $departure3active = QuoteSmart($_POST['departure3active']);
     if($departure3active == 1){
     $sql_12 = "INSERT INTO fll_departures ". 
-        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes) ". 
-        "VALUES ('$fsref', '$dpt_date3', '$dpt_time3', '$dpt_flight_no3', '$dpt_flight_class3', '$dpt3_transport', '$dpt_driver3', '$dpt_vehicle_no3', '$dpt_pickup3', '$dpt_dropoff3', '$pickup_time3', '$dpt_transport_notes3')";
+        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
+        "VALUES ('$fsref', '$dpt_date3', '$dpt_time3', '$dpt_flight_no3', '$dpt_flight_class3', '$dpt3_transport', '$dpt_driver3', '$dpt_vehicle_no3', '$dpt_pickup3', '$dpt_dropoff3', '$pickup_time3', '$dpt_transport_notes3','$jetCenter3')";
         $retval12 = mysql_query( $sql_12, $conn );
     }
     
@@ -3366,6 +3391,10 @@ if(isset($_POST['addreservation']))
                                             echo "</select>";
                                         ?>
                                     </div>
+                                    <div class="clearfix"></div>
+                                    <label>
+                                        <input type="checkbox" name="jetCenter3" value="jetCenter"> IAM Jet Center
+                                    </label>
                                     <div class="clearfix"></div>
                                     <br />
                                      <div><button id="remdeparture3" class="btn btn-danger right20">Remove Departure</button>
