@@ -1113,7 +1113,7 @@ if(isset($_POST['addreservation']))
                                             });
                                         });
                                         
-                                        $("#arr_room_type").attr("disabled","disabled");
+                                        $(".arr0_room_type").attr("disabled","disabled");
                                         
                                         $("#arr-dropoff").change(function(){
                                             console.log('test');
@@ -2061,7 +2061,7 @@ if(isset($_POST['addreservation']))
                                 <div class="clearfix"></div>
                                     <div class="form-group col-lg-2 col-md-6 col-xs-6"><!-- number of rooms -->
                                         <label>Number of Rooms</label>
-                                        <input type="number" min=0 max=99 class="form-control" id="no-of-rooms" name="no_of_rooms" value="" placeholder="Number of Rooms">
+                                        <input type="number" min=0 max=99 class="form-control" id="no-of-rooms1" name="no_of_rooms1" value="" placeholder="Number of Rooms">
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
@@ -2259,12 +2259,18 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
-                                    <label>Dropoff Location</label>
+                                    <label for="arr-dropoff2">Dropoff Location</label>
                                     <select class="form-control dropSelect" id="arr-dropoff2" name="arr_dropoff2">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-lg-2 col-md-6 col-xs-6"><!-- number of rooms -->
+                                        <label>Number of Rooms</label>
+                                        <input type="number" min=0 max=99 class="form-control" id="no-of-rooms2" name="no_of_rooms2" placeholder="Number of Rooms">
+                                    </div>
                                 <div class="clearfix"></div>
+
                                     <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
                                         <label for="arr2_room_type">Room type</label>
                                         <select class="form-control right20" id="arr2_room_type" name="arr2_room_type">

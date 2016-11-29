@@ -446,8 +446,8 @@ if(isset($_POST['addreservation']))
 
 
     $sql_5 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle) ".
-        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main',$luggageVehicle)";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle,room_last_name) ".
+        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main','$luggageVehicle','$arr0_room_last_name')";
         $retval5 = mysql_query( $sql_5, $conn );
 
     if(mysql_errno()){
@@ -1070,17 +1070,17 @@ if(isset($_POST['addreservation']))
                                             });
                                         });
                                         
-                                        $("#room-type").attr("disabled","disabled");
+                                        $(".arr0_room_type").attr("disabled","disabled");
                                         
                                         $("#arr-dropoff").change(function(){
-                                            $("#room-type").attr("disabled","disabled");
-                                            $("#room-type").html("<option>Loading rooms ...</option>");
+                                            $(".arr0_room_type").attr("disabled","disabled");
+                                            $(".arr0_room_type").html("<option>Loading rooms ...</option>");
                                         
                                             var locationid = $("#arr-dropoff option:selected").attr('value');
                                         
                                             $.post("select_roomtype.php", {locationid:locationid}, function(data){
-                                                $("#room-type").removeAttr("disabled");
-                                                $("#room-type").html(data);
+                                                $(".arr0_room_type").removeAttr("disabled");
+                                                $(".arr0_room_type").html(data);
                                                 
                                             });
                                         });
@@ -1095,7 +1095,6 @@ if(isset($_POST['addreservation']))
                                             $.post("select_vehicle.php", {driverid:driverid}, function(data){
                                                 $("#arr-vehicle-no1").removeAttr("disabled");
                                                 $("#arr-vehicle-no1").html(data);
-                                                
                                             });
                                         });
                                         
@@ -1147,14 +1146,15 @@ if(isset($_POST['addreservation']))
                                         $("#room-type1").attr("disabled","disabled");
                                         
                                         $("#arr-dropoff1").change(function(){
-                                            $("#room-type1").attr("disabled","disabled");
-                                            $("#room-type1").html("<option>Loading rooms ...</option>");
+                                            var roomTypeSelector1 = $(".arr1_room_type");
+                                            roomTypeSelector1.attr("disabled","disabled");
+                                            roomTypeSelector1.html("<option>Loading rooms ...</option>");
                                         
                                             var locationid = $("#arr-dropoff1 option:selected").attr('value');
                                         
                                             $.post("select_roomtype.php", {locationid:locationid}, function(data){
-                                                $("#room-type1").removeAttr("disabled");
-                                                $("#room-type1").html(data);
+                                                roomTypeSelector1.removeAttr("disabled");
+                                                roomTypeSelector1.html(data);
                                                 
                                             });
                                         });
@@ -1219,18 +1219,18 @@ if(isset($_POST['addreservation']))
                                             });
                                         });
                                         
-                                        $("#room-type2").attr("disabled","disabled");
-                                        
+                                        $(".arr2_room_type").attr("disabled","disabled");
                                         $("#arr-dropoff2").change(function(){
-                                            $("#room-type2").attr("disabled","disabled");
-                                            $("#room-type2").html("<option>Loading rooms ...</option>");
-                                        
+                                            var roomTypeSelector2 = $(".arr2_room_type");
+                                            roomTypeSelector2.attr("disabled","disabled");
+                                            roomTypeSelector2.html("<option>Loading rooms ...</option>");
+
                                             var locationid = $("#arr-dropoff2 option:selected").attr('value');
-                                        
+
                                             $.post("select_roomtype.php", {locationid:locationid}, function(data){
-                                                $("#room-type2").removeAttr("disabled");
-                                                $("#room-type2").html(data);
-                                                
+                                                roomTypeSelector2.removeAttr("disabled");
+                                                roomTypeSelector2.html(data);
+
                                             });
                                         });
                                         /* end arrival 2 */
@@ -1294,18 +1294,18 @@ if(isset($_POST['addreservation']))
                                             });
                                         });
                                         
-                                        $("#room-type3").attr("disabled","disabled");
+                                        $(".arr3_room_type").attr("disabled","disabled");
                                         
                                         $("#arr-dropoff3").change(function(){
-                                            $("#room-type3").attr("disabled","disabled");
-                                            $("#room-type3").html("<option>Loading rooms ...</option>");
-                                        
+                                            var roomTypeSelector3 = $(".arr3_room_type");
+                                            roomTypeSelector3.attr("disabled","disabled");
+                                            roomTypeSelector3.html("<option>Loading rooms ...</option>");
+
                                             var locationid = $("#arr-dropoff3 option:selected").attr('value');
-                                        
+
                                             $.post("select_roomtype.php", {locationid:locationid}, function(data){
-                                                $("#room-type3").removeAttr("disabled");
-                                                $("#room-type3").html(data);
-                                                
+                                                roomTypeSelector3.removeAttr("disabled");
+                                                roomTypeSelector3.html(data);
                                             });
                                         });
                                         /* end arrival 3 */
@@ -1793,20 +1793,31 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
                                 <div class="clearfix"></div>
-                                <div class="form-group col-xs-3"><!-- room type selection -->
-                                    <label for="room-type">Room type</label>
-                                    <select class="form-control" id="room-type" name="room_type">
-                                        <option>Room Type</option>     
-                                    </select>
-                                </div>
-                                <div class="form-group col-xs-2"><!-- room number -->
-                                    <label class="left20 right20">Room number</label>
-                                    <input class="form-control left20" id="room-no" name="room_no" placeholder="Room number">
-                                </div>
-                                <div class="form-group col-xs-2"><!-- number of rooms -->
-                                    <label style="margin-left: 40px;">Number of Rooms</label>
-                                    <input type="number" min=0 max=99 class="form-control" style="margin-left: 40px;" id="no-of-rooms" name="no_of_rooms" value="" placeholder="Number of Rooms">
-                                </div>
+                                    <div class="form-group col-lg-2 col-md-6 col-xs-6"><!-- number of rooms -->
+                                        <label>Number of Rooms</label>
+                                        <input type="number" min=0 max=99 class="form-control" id="no-of-rooms" name="no_of_rooms" value="" placeholder="Number of Rooms">
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
+                                        <label for="arr0_room_type">Room type</label>
+                                        <select class="form-control arr0_room_type right20" id="arr0_room_type" name="arr0_room_type">
+                                            <option>Room Type</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
+                                        <label for="arr0_room_no" class="right20">Room number</label>
+                                        <input class="form-control right20" id="arr0_room-no" name="arr0_room_no" placeholder="Room number">
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
+                                        <label for="arr0_room_last_name">Last Name</label>
+                                        <input type="text" class="form-control right20" id="arr0_room_last_name" name="arr0_room_last_name" placeholder="Guest last name">
+                                    </div>
+                                    <div class="form-group col-lg-1" style="margin-top: 20px;">
+                                        <a class="btn btn-default addRoomBtn" data-id="0"><i class="fa fa-plus"></i> Add Room</a>
+                                    </div>
+                                    <div id="sub-forms-div0" data-id="0">
+                                    </div>
+                                    <div class="clearfix"></div>
                                  <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
                                         <label>Hotel notes</label>
@@ -1949,21 +1960,32 @@ if(isset($_POST['addreservation']))
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
-                                <div class="clearfix"></div>
-                                <div class="form-group col-xs-3"><!-- room type selection -->
-                                    <label>Room type</label>
-                                    <select class="form-control" id="room-type1" name="room_type1">
-                                        <option>Room Type</option>     
-                                    </select>
-                                </div>
-                                <div class="form-group col-xs-2"><!-- room number -->
-                                    <label class="left20 right20">Room number</label>
-                                    <input class="form-control left20" id="room-no1" name="room_no1" placeholder="Room number">
-                                </div>
-                                <div class="form-group col-xs-2"><!-- number of rooms -->
-                                    <label style="margin-left: 40px;">Number of Rooms</label>
-                                    <input type="number" min=0 max=99 class="form-control" style="margin-left: 40px;" id="no-of-rooms1" name="no_of_rooms1" value="" placeholder="Number of Rooms">
-                                </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-lg-2 col-md-6 col-xs-6"><!-- number of rooms -->
+                                        <label>Number of Rooms</label>
+                                        <input type="number" min=0 max=99 class="form-control" id="no-of-rooms" name="no_of_rooms" value="" placeholder="Number of Rooms">
+                                    </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
+                                        <label for="arr1_room_type">Room type</label>
+                                        <select class="form-control right20" id="arr1_room_type" name="arr1_room_type">
+                                            <option>Room Type</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
+                                        <label for="arr1_room_no" class="right20">Room number</label>
+                                        <input class="form-control right20" id="arr1_room-no" name="arr1_room_no" placeholder="Room number">
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
+                                        <label for="arr1_room_last_name">Last Name</label>
+                                        <input type="text" class="form-control right20" id="arr1_room_last_name" name="arr1_room_last_name" placeholder="Guest last name">
+                                    </div>
+                                    <div class="form-group col-lg-1" style="margin-top: 20px;">
+                                        <a class="btn btn-default addRoomBtn" data-id="1"><i class="fa fa-plus"></i> Add Room</a>
+                                    </div>
+                                    <div id="sub-forms-div1" data-id="1">
+                                    </div>
+                                    <div class="clearfix"></div>
                                  <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
                                         <label>Hotel notes</label>
@@ -2117,21 +2139,33 @@ if(isset($_POST['addreservation']))
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-lg-2 col-md-6 col-xs-6"><!-- number of rooms -->
+                                        <label>Number of Rooms</label>
+                                        <input type="number" min=0 max=99 class="form-control" id="no-of-rooms2" name="no_of_rooms2" placeholder="Number of Rooms">
+                                    </div>
+                                    <div class="clearfix"></div>
+
+                                    <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
+                                        <label for="arr2_room_type">Room type</label>
+                                        <select class="form-control right20" id="arr2_room_type" name="arr2_room_type">
+                                            <option>Room Type</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
+                                        <label for="arr2_room_no" class="right20">Room number</label>
+                                        <input class="form-control right20" id="arr2_room-no" name="arr2_room_no" placeholder="Room number">
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
+                                        <label for="arr2_room_last_name">Last Name</label>
+                                        <input type="text" class="form-control right20" id="arr2_room_last_name" name="arr2_room_last_name" placeholder="Guest last name">
+                                    </div>
+                                    <div class="form-group col-lg-1" style="margin-top: 20px;">
+                                        <a class="btn btn-default addRoomBtn" data-id="2"><i class="fa fa-plus"></i> Add Room</a>
+                                    </div>
+                                    <div id="sub-forms-div2" data-id="2">
+                                    </div>
                                 <div class="clearfix"></div>
-                                <div class="form-group col-xs-3"><!-- room type selection -->
-                                    <label for="room-type2">Room type</label>
-                                    <select class="form-control" id="room-type2" name="room_type2">
-                                        <option>Room Type</option>     
-                                    </select>
-                                </div>
-                                <div class="form-group col-xs-2"><!-- room number -->
-                                    <label class="left20 right20">Room number</label>
-                                    <input class="form-control left20" id="room-no2" name="room_no2" placeholder="Room number">
-                                </div>
-                                <div class="form-group col-xs-2"><!-- number of rooms -->
-                                    <label style="margin-left: 40px;">Number of Rooms</label>
-                                    <input type="number" min=0 max=99 class="form-control" style="margin-left: 40px;" id="no-of-rooms2" name="no_of_rooms2" value="" placeholder="Number of Rooms">
-                                </div>
                                  <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
                                         <label>Hotel notes</label>
@@ -2285,21 +2319,27 @@ if(isset($_POST['addreservation']))
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
-                                <div class="clearfix"></div>
-                                <div class="form-group col-xs-3"><!-- room type selection -->
-                                    <label>Room type</label>
-                                    <select class="form-control" id="room-type3" name="room_type3">
-                                        <option>Room Type</option>     
-                                    </select>
-                                </div>
-                                <div class="form-group col-xs-2"><!-- room number -->
-                                    <label class="left20 right20">Room number</label>
-                                    <input class="form-control left20" id="room-no3" name="room_no3" placeholder="Room number">
-                                </div>
-                                <div class="form-group col-xs-2"><!-- number of rooms -->
-                                    <label style="margin-left: 40px;">Number of Rooms</label>
-                                    <input type="number" min=0 max=99 class="form-control" style="margin-left: 40px;" id="no-of-rooms3" name="no_of_rooms3" value="" placeholder="Number of Rooms">
-                                </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
+                                        <label for="arr3_room_type">Room type</label>
+                                        <select class="form-control right20" id="arr3_room_type" name="arr3_room_type">
+                                            <option>Room Type</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
+                                        <label for="arr3_room_no" class="right20">Room number</label>
+                                        <input class="form-control right20" id="arr3_room-no" name="arr3_room_no" placeholder="Room number">
+                                    </div>
+                                    <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;">
+                                        <label for="arr3_room_last_name">Last Name</label>
+                                        <input type="text" class="form-control right20" id="arr3_room_last_name" name="arr3_room_last_name" placeholder="Guest last name">
+                                    </div>
+                                    <div class="form-group col-lg-1" style="margin-top: 20px;">
+                                        <a class="btn btn-default addRoomBtn" data-id="3"><i class="fa fa-plus"></i> Add Room</a>
+                                    </div>
+                                    <div id="sub-forms-div3" data-id="3">
+                                    </div>
+                                    <div class="clearfix"></div>
                                  <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
                                         <label>Hotel notes</label>
@@ -3241,6 +3281,7 @@ if(isset($_POST['addreservation']))
         minimumInputLength: 3
     });
     $('.rep-type').select2();
+    body = $('body');
     $(function(){
         $('.numericCol').keypress(function(e) {
             var tval = $(this).val(),
@@ -3252,6 +3293,53 @@ if(isset($_POST['addreservation']))
                 $(this).val((tval).substring(0, tlength - 1))
             }
         });
+    });
+    body.on('click','.addRoomBtn',function(){
+        var currentBtn = $(this);
+        var currentArrivalID = currentBtn.attr('data-id');
+        var subRoomsDiv = $('#sub-forms-div'+currentArrivalID);
+        console.log(subRoomsDiv);
+        var totalCurrentDivs = subRoomsDiv.find('div.roomDiv').length + 1;
+        var maxRooms = 5;
+
+        if(totalCurrentDivs<maxRooms){
+            //We Would be Adding More Guests Now to our specified Div.
+            //New Way, Now More Guests Forms will be added through the jquery/ajax
+            $.ajax({
+                url: "<?=$url?>/custom_updates/sub_room_form.php",
+                type: "POST",
+                data: {req: "roomCount", dataID: totalCurrentDivs, arrID:currentArrivalID},
+                success: function (output) {
+                    subRoomsDiv.append(output);
+                    currentBtn.parent().hide();
+                    console.log(totalCurrentDivs);
+                    console.log(maxRooms);
+                    if(totalCurrentDivs==(maxRooms-1)){
+                        subRoomsDiv.find('div.roomDiv').last().find('.addRoomBtn').hide();
+                        console.log('total 5 added');
+                    }
+                }
+            });
+        }
+    });
+    body.on('click','.removeBtn',function(){
+        var removeBtn = $(this);
+        var currentArrivalID = removeBtn.attr('data-id');
+        var mainDiv = $('#sub-forms-div'+currentArrivalID);
+        removeBtn.parents('.roomDiv').remove();
+
+        //Now we need to check what button to show
+        var totalCurrentDivs = mainDiv.find('div.roomDiv').length;
+        console.log(totalCurrentDivs);
+        if(totalCurrentDivs){
+            mainDiv.find('.roomDiv').last().find('.actionButtons').show();
+        }else{
+            console.log(mainDiv);
+            console.log(currentArrivalID);
+            mainDiv.prev().show();
+        }
+
+
     });
 </script>
      <?php 
