@@ -10,7 +10,7 @@ if($_POST){
 <div class="roomDiv">
 <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
     <label for="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>">Room type</label>
-    <select class="form-control right20" id="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>" name="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>">
+    <select class="form-control arr<?=$arrID?>_room_type right20" id="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>" name="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>">
         <option>Room Type</option>
     </select>
 </div>
