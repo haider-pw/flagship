@@ -31,6 +31,16 @@ var_dump($_POST['rep_type']);*/
 
 if(isset($_POST['addreservation']))
 {
+    //Arrivals And Departures Flight Details
+    $arrivals = true;
+    $departures = true;
+    if($_POST['arrivalsDivCheckBox']){
+        $arrivals = false;
+    };
+    if($_POST['departuresDivCheckBox']){
+        $departures = false;
+    };
+
     //Sanitize data
     $title_name             = QuoteSmart(@$_POST['title_name']);
     $first_name             = QuoteSmart(@$_POST['first_name']);
@@ -519,412 +529,416 @@ if(isset($_POST['addreservation']))
         }
     }
 
-    //Other Queries
-    //
-    $sql_5 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests,room_last_name) ".
-        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$arr0_room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$arr0_room_no', '$arr_main', '$luggageVehicle','$ftres','$excursion_name','$excursion_date','$excursion_pickup','$excursion_confirm_by','$excursion_confirm_date','$excursion_guests','$arr0_room_last_name')";
+    //If Depends on the checkbox, if not selected, then arrivals queries would execute.
+    if($arrivals){
+        $sql_5 = "INSERT INTO fll_arrivals ".
+            "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests,room_last_name) ".
+            "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$arr0_room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$arr0_room_no', '$arr_main', '$luggageVehicle','$ftres','$excursion_name','$excursion_date','$excursion_pickup','$excursion_confirm_by','$excursion_confirm_date','$excursion_guests','$arr0_room_last_name')";
         $retval5 = mysql_query( $sql_5, $conn );
-/*    echo $sql_5;
-    exit;*/
+        /*    echo $sql_5;
+            exit;*/
 
-    if(mysql_errno()){
-        echo $sql_5;
-        echo "<br/>".mysql_error();
-        $lastArrival0ID = 0;
-    }else{
-        $lastArrival0ID = mysql_insert_id();
-    }
-
-    if(!empty($lastArrival0ID)){
-        //Insert the First Arrival Room Details.
-
-        //For Room 0
-        $sql_arrival0_room = "INSERT INTO fll_arrivals_rooms ".
-            "(arrival_id, room_type, room_number, last_name) ".
-            "VALUES ('$lastArrival0ID', '$arr0_room_type', '$arr0_room_no', '$arr0_room_last_name')";
-        $resource_arrival0_room = mysql_query( $sql_arrival0_room, $conn );
-        if(mysql_errno()) {
-            echo $sql_arrival0_room;
-            echo "<br/>" . mysql_error();
-            echo "Error near LINE::".__LINE__;
-        }
-
-        //now, we need to check if there is another rooms selected or not.
-        if(!empty($arr0_room_no1)){
-            $sql_arrival0_room1 = "INSERT INTO fll_arrivals_rooms ".
-                "(arrival_id, room_type, room_number, last_name) ".
-                "VALUES ('$lastArrival0ID', '$arr0_room_type1', '$arr0_room_no1', '$arr0_room_last_name1')";
-            $resource_arrival0_room1 = mysql_query( $sql_arrival0_room1, $conn );
-            if(mysql_errno()) {
-                echo '<pre>';
-                echo $resource_arrival0_room1;
-                echo "<br/>".__LINE__."::". mysql_error();
-                echo "Error near LINE::".__LINE__;
-                echo '</pre>';
-            }
-        }
-
-        if(!empty($arr0_room_no2)){
-            $sql_arrival0_room2 = "INSERT INTO fll_arrivals_rooms ".
-                "(arrival_id, room_type, room_number, last_name) ".
-                "VALUES ('$lastArrival0ID', '$arr0_room_type2', '$arr0_room_no2', '$arr0_room_last_name2')";
-            $resource_arrival0_room2 = mysql_query( $sql_arrival0_room2, $conn );
-            if(mysql_errno()) {
-                echo '<pre>';
-                echo $sql_arrival0_room2;
-                echo "<br/>".__LINE__."::". mysql_error();
-                echo "Error near LINE::".__LINE__;
-                echo '</pre>';
-            }
-        }
-
-        if(!empty($arr0_room_no3)){
-            $sql_arrival0_room13= "INSERT INTO fll_arrivals_rooms ".
-                "(arrival_id, room_type, room_number, last_name) ".
-                "VALUES ('$lastArrival0ID', '$arr0_room_type3', '$arr0_room_no3', '$arr0_room_last_name3')";
-            $resource_arrival0_room3 = mysql_query( $sql_arrival0_room13, $conn );
-        }
-
-        if(!empty($arr0_room_no4)){
-            $sql_arrival0_room4 = "INSERT INTO fll_arrivals_rooms ".
-                "(arrival_id, room_type, room_number, last_name) ".
-                "VALUES ('$lastArrival0ID', '$arr0_room_type4', '$arr0_room_no4', '$arr0_room_last_name4')";
-            $resource_arrival0_room4 = mysql_query( $sql_arrival0_room4, $conn );
-        }
-
-        if(!empty($arr0_room_no5)){
-            $sql_arrival0_room5 = "INSERT INTO fll_arrivals_rooms ".
-                "(arrival_id, room_type, room_number, last_name) ".
-                "VALUES ('$lastArrival0ID', '$arr0_room_type5', '$arr0_room_no5','$arr0_room_last_name5')";
-            $resource_arrival0_room5 = mysql_query( $sql_arrival0_room5, $conn );
-        }
-    }
-
-    $arrival1active = QuoteSmart($_POST['arrival1active']);
-    if($arrival1active == 1){    
-    $sql_6 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
-        "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1', '$luggageVehicle1','$ftres1','$excursion_name1','$excursion_date1','$excursion_pickup1','$excursion_confirm_by1','$excursion_confirm_date1','$excursion_guests1')";
-        $retval6 = mysql_query( $sql_6, $conn );
         if(mysql_errno()){
-            echo "<br/>".__LINE__."::". mysql_error();
-            $lastArrival1ID = 0;
+            echo $sql_5;
+            echo "<br/>".mysql_error();
+            $lastArrival0ID = 0;
         }else{
-            $Arr0roomIDs = array();
-            $lastArrival1ID = mysql_insert_id();
+            $lastArrival0ID = mysql_insert_id();
         }
 
-
-        //Now we need to check if we have rooms.
-        if(!empty($lastArrival1ID)) {
+        if(!empty($lastArrival0ID)){
             //Insert the First Arrival Room Details.
+
             //For Room 0
-            $sql_arrival1_room = "INSERT INTO fll_arrivals_rooms " .
-                "(arrival_id, room_type, room_number, last_name) " .
-                "VALUES ('$lastArrival1ID', '$arr1_room_type', '$arr1_room_no', '$arr1_room_last_name')";
-            $resource_arrival1_room = mysql_query($sql_arrival1_room, $conn);
-            if (mysql_errno()) {
-                echo $sql_arrival1_room;
+            $sql_arrival0_room = "INSERT INTO fll_arrivals_rooms ".
+                "(arrival_id, room_type, room_number, last_name) ".
+                "VALUES ('$lastArrival0ID', '$arr0_room_type', '$arr0_room_no', '$arr0_room_last_name')";
+            $resource_arrival0_room = mysql_query( $sql_arrival0_room, $conn );
+            if(mysql_errno()) {
+                echo $sql_arrival0_room;
                 echo "<br/>" . mysql_error();
-                echo "Error near LINE::" . __LINE__;
+                echo "Error near LINE::".__LINE__;
+            }
+
+            //now, we need to check if there is another rooms selected or not.
+            if(!empty($arr0_room_no1)){
+                $sql_arrival0_room1 = "INSERT INTO fll_arrivals_rooms ".
+                    "(arrival_id, room_type, room_number, last_name) ".
+                    "VALUES ('$lastArrival0ID', '$arr0_room_type1', '$arr0_room_no1', '$arr0_room_last_name1')";
+                $resource_arrival0_room1 = mysql_query( $sql_arrival0_room1, $conn );
+                if(mysql_errno()) {
+                    echo '<pre>';
+                    echo $resource_arrival0_room1;
+                    echo "<br/>".__LINE__."::". mysql_error();
+                    echo "Error near LINE::".__LINE__;
+                    echo '</pre>';
+                }
+            }
+
+            if(!empty($arr0_room_no2)){
+                $sql_arrival0_room2 = "INSERT INTO fll_arrivals_rooms ".
+                    "(arrival_id, room_type, room_number, last_name) ".
+                    "VALUES ('$lastArrival0ID', '$arr0_room_type2', '$arr0_room_no2', '$arr0_room_last_name2')";
+                $resource_arrival0_room2 = mysql_query( $sql_arrival0_room2, $conn );
+                if(mysql_errno()) {
+                    echo '<pre>';
+                    echo $sql_arrival0_room2;
+                    echo "<br/>".__LINE__."::". mysql_error();
+                    echo "Error near LINE::".__LINE__;
+                    echo '</pre>';
+                }
+            }
+
+            if(!empty($arr0_room_no3)){
+                $sql_arrival0_room13= "INSERT INTO fll_arrivals_rooms ".
+                    "(arrival_id, room_type, room_number, last_name) ".
+                    "VALUES ('$lastArrival0ID', '$arr0_room_type3', '$arr0_room_no3', '$arr0_room_last_name3')";
+                $resource_arrival0_room3 = mysql_query( $sql_arrival0_room13, $conn );
+            }
+
+            if(!empty($arr0_room_no4)){
+                $sql_arrival0_room4 = "INSERT INTO fll_arrivals_rooms ".
+                    "(arrival_id, room_type, room_number, last_name) ".
+                    "VALUES ('$lastArrival0ID', '$arr0_room_type4', '$arr0_room_no4', '$arr0_room_last_name4')";
+                $resource_arrival0_room4 = mysql_query( $sql_arrival0_room4, $conn );
+            }
+
+            if(!empty($arr0_room_no5)){
+                $sql_arrival0_room5 = "INSERT INTO fll_arrivals_rooms ".
+                    "(arrival_id, room_type, room_number, last_name) ".
+                    "VALUES ('$lastArrival0ID', '$arr0_room_type5', '$arr0_room_no5','$arr0_room_last_name5')";
+                $resource_arrival0_room5 = mysql_query( $sql_arrival0_room5, $conn );
+            }
+        }
+
+        $arrival1active = QuoteSmart($_POST['arrival1active']);
+        if($arrival1active == 1){
+            $sql_6 = "INSERT INTO fll_arrivals ".
+                "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
+                "VALUES ('$fsref', '$arr_date1', '$arr_time1', '$arr_flight_no1', '$flight_class1', '$arr1_transport', '$arr_driver1', '$arr_vehicle_no1', '$arr_pickup1', '$arr_dropoff1', '$room_type1', '$rep_type1', '$client1_reqs', '$arr_transport_notes1', '$arr_hotel_notes1', '$infant_seats1', '$child_seats1', '$booster_seats1', '$vouchers1', '$cold_towels1', '$bottled_water1', '$rooms1', '$room_no1', '$luggageVehicle1','$ftres1','$excursion_name1','$excursion_date1','$excursion_pickup1','$excursion_confirm_by1','$excursion_confirm_date1','$excursion_guests1')";
+            $retval6 = mysql_query( $sql_6, $conn );
+            if(mysql_errno()){
+                echo "<br/>".__LINE__."::". mysql_error();
+                $lastArrival1ID = 0;
             }else{
-                array_push($arr0RoomID,$Arr0roomIDs);
+                $Arr0roomIDs = array();
+                $lastArrival1ID = mysql_insert_id();
             }
 
-            //now, we need to check if there is another rooms selected or not.
-            //Arr1 Room1
-            if(!empty($arr1_room_no1)){
-                $sql_arrival1_room1 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival1ID', '$arr1_room_type1', '$arr1_room_no1', '$arr1_room_last_name1')";
-                $resource_arrival1_room1 = mysql_query( $sql_arrival1_room1, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival1_room1;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
+
+            //Now we need to check if we have rooms.
+            if(!empty($lastArrival1ID)) {
+                //Insert the First Arrival Room Details.
+                //For Room 0
+                $sql_arrival1_room = "INSERT INTO fll_arrivals_rooms " .
+                    "(arrival_id, room_type, room_number, last_name) " .
+                    "VALUES ('$lastArrival1ID', '$arr1_room_type', '$arr1_room_no', '$arr1_room_last_name')";
+                $resource_arrival1_room = mysql_query($sql_arrival1_room, $conn);
+                if (mysql_errno()) {
+                    echo $sql_arrival1_room;
+                    echo "<br/>" . mysql_error();
+                    echo "Error near LINE::" . __LINE__;
+                }else{
+                    array_push($arr0RoomID,$Arr0roomIDs);
+                }
+
+                //now, we need to check if there is another rooms selected or not.
+                //Arr1 Room1
+                if(!empty($arr1_room_no1)){
+                    $sql_arrival1_room1 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival1ID', '$arr1_room_type1', '$arr1_room_no1', '$arr1_room_last_name1')";
+                    $resource_arrival1_room1 = mysql_query( $sql_arrival1_room1, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival1_room1;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+
+                //now, we need to check if there is another rooms selected or not.
+                //Arr1 Room2
+                if(!empty($arr1_room_no2)){
+                    $sql_arrival1_room2 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival1ID', '$arr1_room_type2', '$arr1_room_no2', '$arr1_room_last_name2')";
+                    $resource_arrival1_room2 = mysql_query( $sql_arrival1_room2, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival1_room2;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+
+                // Arr1 Room3
+                if(!empty($arr1_room_no3)){
+                    $sql_arrival1_room3 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival1ID', '$arr1_room_type3', '$arr1_room_no3', '$arr1_room_last_name3')";
+                    $resource_arrival1_room3 = mysql_query( $sql_arrival1_room3, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival1_room3;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+
+                // Arr1 Room4
+                if(!empty($arr1_room_no4)){
+                    $sql_arrival1_room4 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival1ID', '$arr1_room_type4', '$arr1_room_no4', '$arr1_room_last_name4')";
+                    $resource_arrival1_room4 = mysql_query( $sql_arrival1_room3, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival1_room4;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+
+                // Arr1 Room5
+                if(!empty($arr1_room_no5)){
+                    $sql_arrival1_room5 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival1ID', '$arr1_room_type5', '$arr1_room_no5', '$arr1_room_last_name5')";
+                    $resource_arrival1_room5 = mysql_query( $sql_arrival1_room5, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival1_room5;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
                 }
             }
+        }//Enf of First If Statement, if arrival1 is selected
 
-            //now, we need to check if there is another rooms selected or not.
-            //Arr1 Room2
-            if(!empty($arr1_room_no2)){
-                $sql_arrival1_room2 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival1ID', '$arr1_room_type2', '$arr1_room_no2', '$arr1_room_last_name2')";
-                $resource_arrival1_room2 = mysql_query( $sql_arrival1_room2, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival1_room2;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
-                }
+        $arrival2active = QuoteSmart($_POST['arrival2active']);
+        if($arrival2active == 1){
+            $sql_7 = "INSERT INTO fll_arrivals ".
+                "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
+                "VALUES ('$fsref', '$arr_date2', '$arr_time2', '$arr_flight_no2', '$flight_class2', '$arr2_transport', '$arr_driver2', '$arr_vehicle_no2', '$arr_pickup2', '$arr_dropoff2', '$arr2_room_type', '$rep_type2', '$client2_reqs', '$arr_transport_notes2', '$arr_hotel_notes2', '$infant_seats2', '$child_seats2', '$booster_seats2', '$vouchers2', '$cold_towels2', '$bottled_water2', '$rooms2', '$arr2_room_no', '$luggageVehicle2','$ftres2','$excursion_name2','$excursion_date2','$excursion_pickup2','$excursion_confirm_by2','$excursion_confirm_date2','$excursion_guests2')";
+            $retval7 = mysql_query( $sql_7, $conn );
+            if(mysql_errno()){
+                echo "<br/>".__LINE__."::". mysql_error();
+                $lastArrival2ID = 0;
+            }else{
+                $lastArrival2ID = mysql_insert_id();
             }
 
-            // Arr1 Room3
-            if(!empty($arr1_room_no3)){
-                $sql_arrival1_room3 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival1ID', '$arr1_room_type3', '$arr1_room_no3', '$arr1_room_last_name3')";
-                $resource_arrival1_room3 = mysql_query( $sql_arrival1_room3, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival1_room3;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
-                }
-            }
 
-            // Arr1 Room4
-            if(!empty($arr1_room_no4)){
-                $sql_arrival1_room4 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival1ID', '$arr1_room_type4', '$arr1_room_no4', '$arr1_room_last_name4')";
-                $resource_arrival1_room4 = mysql_query( $sql_arrival1_room3, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival1_room4;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
+            if(!empty($lastArrival2ID)) {
+                //Arr2 Room0
+                //Insert the First Arrival Room Details.
+                $sql_arrival2_room = "INSERT INTO fll_arrivals_rooms " .
+                    "(arrival_id, room_type, room_number, last_name) " .
+                    "VALUES ('$lastArrival2ID', '$arr2_room_type', '$arr2_room_no', '$arr2_room_last_name')";
+                $resource_arrival2_room = mysql_query($sql_arrival2_room, $conn);
+                if (mysql_errno()) {
+                    echo $sql_arrival2_room;
+                    echo "<br/>" . mysql_error();
+                    echo "Error near LINE::" . __LINE__;
                 }
-            }
 
-            // Arr1 Room5
-            if(!empty($arr1_room_no5)){
-                $sql_arrival1_room5 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival1ID', '$arr1_room_type5', '$arr1_room_no5', '$arr1_room_last_name5')";
-                $resource_arrival1_room5 = mysql_query( $sql_arrival1_room5, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival1_room5;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
+                //Arr2 Room1
+                if(!empty($arr2_room_no1)){
+                    $sql_arrival2_room1 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival2ID', '$arr2_room_type1', '$arr2_room_no1', '$arr2_room_last_name1')";
+                    $resource_arrival2_room1 = mysql_query( $sql_arrival2_room1, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival2_room1;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+
+                //Arr2 Room2
+                if(!empty($arr2_room_no1)){
+                    $sql_arrival2_room2 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival2ID', '$arr2_room_type2', '$arr2_room_no2', '$arr2_room_last_name2')";
+                    $resource_arrival2_room2 = mysql_query( $sql_arrival2_room2, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival2_room2;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+
+                //Arr2 Room3
+                if(!empty($arr2_room_no3)){
+                    $sql_arrival2_room3 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival2ID', '$arr2_room_type3', '$arr2_room_no3', '$arr2_room_last_name3')";
+                    $resource_arrival2_room3 = mysql_query( $sql_arrival2_room3, $conn);
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival2_room3;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+
+                //Arr2 Room4
+                if(!empty($arr1_room_no4)){
+                    $sql_arrival2_room4 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival2ID', '$arr2_room_type4', '$arr2_room_no4', '$arr2_room_last_name4')";
+                    $resource_arrival2_room4 = mysql_query( $sql_arrival2_room4, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival2_room4;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+
+                //Arr2 Room5
+                if(!empty($arr2_room_no5)){
+                    $sql_arrival2_room5 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival2ID', '$arr2_room_type5', '$arr2_room_no5', '$arr2_room_last_name5')";
+                    $resource_arrival2_room5 = mysql_query( $sql_arrival2_room5, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival2_room5;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
                 }
             }
         }
-    }//Enf of First If Statement, if arrival1 is selected
-    
-    $arrival2active = QuoteSmart($_POST['arrival2active']);
-    if($arrival2active == 1){
-    $sql_7 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no,luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
-        "VALUES ('$fsref', '$arr_date2', '$arr_time2', '$arr_flight_no2', '$flight_class2', '$arr2_transport', '$arr_driver2', '$arr_vehicle_no2', '$arr_pickup2', '$arr_dropoff2', '$arr2_room_type', '$rep_type2', '$client2_reqs', '$arr_transport_notes2', '$arr_hotel_notes2', '$infant_seats2', '$child_seats2', '$booster_seats2', '$vouchers2', '$cold_towels2', '$bottled_water2', '$rooms2', '$arr2_room_no', '$luggageVehicle2','$ftres2','$excursion_name2','$excursion_date2','$excursion_pickup2','$excursion_confirm_by2','$excursion_confirm_date2','$excursion_guests2')";
-        $retval7 = mysql_query( $sql_7, $conn );
-        if(mysql_errno()){
-            echo "<br/>".__LINE__."::". mysql_error();
-            $lastArrival2ID = 0;
-        }else{
-            $lastArrival2ID = mysql_insert_id();
-        }
 
-
-        if(!empty($lastArrival2ID)) {
-            //Arr2 Room0
-            //Insert the First Arrival Room Details.
-            $sql_arrival2_room = "INSERT INTO fll_arrivals_rooms " .
-                "(arrival_id, room_type, room_number, last_name) " .
-                "VALUES ('$lastArrival2ID', '$arr2_room_type', '$arr2_room_no', '$arr2_room_last_name')";
-            $resource_arrival2_room = mysql_query($sql_arrival2_room, $conn);
-            if (mysql_errno()) {
-                echo $sql_arrival2_room;
-                echo "<br/>" . mysql_error();
-                echo "Error near LINE::" . __LINE__;
+        $arrival3active = QuoteSmart($_POST['arrival3active']);
+        if($arrival3active == 1){
+            $sql_8 = "INSERT INTO fll_arrivals ".
+                "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
+                "VALUES ('$fsref', '$arr_date3', '$arr_time3', '$arr_flight_no3', '$flight_class3', '$arr3_transport', '$arr_driver3', '$arr_vehicle_no3', '$arr_pickup3', '$arr_dropoff3', '$room_type3', '$rep_type3', '$client3_reqs', '$arr_transport_notes3', '$arr_hotel_notes3', '$infant_seats3', '$child_seats3', '$booster_seats3', '$vouchers3', '$cold_towels3', '$bottled_water3', '$rooms3', '$room_no3', '$luggageVehicle3','$ftres3','$excursion_name3','$excursion_date3','$excursion_pickup3','$excursion_confirm_by3','$excursion_confirm_date3','$excursion_guests3')";
+            $retval8 = mysql_query( $sql_8, $conn );
+            if(mysql_errno()){
+                echo "<br/>".__LINE__."::". mysql_error();
+                $lastArrival3ID = 0;
+            }else{
+                $lastArrival3ID = mysql_insert_id();
             }
 
-            //Arr2 Room1
-            if(!empty($arr2_room_no1)){
-                $sql_arrival2_room1 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival2ID', '$arr2_room_type1', '$arr2_room_no1', '$arr2_room_last_name1')";
-                $resource_arrival2_room1 = mysql_query( $sql_arrival2_room1, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival2_room1;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
+            if(!empty($lastArrival3ID)){
+                //Arr3 Room0
+                //Insert the First Arrival Room Details.
+                $sql_arrival3_room = "INSERT INTO fll_arrivals_rooms " .
+                    "(arrival_id, room_type, room_number, last_name) " .
+                    "VALUES ('$lastArrival3ID', '$arr3_room_type', '$arr3_room_no', '$arr3_room_last_name')";
+                $resource_arrival3_room = mysql_query($sql_arrival3_room, $conn);
+                if (mysql_errno()) {
+                    echo $sql_arrival3_room;
+                    echo "<br/>" . mysql_error();
+                    echo "Error near LINE::" . __LINE__;
                 }
-            }
-
-            //Arr2 Room2
-            if(!empty($arr2_room_no1)){
-                $sql_arrival2_room2 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival2ID', '$arr2_room_type2', '$arr2_room_no2', '$arr2_room_last_name2')";
-                $resource_arrival2_room2 = mysql_query( $sql_arrival2_room2, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival2_room2;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
+                //Arr3 Room1
+                if(!empty($arr3_room_no1)){
+                    $sql_arrival3_room1 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival3ID', '$arr3_room_type1', '$arr3_room_no1', '$arr3_room_last_name1')";
+                    $resource_arrival3_room1 = mysql_query( $sql_arrival3_room1, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival3_room1;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
                 }
-            }
-
-            //Arr2 Room3
-            if(!empty($arr2_room_no3)){
-                $sql_arrival2_room3 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival2ID', '$arr2_room_type3', '$arr2_room_no3', '$arr2_room_last_name3')";
-                $resource_arrival2_room3 = mysql_query( $sql_arrival2_room3, $conn);
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival2_room3;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
+                //Arr3 Room2
+                if(!empty($arr3_room_no2)){
+                    $sql_arrival3_room2 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival3ID', '$arr3_room_type2', '$arr3_room_no2', '$arr3_room_last_name2')";
+                    $resource_arrival3_room2 = mysql_query( $sql_arrival3_room2, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival3_room2;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
                 }
-            }
-
-            //Arr2 Room4
-            if(!empty($arr1_room_no4)){
-                $sql_arrival2_room4 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival2ID', '$arr2_room_type4', '$arr2_room_no4', '$arr2_room_last_name4')";
-                $resource_arrival2_room4 = mysql_query( $sql_arrival2_room4, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival2_room4;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
+                //Arr3 Room3
+                if(!empty($arr3_room_no3)){
+                    $sql_arrival3_room3 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival3ID', '$arr3_room_type3', '$arr3_room_no3', '$arr3_room_last_name3')";
+                    $resource_arrival3_room3 = mysql_query( $sql_arrival3_room3, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival3_room3;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
                 }
-            }
-
-            //Arr2 Room5
-            if(!empty($arr2_room_no5)){
-                $sql_arrival2_room5 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival2ID', '$arr2_room_type5', '$arr2_room_no5', '$arr2_room_last_name5')";
-                $resource_arrival2_room5 = mysql_query( $sql_arrival2_room5, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival2_room5;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
+                //Arr3 Room4
+                if(!empty($arr3_room_no4)){
+                    $sql_arrival3_room4 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival3ID', '$arr3_room_type4', '$arr3_room_no4', '$arr3_room_last_name4')";
+                    $resource_arrival3_room4 = mysql_query( $sql_arrival3_room4, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival3_room4;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
+                }
+                //Arr3 Room5
+                if(!empty($arr3_room_no5)){
+                    $sql_arrival3_room5 = "INSERT INTO fll_arrivals_rooms ".
+                        "(arrival_id, room_type, room_number, last_name) ".
+                        "VALUES ('$lastArrival3ID', '$arr3_room_type5', '$arr3_room_no5', '$arr3_room_last_name5')";
+                    $resource_arrival3_room5 = mysql_query( $sql_arrival3_room5, $conn );
+                    if(mysql_errno()) {
+                        echo '<pre>';
+                        echo $sql_arrival3_room5;
+                        echo "<br/>".__LINE__."::". mysql_error();
+                        echo '</pre>';
+                    }
                 }
             }
         }
     }
-    
-    $arrival3active = QuoteSmart($_POST['arrival3active']);
-    if($arrival3active == 1){
-    $sql_8 = "INSERT INTO fll_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, luggage_vehicle, fast_track,excursion_name,excursion_date,excursion_pickup,excursion_confirm_by,excursion_confirm_date,excursion_guests) ".
-        "VALUES ('$fsref', '$arr_date3', '$arr_time3', '$arr_flight_no3', '$flight_class3', '$arr3_transport', '$arr_driver3', '$arr_vehicle_no3', '$arr_pickup3', '$arr_dropoff3', '$room_type3', '$rep_type3', '$client3_reqs', '$arr_transport_notes3', '$arr_hotel_notes3', '$infant_seats3', '$child_seats3', '$booster_seats3', '$vouchers3', '$cold_towels3', '$bottled_water3', '$rooms3', '$room_no3', '$luggageVehicle3','$ftres3','$excursion_name3','$excursion_date3','$excursion_pickup3','$excursion_confirm_by3','$excursion_confirm_date3','$excursion_guests3')";
-        $retval8 = mysql_query( $sql_8, $conn );
-        if(mysql_errno()){
-            echo "<br/>".__LINE__."::". mysql_error();
-            $lastArrival3ID = 0;
-        }else{
-            $lastArrival3ID = mysql_insert_id();
-        }
 
-        if(!empty($lastArrival3ID)){
-            //Arr3 Room0
-            //Insert the First Arrival Room Details.
-            $sql_arrival3_room = "INSERT INTO fll_arrivals_rooms " .
-                "(arrival_id, room_type, room_number, last_name) " .
-                "VALUES ('$lastArrival3ID', '$arr3_room_type', '$arr3_room_no', '$arr3_room_last_name')";
-            $resource_arrival3_room = mysql_query($sql_arrival3_room, $conn);
-            if (mysql_errno()) {
-                echo $sql_arrival3_room;
-                echo "<br/>" . mysql_error();
-                echo "Error near LINE::" . __LINE__;
-            }
-            //Arr3 Room1
-            if(!empty($arr3_room_no1)){
-                $sql_arrival3_room1 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival3ID', '$arr3_room_type1', '$arr3_room_no1', '$arr3_room_last_name1')";
-                $resource_arrival3_room1 = mysql_query( $sql_arrival3_room1, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival3_room1;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
-                }
-            }
-            //Arr3 Room2
-            if(!empty($arr3_room_no2)){
-                $sql_arrival3_room2 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival3ID', '$arr3_room_type2', '$arr3_room_no2', '$arr3_room_last_name2')";
-                $resource_arrival3_room2 = mysql_query( $sql_arrival3_room2, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival3_room2;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
-                }
-            }
-            //Arr3 Room3
-            if(!empty($arr3_room_no3)){
-                $sql_arrival3_room3 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival3ID', '$arr3_room_type3', '$arr3_room_no3', '$arr3_room_last_name3')";
-                $resource_arrival3_room3 = mysql_query( $sql_arrival3_room3, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival3_room3;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
-                }
-            }
-            //Arr3 Room4
-            if(!empty($arr3_room_no4)){
-                $sql_arrival3_room4 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival3ID', '$arr3_room_type4', '$arr3_room_no4', '$arr3_room_last_name4')";
-                $resource_arrival3_room4 = mysql_query( $sql_arrival3_room4, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival3_room4;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
-                }
-            }
-            //Arr3 Room5
-            if(!empty($arr3_room_no5)){
-                $sql_arrival3_room5 = "INSERT INTO fll_arrivals_rooms ".
-                    "(arrival_id, room_type, room_number, last_name) ".
-                    "VALUES ('$lastArrival3ID', '$arr3_room_type5', '$arr3_room_no5', '$arr3_room_last_name5')";
-                $resource_arrival3_room5 = mysql_query( $sql_arrival3_room5, $conn );
-                if(mysql_errno()) {
-                    echo '<pre>';
-                    echo $sql_arrival3_room5;
-                    echo "<br/>".__LINE__."::". mysql_error();
-                    echo '</pre>';
-                }
-            }
-        }
-    }
-    
-    $sql_9 = "INSERT INTO fll_departures ". 
-        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center) ".
-        "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter')";
+    //If Depends on the checkbox, if not selected, then departures queries would execute.
+    if($departures){
+        $sql_9 = "INSERT INTO fll_departures ".
+            "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center) ".
+            "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter')";
         $retval9 = mysql_query( $sql_9, $conn );
-    
-    $departure1active = QuoteSmart($_POST['departure1active']);
-    if($departure1active == 1){
-    $sql_10 = "INSERT INTO fll_departures ". 
-        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
-        "VALUES ('$fsref', '$dpt_date1', '$dpt_time1', '$dpt_flight_no1', '$dpt_flight_class1', '$dpt1_transport', '$dpt_driver1', '$dpt_vehicle_no1', '$dpt_pickup1', '$dpt_dropoff1', '$pickup_time1', '$dpt_transport_notes1','$jetCenter1')";
-        $retval10 = mysql_query( $sql_10, $conn );
-    }
-    
-    $departure2active = QuoteSmart($_POST['departure2active']);
-    if($departure2active == 1){
-    $sql_11 = "INSERT INTO fll_departures ". 
-        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
-        "VALUES ('$fsref', '$dpt_date2', '$dpt_time2', '$dpt_flight_no2', '$dpt_flight_class2', '$dpt2_transport', '$dpt_driver2', '$dpt_vehicle_no2', '$dpt_pickup2', '$dpt_dropoff2', '$pickup_time2', '$dpt_transport_notes2','$jetCenter2')";
-        $retval11 = mysql_query( $sql_11, $conn );
-    }
-    
-    $departure3active = QuoteSmart($_POST['departure3active']);
-    if($departure3active == 1){
-    $sql_12 = "INSERT INTO fll_departures ". 
-        "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
-        "VALUES ('$fsref', '$dpt_date3', '$dpt_time3', '$dpt_flight_no3', '$dpt_flight_class3', '$dpt3_transport', '$dpt_driver3', '$dpt_vehicle_no3', '$dpt_pickup3', '$dpt_dropoff3', '$pickup_time3', '$dpt_transport_notes3','$jetCenter3')";
-        $retval12 = mysql_query( $sql_12, $conn );
+
+        $departure1active = QuoteSmart($_POST['departure1active']);
+        if($departure1active == 1){
+            $sql_10 = "INSERT INTO fll_departures ".
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
+                "VALUES ('$fsref', '$dpt_date1', '$dpt_time1', '$dpt_flight_no1', '$dpt_flight_class1', '$dpt1_transport', '$dpt_driver1', '$dpt_vehicle_no1', '$dpt_pickup1', '$dpt_dropoff1', '$pickup_time1', '$dpt_transport_notes1','$jetCenter1')";
+            $retval10 = mysql_query( $sql_10, $conn );
+        }
+
+        $departure2active = QuoteSmart($_POST['departure2active']);
+        if($departure2active == 1){
+            $sql_11 = "INSERT INTO fll_departures ".
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
+                "VALUES ('$fsref', '$dpt_date2', '$dpt_time2', '$dpt_flight_no2', '$dpt_flight_class2', '$dpt2_transport', '$dpt_driver2', '$dpt_vehicle_no2', '$dpt_pickup2', '$dpt_dropoff2', '$pickup_time2', '$dpt_transport_notes2','$jetCenter2')";
+            $retval11 = mysql_query( $sql_11, $conn );
+        }
+
+        $departure3active = QuoteSmart($_POST['departure3active']);
+        if($departure3active == 1){
+            $sql_12 = "INSERT INTO fll_departures ".
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
+                "VALUES ('$fsref', '$dpt_date3', '$dpt_time3', '$dpt_flight_no3', '$dpt_flight_class3', '$dpt3_transport', '$dpt_driver3', '$dpt_vehicle_no3', '$dpt_pickup3', '$dpt_dropoff3', '$pickup_time3', '$dpt_transport_notes3','$jetCenter3')";
+            $retval12 = mysql_query( $sql_12, $conn );
+        }
     }
     
     $transfermainactive = QuoteSmart($_POST['transfermainactive']);
@@ -1017,25 +1031,21 @@ if(isset($_POST['addreservation']))
                     $(".clientreqs").toggle();
                 }        
             });
-            
             $('input[type="checkbox"]').click(function(){
                 if($(this).attr("value")=="clientreqs1"){
                     $(".clientreqs1").toggle();
                 }        
             });
-            
             $('input[type="checkbox"]').click(function(){
                 if($(this).attr("value")=="clientreqs2"){
                     $(".clientreqs2").toggle();
                 }        
             });
-            
             $('input[type="checkbox"]').click(function(){
                 if($(this).attr("value")=="clientreqs3"){
                     $(".clientreqs3").toggle();
                 }        
             });
-               
         });
     </script>
 
@@ -1814,7 +1824,10 @@ if(isset($_POST['addreservation']))
                                     </div>
 
                                     <!-- arrival main -->
-                                <h4>Arrival Details</h4>
+                                <h4>Arrival Details <label class="checkbox-inline label_checkboxitem" style="margin-left:10px;padding-top: 0;">
+                                        <input type="checkbox" id="arrivalsDivCheckBox" name="arrivalsDivCheckBox"> No Flight Details
+                                    </label></h4>
+                                <div id="arrivalsDiv">
                                 <div class="form-group">
                                     <div class="form-inline left20">
                                         <!-- arrival date -->
@@ -2544,7 +2557,7 @@ if(isset($_POST['addreservation']))
                                 <br /><br />
                                 </div>
                                 <div class="clientreqs3 reqs-box">
-                                    <div class="form-group col-xs-7">                                        
+                                    <div class="form-group col-xs-7">
                                        <?php
                                        $sql = "SELECT * FROM fll_clientreqs ORDER BY id ASC";
                                        $result = mysql_query($sql);
@@ -2596,7 +2609,7 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <!-- end arrival 3 -->
-                                
+                                </div>
                                 <div id="transfermain"><hr /><button  class="btn btn-success">Add Inter-Hotel Transfer</button></div>
                                 <div class="clearfix"></div>
                                 <!-- transfer main -->
@@ -2954,7 +2967,10 @@ if(isset($_POST['addreservation']))
                                 
                                 <!-- departure main -->
                                 <hr />
-                                <h4>Departure Details</h4>
+                                <h4>Departure Details <label class="checkbox-inline label_checkboxitem" style="margin-left:10px;padding-top: 0;">
+                                        <input type="checkbox" id="departuresDivCheckBox" name="departuresDivCheckBox"> No Flight Details
+                                    </label> </h4>
+<div id="departuresDiv">
                                 <div class="form-group">
                                     <div class="form-inline left20">
                                         <!-- departure date -->
@@ -3402,7 +3418,7 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     </div>
                                     <!-- end departure 3 -->
-                                    
+                                    </div> <!--DepartureFlight-->
                                     <hr /> 
                                 <div class="form-group"><!-- accounting notes -->
                                         <div class="col-xs-7">
@@ -3514,7 +3530,23 @@ if(isset($_POST['addreservation']))
                 console.log('value exists in array');
             }
         });
+    });
 
+    $('#arrivalsDivCheckBox').on('change',function(){
+         if($(this).is(':checked')){
+             $('#arrivalsDiv').hide();
+         }else{
+             $('#arrivalsDiv').show();
+         }
+    });
+
+    $('#departuresDivCheckBox').on('change',function(){
+        console.log('#departuresDivCheckBox');
+         if($(this).is(':checked')){
+             $('#departuresDiv').hide();
+         }else{
+             $('#departuresDiv').show();
+         }
     });
     body.on('click','.addRoomBtn',function(){
         var currentBtn = $(this);
