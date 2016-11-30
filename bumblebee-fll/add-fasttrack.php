@@ -12,10 +12,12 @@ $row = $user->getUserData();
  * @copyright 2015
  */
 include('ref.php');
+include('fast_ref.php');
 include('header.php');
 include('select.class.php');
 $countrycode = "FLL";
 $fsref = "$countrycode-$flagship_ref";
+$fastRef = "$countrycode-$flagship_fast_ref";
 $loggedinas = $row->fname . ' ' . $row->lname;
 site_header('Add Reservations');
 if (isset($_POST['addreservation'])) {
@@ -28,7 +30,6 @@ if (isset($_POST['addreservation'])) {
     }else{
         $arrServiceOnly = false;
     }
-
     $pnr = QuoteSmart(@$_POST['pnr']);
     $tour_oper = QuoteSmart(@$_POST['tour_oper']);
     $oper_code = QuoteSmart(@$_POST['oper_code']);
@@ -424,7 +425,7 @@ if (isset($_POST['addreservation'])) {
         );
         array_push($guestsArray, $arrayToPush);
     }
-    print_r($guestsArray);
+//    print_r($guestsArray);
     $user_action = "add new fast track reservation:  $title_name. $first_name $last_name #ref:$fsref";
     //Now Just Loop the Guests the the guests table
     if (!empty($guestsArray)) {
@@ -866,8 +867,8 @@ if (isset($_POST['addreservation'])) {
     }
     //Put all this stuff into the database
     $sql = "INSERT INTO fll_reservations " .
-        "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, affiliates, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle) " .
-        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$affiliates', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$room_no', '$total_guests','$luggageVehicle')";
+        "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, affiliates, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle,fast_ref_no_sys) " .
+        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$affiliates', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$room_no', '$total_guests','$luggageVehicle','$fastRef')";
     $retval = mysql_query($sql, $conn);
     //Log user action
     $sql_19 = "INSERT INTO fll_activity " .

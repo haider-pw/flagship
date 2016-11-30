@@ -6,7 +6,7 @@
       redirect_to("index.php");
       
   $row = $user->getUserData();
-?> 
+?>
 <?php
 ob_start();
 /**
@@ -17,7 +17,8 @@ ob_start();
 include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
-$reservation = mysql_fetch_row(mysql_query("SELECT * FROM fll_reservations WHERE id='" . $_GET['id'] . "' AND fast_track = 1"));
+$reservationQueryResource = mysql_query("SELECT * FROM fll_reservations WHERE id='" . $_GET['id'] . "' AND fast_track = 1");
+$reservation = mysql_fetch_array($reservationQueryResource);
 $get_arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $reservation[16] . "'"));
 $get_arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $reservation[15] . "'"));
 $get_dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $reservation[28] . "'"));
@@ -36,6 +37,21 @@ $get_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM fll_flightclass WH
 $get_dpt_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM fll_flightclass WHERE id='" . $reservation[55] . "'"));
 $get_reptype = mysql_fetch_row(mysql_query("SELECT * FROM fll_reptype WHERE id='" . $reservation[24] . "'"));
 $flagship_ref = $reservation[40];
+
+//Need to Code for Fast Track. Get the FastTrack Reservation Code.
+//$reservationForFast = mysql_fetch_array($reservationQueryResource);
+/*echo '<pre>';
+var_dump($reservationForFast);
+echo '</pre>';
+exit;*/
+if(!empty($reservation)){
+//    echo '<pre>';
+//        var_dump($reservation);
+//    echo '</pre>';
+//    exit;
+    $flagship_fast_ref = $reservation['fast_ref_no_sys'];
+}
+
 
 //Get and count how many guests are on this reservation
 $guestrows = mysql_query("SELECT * FROM fll_guest WHERE ref_no_sys='$flagship_ref'");
@@ -265,7 +281,15 @@ if(isset($_POST['update']))
                                             </div>
                                             <div class="widget-data">
                                                 <div class="widget-title">System Info</div>
-                                                <div class="widget-subtitle"><strong>Reference#: <?php echo $reservation[40]; ?></strong></div>
+                                                <div class="widget-subtitle"><strong>GH Ref#: <?php echo $reservation[40]; ?></strong></div>
+                                                <?php
+                                                if (isset($flagship_fast_ref)) {
+                                                    ?>
+                                                    <div class="widget-subtitle"><strong>FSFT
+                                                            Ref#: <?php echo $flagship_fast_ref; ?></strong></div>
+                                                    <?php
+                                                }
+                                                ?>
                                                 <div class="widget-subtitle">
                                                     Status: <?php echo ($reservation[43]< 2) ? '<span class="label label-info">Active</span>' : '<span class="label label-danger">Cancelled</span>'; ?>
                                                     <div class="clearfix"></div>
