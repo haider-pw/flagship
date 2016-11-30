@@ -38,17 +38,7 @@ $get_dpt_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM fll_flightclas
 $get_reptype = mysql_fetch_row(mysql_query("SELECT * FROM fll_reptype WHERE id='" . $reservation[24] . "'"));
 $flagship_ref = $reservation[40];
 
-//Need to Code for Fast Track. Get the FastTrack Reservation Code.
-//$reservationForFast = mysql_fetch_array($reservationQueryResource);
-/*echo '<pre>';
-var_dump($reservationForFast);
-echo '</pre>';
-exit;*/
 if(!empty($reservation)){
-//    echo '<pre>';
-//        var_dump($reservation);
-//    echo '</pre>';
-//    exit;
     $flagship_fast_ref = $reservation['fast_ref_no_sys'];
 }
 
