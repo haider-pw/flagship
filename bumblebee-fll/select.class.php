@@ -38,10 +38,28 @@ class SelectList
         {
             $sql = "SELECT * FROM fll_vehicles WHERE id_transport=$_POST[driverid] ORDER BY name ASC";
             $resd= mysql_query($sql,$this->connd);
-            $vehicle = '<option value="0">Select vehicle</option>';
-            while($row = mysql_fetch_array($resd))
-            {
-                $vehicle .= '<option value="' . $row['id_vehicle'] . '">' . $row['name'] . '</option>';
+
+            $vehiclesArray = array();
+            //Making a MultiDimentional Array.
+            while($row=mysql_fetch_array($resd)){
+                $arrayToPush = array(
+                    'id_vehicle' => $row['id_vehicle'],
+                    'id_transport' => $row['id_transport'],
+                    'name' => $row['name']
+                );
+                array_push($vehiclesArray,$arrayToPush);
+            }
+
+            $totalVehicles = count($vehiclesArray);
+            if($totalVehicles===1){
+                $vehicle = '<option value="' . $vehiclesArray[0]['id_vehicle'] . '" selected="selected">' . $vehiclesArray[0]['name'] . '</option>';
+            }else if($totalVehicles>1){
+                $vehicle = '<option value="0">Select vehicle</option>';
+                foreach($vehiclesArray as $vehicle){
+                    $vehicle .= '<option value="' . $vehicle['id_vehicle'] . '">' . $vehicle['name'] . '</option>';
+                }
+            }else{
+                $vehicle = '<option value="0">Select vehicle</option>';
             }
             return $vehicle;
         }
