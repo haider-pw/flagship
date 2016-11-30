@@ -1839,13 +1839,6 @@ if (isset($_POST['addreservation'])) {
                                               placeholder="Hotel notes: additional hotel comments and details here"></textarea>
                                 </div>
                             </div>
-                            <div class="form-group col-xs-7"><!-- representation type selection -->
-                                <label for="rep_type">Representation Type</label>
-                                <select multiple class="form-control rep-type" id="rep_type" name="rep_type[]">
-                                    <option value="0">Select Representation</option>
-                                    <?php include('reptype_select_multiple.php'); ?>
-                                </select>
-                            </div>
                             <div class="clearfix"></div>
                             <hr/>
                             <div class="form-group col-lg-8">
@@ -2042,13 +2035,6 @@ if (isset($_POST['addreservation'])) {
                                                   name="arr_hotel_notes1"
                                                   placeholder="Hotel notes: additional hotel comments and details here"></textarea>
                                     </div>
-                                </div>
-                                <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label for="rep_type1">Representation Type</label>
-                                    <select multiple class="form-control rep-type" id="rep_type1" name="rep_type1[]">
-                                        <option value="0">Select Representation</option>
-                                        <?php include('reptype_select_multiple.php'); ?>
-                                    </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr/>
@@ -2270,13 +2256,6 @@ if (isset($_POST['addreservation'])) {
                                                   placeholder="Hotel notes: additional hotel comments and details here"></textarea>
                                     </div>
                                 </div>
-                                <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label for="rep_type2">Representation Type</label>
-                                    <select multiple class="form-control rep-type" id="rep_type2" name="rep_type2[]">
-                                        <option value="0">Select Representation</option>
-                                        <?php include('reptype_select_multiple.php'); ?>
-                                    </select>
-                                </div>
                                 <div class="clearfix"></div>
                                 <hr/>
                                 <div class="form-group col-lg-8">
@@ -2489,14 +2468,6 @@ if (isset($_POST['addreservation'])) {
                                                   name="arr_hotel_notes3"
                                                   placeholder="Hotel notes: additional hotel comments and details here"></textarea>
                                     </div>
-                                </div>
-                                <div class="form-group col-xs-7">
-                                    <!-- representation type selection -->
-                                    <label for="rep_type3">Representation Type</label>
-                                    <select multiple class="form-control rep-type" id="rep_type3" name="rep_type3[]">
-                                        <option value="0">Select Representation</option>
-                                        <?php include('reptype_select_multiple.php'); ?>
-                                    </select>
                                 </div>
                                 <div class="clearfix"></div>
                                 <hr/>

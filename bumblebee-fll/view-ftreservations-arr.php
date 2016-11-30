@@ -140,7 +140,6 @@ if(mysql_errno()){
                                                 <th>T/O</th>
                                                 <th>Ref #</th>
                                                 <th>Rep</th>
-                                                <th>Rep Service</th>
                                                 <th>Hotel</th>
                                                 <th>Trans Type</th>
                                                 <th>Inf Seat</th>
@@ -232,7 +231,6 @@ if(mysql_errno()){
                                                         <td>' . $tour_oper[1] . '</td>
                                                         <td>' . $ref_no . '</td>
                                                         <td>' . $rep . '</td>
-                                                        <td>' . $rep_type[1] . '</td>
                                                         <td>' . $hotel[1] . '</td>
                                                         <td>' . $transport_type . '</td>
                                                         <td>' . $infant_seat . '</td>
@@ -265,7 +263,6 @@ if(mysql_errno()){
                                                 <th>T/O</th>
                                                 <th>Ref #</th>
                                                 <th>Rep</th>
-                                                <th>Rep Service</th>
                                                 <th>Hotel</th>
                                                 <th>Trans Type</th>
                                                 <th>FSFT</th>
@@ -357,7 +354,6 @@ if(mysql_errno()){
                                                         <td>' . $tour_oper[1] . '</td>
                                                         <td>' . $ref_no . '</td>
                                                         <td>' . $rep . '</td>
-                                                        <td>' . $rep_type[1] . '</td>
                                                         <td>' . $hotel[1] . '</td>
                                                         <td>' . $transport_type . '</td>
                                                         <td>' . $fsft . '</td>

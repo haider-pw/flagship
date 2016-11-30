@@ -14,21 +14,24 @@
  * @author Alvin Herbert
  * @copyright 2015
  */
+
+/*echo '<pre>';
+    var_dump($row);
+echo '</pre>';
+exit;*/
 include ('ref.php');
 include('header.php');
 include ('select.class.php');
 $fsref = $_GET['ref'];
 $reservation_id = $_GET['reservation'];
+$fast_track_ref = $_GET['fsft_ref'];
 $loggedinas = $row->fname . ' ' . $row->lname;
 site_header('Add Arrival');
 
 
-
 if(isset($_POST['addarrival']))
 {
-
-//Sanitize data
-
+    //Sanitize data
     $arr_date           = QuoteSmart($_POST['arr_date']);
     $fast_track           = QuoteSmart($_POST['ftres']);
     $arr_time           = QuoteSmart($_POST['arr_time']);
@@ -320,13 +323,19 @@ if(isset($_POST['addarrival']))
                                         <textarea class="form-control text-lowercase" rows="5" id="arr-hotel-notes" name="arr_hotel_notes" placeholder="Hotel notes: additional hotel comments and details here"></textarea>
                                     </div>
                                  </div>
-                                <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label>Representation Type</label>
-                                    <select multiple class="form-control rep-type" id="rep_type" name="rep_type[]">
-                                        <option value="0">Select Representation</option>
-                                    <?php include ('reptype_select_multiple.php'); ?>
-                                        </select>
-                                </div>
+
+                                    <?php if(!$fast_track_ref){
+                                        ?>
+                                        <div class="form-group col-xs-7"><!-- representation type selection -->
+                                            <label>Representation Type</label>
+                                            <select multiple class="form-control rep-type" id="rep_type" name="rep_type[]">
+                                                <option value="0">Select Representation</option>
+                                                <?php include ('reptype_select_multiple.php'); ?>
+                                            </select>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
                                 <div class="clearfix"></div>
                                 <hr />
                                 <div class="form-group col-xs-7 checkbox"><!-- additional requirements show -->

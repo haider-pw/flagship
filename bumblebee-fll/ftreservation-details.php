@@ -421,7 +421,7 @@ if(isset($_POST['update']))
                                                 $guest_pnr = $row[8];   
                                                 
                                                 echo '<tr>
-                                                        <td><a href="guest-details.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Edit guest"></i></a> | <a href="guest-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&guest=' . $guest_first_name . ' ' . $guest_last_name . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete guest"></i></a></td>
+                                                        <td><a href="guest-details.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas.'"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Edit guest"></i></a> | <a href="guest-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&guest=' . $guest_first_name . ' ' . $guest_last_name . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete guest"></i></a></td>
                                                         <td>' . $guest_title . '</td>
                                                         <td>' . $guest_first_name . '</td>
                                                         <td>' . $guest_last_name . '</td>
@@ -441,7 +441,7 @@ if(isset($_POST['update']))
                                 <h5>Reservation has <?php echo $arrival_count; ?> arrival(s)</h5>
                                 <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><a href="add-arrival.php?reservation=<?php echo $reservation[0]; ?>&ref=<?php echo $reservation[40]; ?>"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="Click to Arrival"></i> Add Arrival</a></h3>    
+                                    <h3 class="panel-title"><a href="add-arrival.php?reservation=<?php echo $reservation[0]; ?>&ref=<?php echo $reservation[40]; ?><?=(isset($flagship_fast_ref)?'&fsft_ref='.$flagship_fast_ref:'')?>"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="Click to Arrival"></i> Add Arrival</a></h3>
                                 </div>
                                 <div class="panel-body table-responsive">
                                     <table id="arrival-listing" class="table table-hover">
@@ -501,7 +501,7 @@ if(isset($_POST['update']))
                                                 }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="arrival-details.php?arrival_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $arrmain_edit .'"></i></a> <span ' . $arrmain_nodel . '>| <a href="arrival-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete arrival"></i></a></span></td>
+                                                        <td><a href="arrival-details.php?arrival_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas .(isset($flagship_fast_ref)?'&fsft_ref='. $flagship_fast_ref:''). '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $arrmain_edit .'"></i></a> <span ' . $arrmain_nodel . '>| <a href="arrival-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas  .(isset($flagship_fast_ref)?'&fsft_ref='. $flagship_fast_ref:''). '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete arrival"></i></a></span></td>
                                                         <td>' . $arrmain .' ' . $arr_date . '</td>
                                                         <td>' . $arr_flight_no[1] . '</td>
                                                         <td>' . $arr_time[2] . '</td>

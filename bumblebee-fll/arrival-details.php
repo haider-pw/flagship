@@ -18,6 +18,7 @@ include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
 $reservation_id = $_GET['reservation'];
+$fast_track_ref = $_GET['fsft_ref'];
 $getArrivalQuery = "SELECT * FROM fll_arrivals WHERE id='" . QuoteSmart($_GET['arrival_id']) . "'";
 //$reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
 $reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
@@ -143,7 +144,6 @@ if(isset($_POST['update']))
                                             $.post("select_vehicle.php", {driverid:driverid}, function(data){
                                                 $("#arr-vehicle-no").removeAttr("disabled");
                                                 $("#arr-vehicle-no").html(data);
-                                                
                                             });
                                         });
                                         
@@ -341,26 +341,35 @@ if(isset($_POST['update']))
                                         <textarea class="form-control" rows="5" id="arr-hotel-notes" name="arr_hotel_notes" placeholder="Hotel notes: additional hotel comments and details here"><?php echo $reservation[15]; ?></textarea>
                                     </div>
                                  </div>
-                                <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label for="rep-type">Representation Type</label>
-                                <?php
+
+                                    <?php
+                                    if(!$fast_track_ref){
+                                        ?>
+                                        <div class="form-group col-xs-7"><!-- representation type selection -->
+                                            <label for="rep-type">Representation Type</label>
+                                            <?php
                                             // Error handling for classselect
                                             if($classselect === FALSE) {
-                                                die(mysql_error()); 
+                                                die(mysql_error());
                                             }
-                                            
-                                            //Show selected flight class and list all the others 
+
+                                            //Show selected flight class and list all the others
                                             echo '<select multiple class="form-control rep-type" id="rep-type" name="rep_type[]">';
                                             while ($row = mysql_fetch_array($reptypeselect)) {
                                                 if (in_array($row['id'],$selectedRepTypesArray)) {
-                                                echo "<option value='" . $row['id'] . "' selected='selected'>" . $row['rep_type'] . "</option>";
+                                                    echo "<option value='" . $row['id'] . "' selected='selected'>" . $row['rep_type'] . "</option>";
                                                 } else {
-                                                echo "<option value='" . $row['id'] . "'>" . $row['rep_type'] . "</option>";
+                                                    echo "<option value='" . $row['id'] . "'>" . $row['rep_type'] . "</option>";
                                                 }
                                             }
-                                                echo "</select>";
+                                            echo "</select>";
                                             ?>
-                                </div>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
+
+
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-7">                                        
                                         <select multiple class="form-control select" id="client-reqs" name="client_reqs[]">                                      
