@@ -3036,6 +3036,7 @@ if(isset($_POST['addreservation']))
                                         <input type="checkbox" name="jetCenter" value="jetCenter"> IAM Jet Center
                                     </label>
                                     <div class="clearfix"></div>
+                                    <br />
                                     <div><button id="departure1" class="btn btn-warning">Add Departure</button></div>
                                     <!-- end departure main -->
                                     
