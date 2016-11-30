@@ -55,8 +55,8 @@ class SelectList
                 $vehicle = '<option value="' . $vehiclesArray[0]['id_vehicle'] . '" selected="selected">' . $vehiclesArray[0]['name'] . '</option>';
             }else if($totalVehicles>1){
                 $vehicle = '<option value="0">Select vehicle</option>';
-                foreach($vehiclesArray as $vehicle){
-                    $vehicle .= '<option value="' . $vehicle['id_vehicle'] . '">' . $vehicle['name'] . '</option>';
+                foreach($vehiclesArray as $v){
+                    $vehicle .= '<option value="' . $v['id_vehicle'] . '">' . $v['name'] . '</option>';
                 }
             }else{
                 $vehicle = '<option value="0">Select vehicle</option>';

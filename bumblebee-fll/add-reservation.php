@@ -1321,7 +1321,7 @@ if(isset($_POST['addreservation']))
                                         
                                         $("#dpt-vehicle-no3").attr("disabled","disabled");
                                                                                 
-                                        $("#dpt-driver2").change(function(){
+                                        $("#dpt-driver3").change(function(){
                                             $("#dpt-vehicle-no3").attr("disabled","disabled");
                                             $("#dpt-vehicle-no3").html("<option>Loading vehicles ...</option>");
                                         
