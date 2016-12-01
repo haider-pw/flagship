@@ -1,0 +1,119 @@
+<?php
+/**
+ * Created by PhpStorm.
+ * User: Syed Haider Hassan
+ * Date: 12/1/2016
+ * Time: 12:40 PM
+ */
+if ($_POST) {
+    $divID = $_POST['dataID'];
+    if ($divID == 0) {
+        $transfer_pickup = 'transfer_pickup';
+        $transfer_pickup_time = 'transfer_pickup_time';
+        $transfer_pickup_date = 'transfer_pickup_date';
+        $transfer_transport = 'transfer_transport';
+        $transfer_dropoff = 'transfer_dropoff';
+        $transfer_driver = 'transfer_driver';
+        $transfer_vehicle_no = 'transfer_vehicle_no';
+        $transfer_notes = 'transfer_notes';
+    } else {
+        $transfer_pickup = 'transfer_pickup_' . $divID;
+        $transfer_pickup_time = 'transfer_pickup_time_' . $divID;
+        $transfer_pickup_date = 'transfer_pickup_date_' . $divID;
+        $transfer_transport = 'transfer_transport_' . $divID;
+        $transfer_dropoff = 'transfer_dropoff_' . $divID;
+        $transfer_driver = 'transfer_driver_' . $divID;
+        $transfer_vehicle_no = 'transfer_vehicle_no_' . $divID;
+        $transfer_notes = 'transfer_notes_' . $divID;
+    }
+}
+?>
+<div class="additional-transfer-div" id="additional-transfer-<?=$divID?>" style="display: none;">
+    <input type="hidden" id="transfermainactive" name="transfermainactive" value="0"/>
+    <hr/>
+    <h4>Inter-Hotel Transfer Details</h4>
+    <div class="form-group col-xs-4 right20"><!-- pickup location selection -->
+        <label for="<?=$transfer_pickup?>">Pickup Location</label>
+        <?php
+        $sql = "SELECT * FROM fll_location ORDER BY name ASC";
+        $result = mysql_query($sql);
+        echo '<select class="form-control select" id="'.$transfer_pickup.'" name="'.$transfer_pickup.'">
+                                            <option>Pickup Location</option>';
+        while ($row = mysql_fetch_array($result)) {
+            echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
+        }
+        echo "</select>";
+        ?>
+    </div>
+    <div class="form-group col-xs-3">
+        <!-- arrival date -->
+        <label for="<?=$transfer_pickup_date?>" class="left20">Pickup Date</label>
+        <div class="input-group date left20" data-date-format="mm-dd-yyyy">
+            <input type="text" class="form-control datepicker" name="<?=$transfer_pickup_date?>" id="<?=$transfer_pickup_date?>"
+                   placeholder="Pickup date"/>
+            <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
+        </div>
+    </div>
+
+    <div class="clearfix"></div>
+
+    <div class="form-group col-xs-2"><!-- pickup time -->
+        <label for="<?=$transfer_pickup_time?>">Pickup Time</label>
+        <div class="input-group bootstrap-timepicker">
+            <input type="text" class="form-control timepicker24" name="<?=$transfer_pickup_time?>" id="<?=$transfer_pickup_time?>"
+                   placeholder="Pickup time"/>
+            <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+        </div>
+        <span class="help-block"> &nbsp;Select pickup time</span>
+    </div>
+
+    <div class="form-group col-xs-5"> <!-- transport mode field -->
+        <label class="left20">Transport mode</label>
+        <div class="left20">
+            <?php
+            $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+            $result = mysql_query($sql);
+            echo '<select multiple class="form-control select" id="'.$transfer_transport.'" name="'.$transfer_transport.'[]">
+                  <option>Transfer Transport mode</option>';
+            while ($row = mysql_fetch_array($result)) {
+                echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
+            }
+            echo "</select>";
+            ?>
+        </div>
+    </div>
+    <div class="clearfix"></div>
+    <div class="form-group col-xs-7"><!-- dropoff location selection -->
+        <label for="<?=$transfer_dropoff?>">Dropoff Location</label>
+        <select class="form-control dropSelect" id="<?=$transfer_dropoff?>" name="<?=$transfer_dropoff?>">
+            <?php echo $opt->ShowLocation(); ?>
+        </select>
+    </div>
+    <div class="clearfix"></div>
+    <!-- initiate chained selection drivers -->
+    <div class="form-group col-xs-4"><!-- available driver selection -->
+        <label for="<?=$transfer_driver?>">Driver</label>
+        <select class="form-control" id="<?=$transfer_driver?>" name="<?=$transfer_driver?>">
+            <?php echo $opt->ShowTransport(); ?>
+        </select>
+    </div>
+    <div class="form-group col-xs-3"><!-- vehicle # selection -->
+        <label for="<?=$transfer_vehicle_no?>" class="left20">Vehicle</label>
+        <select class="form-control left20" id="<?=$transfer_vehicle_no?>" name="<?=$transfer_vehicle_no?>">
+            <option value="0">Select vehicle</option>
+        </select>
+    </div>
+
+    <div class="form-group"><!-- hotel notes -->
+        <div class="col-xs-7">
+            <label>Transfer &amp; Transport notes</label>
+            <textarea class="form-control text-lowercase" rows="5" id="<?=$transfer_notes?>" name="<?=$transfer_notes?>"
+                      placeholder="Transfer &amp; Transportation notes: additional transfer &amp; transport comments and details here"></textarea>
+        </div>
+    </div>
+    <div>
+        <button id="remAdditionalTransfer<?=!empty($divID)?'_'.$divID:''?>" class="btn btn-danger right20">Remove Additional Transfer</button>
+        <button id="addAdditionalTransfer<?=!empty($divID)?'_'.$divID:''?>" class="btn btn-warning">Add Transfer</button>
+    </div>
+</div>
+<div class="clearfix"></div>

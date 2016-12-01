@@ -3005,7 +3005,14 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <!-- end transfer 3 -->
-                                
+
+                                    <div id="additionalBtnDiv"><hr /><button type="button" id="additionalMainBtn" class="btn btn-success">Additional Transfer</button></div>
+                                    <div class="clearfix"></div>
+                                    <!--All Additional Transfers Would Go Under Below Div-->
+                                    <div id="additionalTransfersDiv">
+                                    </div>
+
+                                    
                                 <!-- departure main -->
                                 <hr />
                                 <h4>Departure Details <label class="checkbox-inline label_checkboxitem" style="margin-left:10px;padding-top: 0;">
@@ -3589,6 +3596,27 @@ if(isset($_POST['addreservation']))
              $('#departuresDiv').show();
          }
     });
+
+
+    //Code for Additional Transfer
+    $('#additionalTransfersDiv').hide();
+    $("#additionalMainBtn").on('click',function(){
+        $(this).parent().hide();
+        var additionalTransfersDiv = $('#additionalTransfersDiv');
+        var totalAdditionalTransfers = additionalTransfersDiv.find('div.additional-transfer-div').length;
+
+        additionalTransfersDiv.show();
+        //Need to Make an Ajax Call to get the Divs Loaded in Here.
+        $.ajax({
+            url:"<?=$url?>/custom_updates/additional_transfer.php",
+            type:"POST",
+            data:{dataID:totalAdditionalTransfers},
+            success:function(output){
+                additionalTransfersDiv.append(output);
+            }
+        });
+    });
+
     body.on('click','.addRoomBtn',function(){
         var currentBtn = $(this);
         var currentArrivalID = currentBtn.attr('data-id');
