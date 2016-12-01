@@ -5,33 +5,44 @@
  * Date: 12/1/2016
  * Time: 12:40 PM
  */
+include ('../select.class.php');
 if ($_POST) {
     $divID = $_POST['dataID'];
+    $maxDivs = $_POST['max'];
+
+    if(intval($divID)===(intval($maxDivs)-1)){
+        $final = true;
+    }else{
+        $final = false;
+    }
+
     if ($divID == 0) {
-        $transfer_pickup = 'transfer_pickup';
-        $transfer_pickup_time = 'transfer_pickup_time';
-        $transfer_pickup_date = 'transfer_pickup_date';
-        $transfer_transport = 'transfer_transport';
-        $transfer_dropoff = 'transfer_dropoff';
-        $transfer_driver = 'transfer_driver';
-        $transfer_vehicle_no = 'transfer_vehicle_no';
-        $transfer_notes = 'transfer_notes';
+        $transfer_pickup = 'add_transfer_pickup';
+        $transfer_pickup_time = 'add_transfer_pickup_time';
+        $transfer_pickup_date = 'add_transfer_pickup_date';
+        $transfer_transport = 'add_transfer_transport';
+        $transfer_dropoff = 'add_transfer_dropoff';
+        $transfer_driver = 'add_transfer_driver';
+        $transfer_vehicle_no = 'add_transfer_vehicle_no';
+        $transfer_notes = 'add_transfer_notes';
+        $hiddenTransferInput = 'add_transfer_active';
     } else {
-        $transfer_pickup = 'transfer_pickup_' . $divID;
-        $transfer_pickup_time = 'transfer_pickup_time_' . $divID;
-        $transfer_pickup_date = 'transfer_pickup_date_' . $divID;
-        $transfer_transport = 'transfer_transport_' . $divID;
-        $transfer_dropoff = 'transfer_dropoff_' . $divID;
-        $transfer_driver = 'transfer_driver_' . $divID;
-        $transfer_vehicle_no = 'transfer_vehicle_no_' . $divID;
-        $transfer_notes = 'transfer_notes_' . $divID;
+        $transfer_pickup = 'add_transfer_pickup' . $divID;
+        $transfer_pickup_time = 'add_transfer_pickup_time' . $divID;
+        $transfer_pickup_date = 'add_transfer_pickup_date' . $divID;
+        $transfer_transport = 'add_transfer_transport' . $divID;
+        $transfer_dropoff = 'add_transfer_dropoff' . $divID;
+        $transfer_driver = 'add_transfer_driver' . $divID;
+        $transfer_vehicle_no = 'add_transfer_vehicle_no' . $divID;
+        $transfer_notes = 'add_transfer_notes' . $divID;
+        $hiddenTransferInput = 'add_transfer'.$divID.'_active';
     }
 }
 ?>
-<div class="additional-transfer-div" id="additional-transfer-<?=$divID?>" style="display: none;">
-    <input type="hidden" id="transfermainactive" name="transfermainactive" value="0"/>
+<div class="additional-transfer-div" id="additional-transfer-<?=$divID?>">
+    <input type="hidden" id="<?=$hiddenTransferInput?>" name="<?=$hiddenTransferInput?>" value="1"/>
     <hr/>
-    <h4>Inter-Hotel Transfer Details</h4>
+    <h4>Additional Transfer Details</h4>
     <div class="form-group col-xs-4 right20"><!-- pickup location selection -->
         <label for="<?=$transfer_pickup?>">Pickup Location</label>
         <?php
@@ -73,8 +84,7 @@ if ($_POST) {
             <?php
             $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
             $result = mysql_query($sql);
-            echo '<select multiple class="form-control select" id="'.$transfer_transport.'" name="'.$transfer_transport.'[]">
-                  <option>Transfer Transport mode</option>';
+            echo '<select multiple class="form-control transport-mode" id="'.$transfer_transport.'" name="'.$transfer_transport.'[]">';
             while ($row = mysql_fetch_array($result)) {
                 echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
             }
@@ -111,9 +121,16 @@ if ($_POST) {
                       placeholder="Transfer &amp; Transportation notes: additional transfer &amp; transport comments and details here"></textarea>
         </div>
     </div>
-    <div>
-        <button id="remAdditionalTransfer<?=!empty($divID)?'_'.$divID:''?>" class="btn btn-danger right20">Remove Additional Transfer</button>
-        <button id="addAdditionalTransfer<?=!empty($divID)?'_'.$divID:''?>" class="btn btn-warning">Add Transfer</button>
+    <div class="additionalTransferActionButtonsDiv">
+        <button type="button" id="remAdditionalTransfer<?=!empty($divID)?'_'.$divID:''?>" class="btn btn-danger right20 remAdditionalTransfer">Remove Additional Transfer</button>
+        <?php
+            if(!$final){
+                ?>
+                <button type="button" id="addAdditionalTransfer<?=!empty($divID)?'_'.$divID:''?>" class="btn btn-warning addAdditionalTransfer">Add Transfer</button>
+        <?php
+            }
+        ?>
+
     </div>
 </div>
 <div class="clearfix"></div>

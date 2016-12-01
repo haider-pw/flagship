@@ -499,6 +499,53 @@ if(isset($_POST['addreservation']))
     $transfer_vehicle_no3   = QuoteSmart(@$_POST['transfer_vehicle_no3']);
     $transfer_notes3        = QuoteSmart(@$_POST['transfer_notes3']);
 
+
+
+    //Additional Transfer
+    $add_transfer_active        = QuoteSmart(@$_POST['add_transfer_active']);
+    $add_transfer_pickup        = QuoteSmart(@$_POST['add_transfer_pickup']);
+    $add_transfer_time          = QuoteSmart(@$_POST['add_transfer_pickup_time']);
+    $add_transfer_pickup_date   = QuoteSmart(@$_POST['add_transfer_pickup_date']);
+    $add_transfer_transport     = !empty($_POST['add_transfer_transport'])?QuoteSmart(implode(', ',$_POST['add_transfer_transport'])):'';
+    $add_transfer_dropoff       = QuoteSmart(@$_POST['add_transfer_dropoff']);
+    $add_transfer_driver        = QuoteSmart(@$_POST['add_transfer_driver']);
+    $add_transfer_vehicle_no    = QuoteSmart(@$_POST['add_transfer_vehicle_no']);
+    $add_transfer_notes         = QuoteSmart(@$_POST['add_transfer_notes']);
+
+    //Additional Transfer 1
+    $add_transfer1_active        = QuoteSmart(@$_POST['add_transfer1_active']);
+    $add_transfer_pickup1       = QuoteSmart(@$_POST['add_transfer_pickup1']);
+    $add_transfer_time1         = QuoteSmart(@$_POST['add_transfer_pickup_time1']);
+    $add_transfer_pickup_date1  = QuoteSmart(@$_POST['add_transfer_pickup_date1']);
+    $add_transfer1_transport    = !empty($_POST['add_transfer_transport1'])?QuoteSmart(implode(', ',$_POST['add_transfer_transport1'])):'';
+    $add_transfer_dropoff1      = QuoteSmart(@$_POST['add_transfer_dropoff1']);
+    $add_transfer_driver1       = QuoteSmart(@$_POST['add_transfer_driver1']);
+    $add_transfer_vehicle_no1   = QuoteSmart(@$_POST['add_transfer_vehicle_no1']);
+    $add_transfer_notes1        = QuoteSmart(@$_POST['add_transfer_notes1']);
+
+    //Additional Transfer 2
+    $add_transfer2_active        = QuoteSmart(@$_POST['add_transfer2_active']);
+    $add_transfer_pickup2       = QuoteSmart(@$_POST['add_transfer_pickup2']);
+    $add_transfer_time2         = QuoteSmart(@$_POST['add_transfer_pickup_time2']);
+    $add_transfer_pickup_date2  = QuoteSmart(@$_POST['add_transfer_pickup_date2']);
+    $add_transfer_transport2    = !empty($_POST['add_transfer_transport2'])?QuoteSmart(implode(', ',$_POST['add_transfer_transport2'])):'';
+    $add_transfer_dropoff2      = QuoteSmart(@$_POST['add_transfer_dropoff2']);
+    $add_transfer_driver1       = QuoteSmart(@$_POST['add_transfer_driver2']);
+    $add_transfer_vehicle_no2   = QuoteSmart(@$_POST['add_transfer_vehicle_no2']);
+    $add_transfer_notes2        = QuoteSmart(@$_POST['add_transfer_notes2']);
+
+    //Additional Transfer 3
+    $add_transfer3_active        = QuoteSmart(@$_POST['add_transfer3_active']);
+    $add_transfer_pickup3       = QuoteSmart(@$_POST['add_transfer_pickup3']);
+    $add_transfer_time3         = QuoteSmart(@$_POST['add_transfer_pickup_time3']);
+    $add_transfer_pickup_date3  = QuoteSmart(@$_POST['add_transfer_pickup_date3']);
+    $add_transfer3_transport    = !empty($_POST['add_transfer_transport3'])?QuoteSmart(implode(', ',$_POST['add_transfer_transport3'])):'';
+    $add_transfer_dropoff3      = QuoteSmart(@$_POST['add_transfer_dropoff3']);
+    $add_transfer_driver3       = QuoteSmart(@$_POST['add_transfer_driver3']);
+    $add_transfer_vehicle_no3   = QuoteSmart(@$_POST['add_transfer_vehicle_no3']);
+    $add_transfer_notes3        = QuoteSmart(@$_POST['add_transfer_notes3']);
+
+
     //Custom Code for dynamic Guest.
     $guestTitleName = $_POST['guest_title_name'];
     $guestFirstName = $_POST['guest_first_name'];
@@ -1012,7 +1059,58 @@ if(isset($_POST['addreservation']))
         "(ref_no_sys, pickup, pickup_date, pickup_time, dropoff, transport, vehicle, driver, transfer_notes) ". 
         "VALUES ('$fsref', '$transfer_pickup3','$transfer_pickup_date3', '$transfer_time3', '$transfer_dropoff3', '$transfer3_transport', '$transfer_vehicle_no3', '$transfer_driver3', '$transfer_notes3')";
         $retval16 = mysql_query( $sql_16, $conn );
-    }        
+    }
+
+
+
+    //For Additional Transfers
+
+    //Additional Transfer
+    if($add_transfer_active == 1){
+        $addTransferActive_sql = "INSERT INTO fll_additional_transfer ".
+            "(ref_no_sys, pickup, pickup_date, pickup_time, dropoff, transport, vehicle, driver, transfer_notes) ".
+            "VALUES ('$fsref', '$add_transfer_pickup','$add_transfer_pickup_date', '$add_transfer_time', '$add_transfer_dropoff', '$add_transfer_transport', '$add_transfer_vehicle_no', '$add_transfer_driver', '$add_transfer_notes')";
+        $addTransferActive_resource = mysql_query( $addTransferActive_sql, $conn);
+        if(mysql_errno()){
+            echo $addTransferActive_sql;
+            echo '<br />'.__LINE__.'::'.mysql_error();
+        }
+    }
+    //Additional Transfer 1
+    if($add_transfer1_active == 1){
+        $addTransfer1Active_sql = "INSERT INTO fll_additional_transfer ".
+            "(ref_no_sys, pickup, pickup_date, pickup_time, dropoff, transport, vehicle, driver, transfer_notes) ".
+            "VALUES ('$fsref', '$add_transfer_pickup1','$add_transfer_pickup_date1', '$add_transfer_time1', '$add_transfer_dropoff1', '$add_transfer1_transport', '$add_transfer_vehicle_no1', '$add_transfer_driver1', '$add_transfer_notes1')";
+        $addTransfer1Active_resource= mysql_query( $addTransfer1Active_sql, $conn );
+        if(mysql_errno()){
+            echo $addTransfer1Active_sql;
+            echo '<br />'.__LINE__.'::'.mysql_error();
+        }
+    }
+    //Additional Transfer 2
+    if($add_transfer2_active == 1){
+        $addTransfer2Active_sql = "INSERT INTO fll_additional_transfer ".
+            "(ref_no_sys, pickup, pickup_date, pickup_time, dropoff, transport, vehicle, driver, transfer_notes) ".
+            "VALUES ('$fsref', '$add_transfer_pickup2','$add_transfer_pickup_date2', '$add_transfer_time2', '$add_transfer_dropoff2', '$add_transfer2_transport', '$add_transfer_vehicle_no2', '$add_transfer_driver2', '$add_transfer_notes2')";
+        $addTransfer2Active_resource= mysql_query( $addTransfer2Active_sql, $conn );
+        if(mysql_errno()){
+            echo $addTransfer2Active_sql;
+            echo '<br />'.__LINE__.'::'.mysql_error();
+        }
+    }
+    //Additional Transfer 3
+    if($add_transfer3_active == 1){
+        $addTransfer3Active_sql = "INSERT INTO fll_additional_transfer ".
+            "(ref_no_sys, pickup, pickup_date, pickup_time, dropoff, transport, vehicle, driver, transfer_notes) ".
+            "VALUES ('$fsref', '$add_transfer_pickup3','$add_transfer_pickup_date3', '$add_transfer_time3', '$add_transfer_dropoff3', '$add_transfer3_transport', '$add_transfer_vehicle_no3', '$add_transfer_driver3', '$add_transfer_notes3')";
+        $addTransfer3Active_resource= mysql_query( $addTransfer3Active_sql, $conn );
+        if(mysql_errno()){
+            echo $addTransfer3Active_sql;
+            echo '<br />'.__LINE__.'::'.mysql_error();
+        }
+    }
+
+
     //Post driver info to jobsheet
     if ($arr_driver > 0){
         $res_type_arr = 1;
@@ -3084,9 +3182,9 @@ if(isset($_POST['addreservation']))
                                         <?php include ('dpt_pickup_select.php'); ?>
                                     </div>
                                     <div class="form-group"><!-- pickup time -->
-                                        <label>Pickup Time</label>
+                                        <label class="left20">Pickup Time</label>
                                         <div class="input-group bootstrap-timepicker col-xs-3">
-                                            <input type="text" class="form-control timepicker24" name="pickup_time" id="pickup-time" placeholder="Pickup time" value=""/>
+                                            <input type="text" class="form-control timepicker24 left20" name="pickup_time" id="pickup-time" placeholder="Pickup time" value=""/>
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
                                         </div>
                                         <span class="help-block"> &nbsp;Select pickup time</span>
@@ -3435,9 +3533,9 @@ if(isset($_POST['addreservation']))
                                         ?>
                                     </div>
                                     <div class="form-group"><!-- pickup time -->
-                                        <label>Pickup Time</label>
+                                        <label class="left20">Pickup Time</label>
                                         <div class="input-group bootstrap-timepicker col-xs-3">
-                                            <input type="text" class="form-control timepicker24" name="pickup_time3" id="pickup-time3" placeholder="Pickup time" value=""/>
+                                            <input type="text" class="form-control timepicker24 left20" name="pickup_time3" id="pickup-time3" placeholder="Pickup time" value=""/>
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
                                         </div>
                                         <span class="help-block"> &nbsp;Select pickup time</span>
@@ -3600,21 +3698,45 @@ if(isset($_POST['addreservation']))
 
     //Code for Additional Transfer
     $('#additionalTransfersDiv').hide();
-    $("#additionalMainBtn").on('click',function(){
-        $(this).parent().hide();
+    body.on('click',"#additionalMainBtn, .addAdditionalTransfer", function(e){
+        e.preventDefault();
         var additionalTransfersDiv = $('#additionalTransfersDiv');
         var totalAdditionalTransfers = additionalTransfersDiv.find('div.additional-transfer-div').length;
-
-        additionalTransfersDiv.show();
+        var maxDivs = 3;
         //Need to Make an Ajax Call to get the Divs Loaded in Here.
-        $.ajax({
-            url:"<?=$url?>/custom_updates/additional_transfer.php",
-            type:"POST",
-            data:{dataID:totalAdditionalTransfers},
-            success:function(output){
-                additionalTransfersDiv.append(output);
-            }
-        });
+        if(totalAdditionalTransfers<maxDivs){
+            console.log('totalDivs:'+totalAdditionalTransfers);
+            $(this).parent().hide();
+            $.ajax({
+                url:"<?=$url?>/custom_updates/additional_transfer.php",
+                type:"POST",
+                data:{dataID:totalAdditionalTransfers,max:maxDivs},
+                success:function(output){
+                    additionalTransfersDiv.show();
+                    additionalTransfersDiv.append(output);
+                    $('.transport-mode').select2();
+                    //Need To Initialize the datepicker also.
+                    if($(".datepicker").length > 0){
+                        $(".datepicker").datepicker({format: 'yyyy-mm-dd'});
+                    }
+                }
+            });
+        }
+
+    });
+
+    body.on('click','.remAdditionalTransfer',function(){
+        var additionalTransfersDiv = $('#additionalTransfersDiv');
+        $(this).parents('div.additional-transfer-div').remove();
+        var totalAdditionalTransfers = additionalTransfersDiv.find('div.additional-transfer-div').length;
+        if(totalAdditionalTransfers === 0){
+            console.log('i should show up');
+            additionalTransfersDiv.html('');
+            additionalTransfersDiv.hide();
+            $('#additionalBtnDiv').show();
+        }else if(totalAdditionalTransfers > 0){
+            additionalTransfersDiv.find('div.additional-transfer-div').last().find('div.additionalTransferActionButtonsDiv').show();
+        }
     });
 
     body.on('click','.addRoomBtn',function(){
