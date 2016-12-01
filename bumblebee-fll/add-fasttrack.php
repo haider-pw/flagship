@@ -1626,7 +1626,7 @@ if (isset($_POST['addreservation'])) {
 
                             <div class="form-group col-xs-7"><!-- tour operator selection -->
                                 <label>Tour Operator</label>
-                                <?php include('tour_oper_select.php'); ?>
+                                <?php include('fsft_tour_oper_select.php'); ?>
                             </div>
                             <div class="form-group col-xs-7"><!-- operator code field -->
                                 <label>Operator code/Brand</label>

@@ -987,7 +987,7 @@ if(isset($_POST['addreservation']))
     $sql_13 = "INSERT INTO fll_transfer ". 
         "(ref_no_sys, pickup, pickup_date, pickup_time, dropoff, transport, vehicle, driver, transfer_notes) ". 
         "VALUES ('$fsref', '$transfer_pickup','$transfer_pickup_date', '$transfer_time', '$transfer_dropoff', '$transfer_transport', '$transfer_vehicle_no', '$transfer_driver', '$transfer_notes')";
-        $retval13 = mysql_query( $sql_13, $conn );
+        $retval13 = mysql_query( $sql_13, $conn);
     }
     
     $transfer1active = QuoteSmart($_POST['transfer1active']);
