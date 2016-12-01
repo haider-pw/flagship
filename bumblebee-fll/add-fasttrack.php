@@ -25,6 +25,16 @@ if (isset($_POST['addreservation'])) {
     $title_name = QuoteSmart(@$_POST['title_name']);
     $first_name = QuoteSmart(@$_POST['first_name']);
     $last_name = QuoteSmart(@$_POST['last_name']);
+
+    $paymentType = QuoteSmart(@$_POST['paymentType']);
+
+    if($paymentType == 2){ //pay on arrival
+        $paymentAmount = QuoteSmart(@$_POST['paymentAmount']);
+    }else{
+        $paymentAmount = 0;
+    }
+
+
     if($_POST['arr_ServiceOnly']){
         $arrServiceOnly = true;
     }else{
@@ -867,8 +877,8 @@ if (isset($_POST['addreservation'])) {
     }
     //Put all this stuff into the database
     $sql = "INSERT INTO fll_reservations " .
-        "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, affiliates, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle,fast_ref_no_sys) " .
-        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$affiliates', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$room_no', '$total_guests','$luggageVehicle','$fastRef')";
+        "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, affiliates, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle,fast_ref_no_sys,payment_type,payment_amount) " .
+        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$affiliates', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$room_no', '$total_guests','$luggageVehicle','$fastRef','$paymentType','$paymentAmount')";
     $retval = mysql_query($sql, $conn);
     //Log user action
     $sql_19 = "INSERT INTO fll_activity " .
@@ -1661,6 +1671,23 @@ if (isset($_POST['addreservation'])) {
                                               placeholder="Rep notes: additional rep comments and details here"></textarea>
                                 </div>
                             </div>
+                            <div class="form-group col-xs-7"><!-- tour operator selection -->
+                                <label for="paymentType">Payment</label>
+                                <select class="form-control select" id="paymentType" name="paymentType">
+                                    <option value="0">Select Payment Type</option>
+                                    <option value="1">Payment Received</option>
+                                    <option value="2">Pay on Arrival</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-xs-7" id="paymentAmountDiv" style="display: none;"><!-- affiliates field -->
+                                <label>Payment Amount</label>
+                                <div class="input-group">
+                                <span class="input-group-addon">$</span>
+                                <input type="text" class="form-control text-capitalize" placeholder="Payment Amount"
+                                       id="paymentAmount" name="paymentAmount">
+                                    </div>
+                            </div>
+                            <div class="clearfix"></div>
                             <hr/>
                             <!-- guests main-->
                             <div id="guestmain">
@@ -3545,6 +3572,14 @@ if (isset($_POST['addreservation'])) {
                 $('#departureDetailsDiv').hide();
             } else {
                 $('#departureDetailsDiv').show();
+            }
+        });
+
+        $('#paymentType').on('change',function(){
+            if($(this).val() == '2'){
+                $('#paymentAmountDiv').show();
+            }else{
+                $('#paymentAmountDiv').hide();
             }
         });
     });
