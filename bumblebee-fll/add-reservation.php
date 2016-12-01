@@ -49,25 +49,11 @@ if(isset($_POST['addreservation']))
     $tour_oper              = QuoteSmart(@$_POST['tour_oper']);
     $oper_code              = QuoteSmart(@$_POST['oper_code']);
     $tour_ref_no            = QuoteSmart(@$_POST['tour_ref_no']);
-    $adults                 = QuoteSmart(@$_POST['adults']);
-    $children               = QuoteSmart(@$_POST['children']);
-    $infants                = QuoteSmart(@$_POST['infants']);
     $tour_notes             = QuoteSmart(@$_POST['tour_notes']);
-    $arr_date               = QuoteSmart(@$_POST['arr_date']);
-    $arr_time               = QuoteSmart(@$_POST['arr_time']);
-    $arr_flight_no          = QuoteSmart(@$_POST['arr_flight_no']);
-    $flight_class           = QuoteSmart(@$_POST['flight_class']);
-    if(isset($_POST['arr_transport'])){
-        $arr_transport          = QuoteSmart(implode(', ',$_POST['arr_transport']));
-    }else{
-        $arr_transport          = '';
-    }
 
 
-    $arr_driver             = QuoteSmart(@$_POST['arr_driver']);
-    $arr_vehicle_no         = QuoteSmart(@$_POST['arr_vehicle_no']);
-    $arr_pickup             = QuoteSmart(@$_POST['arr_pickup']);
-    $arr_dropoff            = QuoteSmart(@$_POST['arr_dropoff']);
+
+
     if(!empty($_POST['room_type'])){
         $room_type = QuoteSmart($_POST['room_type']);
     }else{
@@ -80,26 +66,81 @@ if(isset($_POST['addreservation']))
     $child_seats            = QuoteSmart(@$_POST['child_seats']);
     $booster_seats          = isset($_POST['booster_seats'])?QuoteSmart($_POST['booster_seats']):'';
     $vouchers               = QuoteSmart(@$_POST['vouchers']);
-    $dpt_date               = QuoteSmart(@$_POST['dpt_date']);
-    $dpt_time               = QuoteSmart(@$_POST['dpt_time']);
-    $dpt_flight_no          = QuoteSmart(@$_POST['dpt_flight_no']);
-    $dpt_transport          = !empty($_POST['dpt_transport'])?QuoteSmart(implode(', ',$_POST['dpt_transport'])):'';
-    $dpt_driver             = QuoteSmart(@$_POST['dpt_driver']);
-    $dpt_vehicle_no         = QuoteSmart(@$_POST['dpt_vehicle_no']);
-    $dpt_pickup             = QuoteSmart(@$_POST['dpt_pickup']);
-    $dpt_dropoff            = QuoteSmart(@$_POST['dpt_dropoff']);
-    $pickup_time            = QuoteSmart(@$_POST['pickup_time']);
-    $dpt_notes              = QuoteSmart(@$_POST['dpt_notes']);
-    $arr_transport_notes    = QuoteSmart(@$_POST['arr_transport_notes']);
-    $arr_hotel_notes        = QuoteSmart(@$_POST['arr_hotel_notes']);
-    $dpt_transport_notes    = QuoteSmart(@$_POST['dpt_transport_notes']);
-    $bottled_water          = QuoteSmart(@$_POST['bottled_water']);
-    $cold_towels            = QuoteSmart(@$_POST['cold_towels']);
     $dpt_flight_class       = QuoteSmart(@$_POST['dpt_flight_class']);
     $rooms                  = QuoteSmart(@$_POST['no_of_rooms']);
     $room_no                = QuoteSmart(@$_POST['room_no']);
     $arr_main               = 1;
     $dpt_main               = 1;
+
+    //if departures
+    if($departures){
+        $dpt_date               = QuoteSmart(@$_POST['dpt_date']);
+        $dpt_time               = QuoteSmart(@$_POST['dpt_time']);
+        $dpt_flight_no          = QuoteSmart(@$_POST['dpt_flight_no']);
+        $dpt_transport          = !empty($_POST['dpt_transport'])?QuoteSmart(implode(', ',$_POST['dpt_transport'])):'';
+        $dpt_driver             = QuoteSmart(@$_POST['dpt_driver']);
+        $dpt_vehicle_no         = QuoteSmart(@$_POST['dpt_vehicle_no']);
+        $dpt_pickup             = QuoteSmart(@$_POST['dpt_pickup']);
+        $dpt_dropoff            = QuoteSmart(@$_POST['dpt_dropoff']);
+        $pickup_time            = QuoteSmart(@$_POST['pickup_time']);
+        $dpt_notes              = QuoteSmart(@$_POST['dpt_notes']);
+        $dpt_transport_notes    = QuoteSmart(@$_POST['dpt_transport_notes']);
+    }else{
+        $dpt_date               = '0000-00-00';
+        $dpt_time               = "";
+        $dpt_flight_no          = "";
+        $dpt_transport          = "";
+        $dpt_driver             = "";
+        $dpt_vehicle_no         = "";
+        $dpt_pickup             = "";
+        $dpt_dropoff            = "";
+        $pickup_time            = "";
+        $dpt_notes              = "";
+    }
+
+    //if arrivals
+    if($arrivals){
+        $arr_date               = QuoteSmart(@$_POST['arr_date']);
+        $arr_time               = QuoteSmart(@$_POST['arr_time']);
+        $arr_flight_no          = QuoteSmart(@$_POST['arr_flight_no']);
+        $flight_class           = QuoteSmart(@$_POST['flight_class']);
+        if(isset($_POST['arr_transport'])){
+            $arr_transport          = QuoteSmart(implode(', ',$_POST['arr_transport']));
+        }else{
+            $arr_transport          = '';
+        }
+        $arr_driver             = QuoteSmart(@$_POST['arr_driver']);
+        $arr_vehicle_no         = QuoteSmart(@$_POST['arr_vehicle_no']);
+        $arr_pickup             = QuoteSmart(@$_POST['arr_pickup']);
+        $arr_dropoff            = QuoteSmart(@$_POST['arr_dropoff']);
+        $arr_transport_notes    = QuoteSmart(@$_POST['arr_transport_notes']);
+        $arr_hotel_notes        = QuoteSmart(@$_POST['arr_hotel_notes']);
+        //requirements
+        $bottled_water          = QuoteSmart(@$_POST['bottled_water']);
+        $cold_towels            = QuoteSmart(@$_POST['cold_towels']);
+        $adults                 = QuoteSmart(@$_POST['adults']);
+        $children               = QuoteSmart(@$_POST['children']);
+        $infants                = QuoteSmart(@$_POST['infants']);
+    }else{
+        $arr_date               = '';
+        $arr_time               = '';
+        $arr_flight_no          = '';
+        $flight_class           = '';
+        $arr_transport          = '';
+        $arr_driver             = '';
+        $arr_vehicle_no         = '';
+        $arr_pickup             = '';
+        $arr_dropoff            = '';
+        $arr_transport_notes    = '';
+        $arr_hotel_notes        = '';
+        //requirements
+        $bottled_water          = '';
+        $cold_towels            = '';
+        $adults                 = '';
+        $children               = '';
+        $infants                = '';
+    }
+
     //Excursion
     $excursion_name = QuoteSmart(@$_POST['excursion_name']);
     $excursion_date = QuoteSmart(@$_POST['excursion_date']);
