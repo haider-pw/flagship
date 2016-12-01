@@ -45,16 +45,7 @@ if ($_POST) {
     <h4>Additional Transfer Details</h4>
     <div class="form-group col-xs-4 right20"><!-- pickup location selection -->
         <label for="<?=$transfer_pickup?>">Pickup Location</label>
-        <?php
-        $sql = "SELECT * FROM fll_location ORDER BY name ASC";
-        $result = mysql_query($sql);
-        echo '<select class="form-control select" id="'.$transfer_pickup.'" name="'.$transfer_pickup.'">
-                                            <option>Pickup Location</option>';
-        while ($row = mysql_fetch_array($result)) {
-            echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
-        }
-        echo "</select>";
-        ?>
+        <input type="text" class="form-control" id="<?=$transfer_pickup?>" name="<?=$transfer_pickup?>" />
     </div>
     <div class="form-group col-xs-3">
         <!-- arrival date -->
@@ -95,9 +86,7 @@ if ($_POST) {
     <div class="clearfix"></div>
     <div class="form-group col-xs-7"><!-- dropoff location selection -->
         <label for="<?=$transfer_dropoff?>">Dropoff Location</label>
-        <select class="form-control dropSelect" id="<?=$transfer_dropoff?>" name="<?=$transfer_dropoff?>">
-            <?php echo $opt->ShowLocation(); ?>
-        </select>
+        <input type="text" class="form-control" id="<?=$transfer_dropoff?>" name="<?=$transfer_dropoff?>" placeholder="Dropoff Location">
     </div>
     <div class="clearfix"></div>
     <!-- initiate chained selection drivers -->
