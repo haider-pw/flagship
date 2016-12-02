@@ -2022,12 +2022,12 @@ if(isset($_POST['addreservation']))
                                     </select>
                                 </div>
 
-                                    <div class="left20" id="addArrTransportDiv col-lg-1">
+                                    <div class="left20 actionBtnsArrTransportDiv">
                                         <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
                                             <a class="btn btn-default addArrTransportBtn left20" data-id="0"><i class="fa fa-plus"></i> Add Transport</a>
                                         </div>
                                     </div>
-                                    
+                                    <div class="clearfix"></div>
                                     <div class="arrTransportsDiv">
                                     </div>
                                     
@@ -3793,30 +3793,44 @@ if(isset($_POST['addreservation']))
             console.log(currentArrivalID);
             mainDiv.prev().show();
         }
-
-
     });
 
-
     //Need to code fro Arrival Transport
+    //When Clicked on Add Transport
     body.on('click','.addArrTransportBtn',function(){
         var button = $(this);
         var mainTransportsDiv = $('.arrTransportsDiv');
-        var totalTransportDivs = mainTransportsDiv.find('div.arr_transport_div').length;
+        var totalTransportDivs = mainTransportsDiv.find('div.arr_transport_div').length + 1;
         var maxDivs = 5;
         if(totalTransportDivs<maxDivs){
             $.ajax({
                 url: "<?=$url?>/custom_updates/arr_transports.php",
                 type:"POST",
-                data:{max:maxDivs},
+                data:{max:maxDivs,dataID:totalTransportDivs},
                 success:function(output){
                     console.log(output);
                     mainTransportsDiv.append(output);
+                    button.parents('div.actionBtnsArrTransportDiv').hide();
                 }
             });
         }else{
             console.log('Max Arrival Transport Divs Reached');
         }
+    });
+    body.on('click','.remArrTransportBtn',function(){
+        var mainTransportsDiv = $('.arrTransportsDiv');
+        var currentMainDiv = $(this).parents('div.arr_transport_div');
+        //Remove this Current Div.
+        currentMainDiv.remove();
+        //Now Need to Check if there are any other divs in the super main div.
+        var totalTransportDivs = mainTransportsDiv.find('div.arr_transport_div').length;
+        if(totalTransportDivs > 0){
+            mainTransportsDiv.find('div.arr_transport_div').last().find('div.actionBtnsArrTransportDiv').show();
+        }else{
+            mainTransportsDiv.html('');
+            $('div.actionBtnsArrTransportDiv').show();
+        }
+
     });
 </script>
         <?php 
