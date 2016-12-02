@@ -2003,24 +2003,34 @@ if(isset($_POST['addreservation']))
                                     <label>Flight class</label>
                                     <?php include ('flightclass_select.php'); ?>
                                 </div>
-                                <div class="form-group col-xs-7"> <!-- transport mode field -->                                      
+                                <div class="form-group col-xs-12 col-lg-7"> <!-- transport mode field -->
                                     <label>Transport mode</label>
                                     <?php include ('transport_mode_arr.php'); ?>
                                 </div>
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
-                                <div class="form-group col-xs-4"><!-- available driver selection -->
+                                <div class="form-group col-xs-12 col-lg-3"><!-- available driver selection -->
                                     <label for="arr-driver">Driver</label>
                                     <select class="form-control" id="arr-driver" name="arr_driver" required="required">
                                         <?php echo $opt->ShowTransport(); ?>     
                                     </select>
                                 </div>
-                                <div class="form-group col-xs-3"><!-- vehicle # selection -->
-                                    <label class="left20">Vehicle</label>
+                                <div class="form-group col-xs-12 col-lg-3"><!-- vehicle # selection -->
+                                    <label for="arr-vehicle-no" class="left20">Vehicle</label>
                                     <select class="form-control left20" id="arr-vehicle-no" name="arr_vehicle_no">
                                         <option value="0">Select vehicle</option>    
                                     </select>
                                 </div>
+
+                                    <div class="left20" id="addArrTransportDiv col-lg-1">
+                                        <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
+                                            <a class="btn btn-default addArrTransportBtn left20" data-id="0"><i class="fa fa-plus"></i> Add Transport</a>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="arrTransportsDiv">
+                                    </div>
+                                    
                                 <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
                                         <label>Arrival &amp; Transport notes</label>
@@ -3785,6 +3795,28 @@ if(isset($_POST['addreservation']))
         }
 
 
+    });
+
+
+    //Need to code fro Arrival Transport
+    body.on('click','.addArrTransportBtn',function(){
+        var button = $(this);
+        var mainTransportsDiv = $('.arrTransportsDiv');
+        var totalTransportDivs = mainTransportsDiv.find('div.arr_transport_div').length;
+        var maxDivs = 5;
+        if(totalTransportDivs<maxDivs){
+            $.ajax({
+                url: "<?=$url?>/custom_updates/arr_transports.php",
+                type:"POST",
+                data:{max:maxDivs},
+                success:function(output){
+                    console.log(output);
+                    mainTransportsDiv.append(output);
+                }
+            });
+        }else{
+            console.log('Max Arrival Transport Divs Reached');
+        }
     });
 </script>
         <?php 

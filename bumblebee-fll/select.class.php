@@ -4,7 +4,7 @@
  * @author Alvin Herbert
  * @copyright 2015
  */
-
+error_reporting(E_ALL ^ E_DEPRECATED);
 class SelectList
 {
     protected $connd;
