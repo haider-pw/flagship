@@ -11,6 +11,9 @@ error_reporting(E_ALL ^ E_DEPRECATED);
 if($_POST){
     $dataID = intval($_POST['dataID'])+1;
     $maxDivs = $_POST['max'];
+    if(!empty($_POST['arrID'])){
+        $arrivalID = $_POST['arrID'];
+    }
 
     $maxReached = false;
     if(intval($maxDivs)===($dataID)){
@@ -23,20 +26,24 @@ if($_POST){
 <div class="arr_transport_div" <?=($maxReached === true)?' style="margin-bottom:30px;overflow:hidden;"':''?>>
     <hr style="border: 1px solid #cccccc;">
 <div class="form-group col-xs-7"> <!-- transport mode field -->
-    <label>Transport mode</label>
-    <?php include ('..\transport_mode_arr.php'); ?>
+    <label for="arr<?=isset($arrivalID)?$arrivalID:''?>-transport">Transport mode</label>
+    <?php
+    echo '<select class="form-control select" id="arr'.(isset($arrivalID)?$arrivalID:'').'-transport" name="arr'.(isset($arrivalID)?$arrivalID:'').'_transport[]">';
+    include ('transport_mode_arr.php');
+    echo "</select>";
+    ?>
 </div>
 <div class="clearfix"></div>
 <!-- initiate chained selection drivers -->
 <div class="form-group col-xs-4"><!-- available driver selection -->
-    <label for="arr-driver">Driver</label>
-    <select class="form-control" id="arr-driver" name="arr_driver" required="required">
+    <label for="arr<?=isset($arrivalID)?$arrivalID:''?>-driver">Driver</label>
+    <select class="form-control" id="arr<?=isset($arrivalID)?$arrivalID:''?>-driver" name="arr<?=isset($arrivalID)?$arrivalID:''?>_driver[]" required="required">
         <?php echo $opt->ShowTransport(); ?>
     </select>
 </div>
 <div class="form-group col-xs-3"><!-- vehicle # selection -->
-    <label for="arr-vehicle-no" class="left20">Vehicle</label>
-    <select class="form-control left20" id="arr-vehicle-no" name="arr_vehicle_no">
+    <label for="arr<?=isset($arrivalID)?$arrivalID:''?>-vehicle-no" class="left20">Vehicle</label>
+    <select class="form-control left20" id="arr<?=isset($arrivalID)?$arrivalID:''?>-vehicle-no" name="arr<?=isset($arrivalID)?$arrivalID:''?>_vehicle_no[]">
         <option value="0">Select vehicle</option>
     </select>
 </div>

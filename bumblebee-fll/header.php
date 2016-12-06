@@ -81,4 +81,16 @@ function validateDate($date)
 	return $d && $d->format('Y-m-d') === $date;
 }
 
+
+
+//general queries functions
+function build_sql_insert($table, $data) {
+	$key = array_keys($data);
+	$val = array_values($data);
+	$sql = "INSERT INTO $table (" . implode(', ', $key) . ") "
+		. "VALUES ('" . implode("', '", $val) . "')";
+
+	return($sql);
+}
+
 ?>
