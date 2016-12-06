@@ -65,7 +65,7 @@ if($_POST){
                     Transport</a>
             </div>
 
-                <?php
+            <?php
             }
             ?>
         </div>

@@ -964,6 +964,22 @@ if(isset($_POST['addreservation']))
 
 
             if(!empty($lastArrival2ID)) {
+
+                //Need to Insert Arrival Id Column in array also
+                array_walk($arrival2_transport_array,function(&$subArray,$key,$lastArrival2ID){
+                    $subArray['arrival_id'] = $lastArrival2ID;
+                },$lastArrival2ID);
+
+                foreach($arrival2_transport_array as $subArray){
+                    $arrivals2_transport_sql = build_sql_insert('fll_arrivals_transports',$subArray);
+                    //Now Run the Queries for this.
+                    $arrivals2_transport_resource = mysql_query($arrivals2_transport_sql,$conn);
+                    if(mysql_errno()) {
+                        echo $arrivals2_transport_sql;
+                        echo "<br/>LINE::".__LINE__."::". mysql_error();
+                    }
+                }
+
                 //Arr2 Room0
                 //Insert the First Arrival Room Details.
                 $sql_arrival2_room = "INSERT INTO fll_arrivals_rooms " .
@@ -1062,6 +1078,20 @@ if(isset($_POST['addreservation']))
             }
 
             if(!empty($lastArrival3ID)){
+                //Need to Insert Arrival Id Column in array also
+                array_walk($arrival3_transport_array,function(&$subArray,$key,$lastArrival3ID){
+                    $subArray['arrival_id'] = $lastArrival3ID;
+                },$lastArrival3ID);
+
+                foreach($arrival3_transport_array as $subArray){
+                    $arrivals3_transport_sql = build_sql_insert('fll_arrivals_transports',$subArray);
+                    //Now Run the Queries for this.
+                    $arrivals3_transport_resource = mysql_query($arrivals3_transport_sql,$conn);
+                    if(mysql_errno()) {
+                        echo $arrivals3_transport_sql;
+                        echo "<br/>LINE::".__LINE__."::". mysql_error();
+                    }
+                }
                 //Arr3 Room0
                 //Insert the First Arrival Room Details.
                 $sql_arrival3_room = "INSERT INTO fll_arrivals_rooms " .
@@ -2381,7 +2411,7 @@ if(isset($_POST['addreservation']))
 
                                     <div class="left20 actionBtnsArrTransportDiv">
                                         <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
-                                            <a class="btn btn-default addArrTransportBtn left20" data-id="0"><i class="fa fa-plus"></i> Add Transport</a>
+                                            <a class="btn btn-default addArrTransportBtn left20" data-id="1"><i class="fa fa-plus"></i> Add Transport</a>
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
@@ -2395,7 +2425,7 @@ if(isset($_POST['addreservation']))
                                     </div>
                                  </div>
                                 <div class="form-group col-xs-7"><!-- pickup location selection -->
-                                    <label>Pickup Location</label>
+                                    <label for="arr-pickup1">Pickup Location</label>
                                     <select class="form-control" id="arr-pickup1" name="arr_pickup1">
                                         <option value="0">Pickup Location</option>
                                         <option value="56">Airport</option>
@@ -4017,7 +4047,6 @@ if(isset($_POST['addreservation']))
         }
 
     });
-
     //Now need to work on transport mode
     body.on('change','.transport_mode',function(){
         var parentDiv = $(this).parents('.arr_transport_div');

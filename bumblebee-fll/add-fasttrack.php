@@ -135,6 +135,26 @@ if (isset($_POST['addreservation'])) {
     } else {
         $jetCenter = 0;
     }
+
+    //Arrivals Transport Mode.
+    $arr_transport_mode = $_POST['arr_transport'];
+    $arr_driver = $_POST['arr_driver'];
+    $arr_vehicle_no = $_POST['arr_vehicle_no'];
+    $arr_luggage_vehicle_no = $_POST['arr_luggage_vehicle_no'];
+
+    $arrival_transport_array = array();
+    if(!empty($arr_transport_mode) and is_array($arr_transport_mode)){
+        foreach($arr_transport_mode as $key=>$val){
+            $tempArray = array(
+                'transport_mode' => $val,
+                'driver' => $arr_driver[$key],
+                'vehicle' => $arr_vehicle_no[$key],
+                'luggage_vehicle' => $arr_luggage_vehicle_no[$key]
+            );
+            $arrival_transport_array[$key] = $tempArray;
+        }
+    }
+
     //Arrival 1
     $arr_date1 = QuoteSmart(@$_POST['arr_date1']);
     $arr_time1 = QuoteSmart(@$_POST['arr_time1']);
@@ -193,6 +213,24 @@ if (isset($_POST['addreservation'])) {
         $arr1_room_no5 = $_POST['arr1_room_no5'];
         $arr1_room_last_name5 = $_POST['arr1_room_last_name5'];
     }
+
+    //Arrivals 1 Transport Mode.
+    $arr1_transport_mode = $_POST['arr1_transport'];
+    $arr1_driver = $_POST['arr1_driver'];
+    $arr1_vehicle_no = $_POST['arr1_vehicle_no'];
+
+    $arrival1_transport_array = array();
+    if(!empty($arr1_transport_mode) and is_array($arr1_transport_mode)){
+        foreach($arr1_transport_mode as $key=>$val){
+            $tempArray = array(
+                'transport_mode' => $val,
+                'driver' => $arr1_driver[$key],
+                'vehicle' => $arr1_vehicle_no[$key]
+            );
+            $arrival1_transport_array[$key] = $tempArray;
+        }
+    }
+
     //Arrival 2
     $arr_date2 = QuoteSmart(@$_POST['arr_date2']);
     $arr_time2 = QuoteSmart(@$_POST['arr_time2']);
@@ -251,6 +289,23 @@ if (isset($_POST['addreservation'])) {
         $arr2_room_no5 = $_POST['arr2_room_no5'];
         $arr2_room_last_name5 = $_POST['arr2_room_last_name5'];
     }
+    //Arrivals 2 Transport Mode.
+    $arr2_transport_mode = $_POST['arr2_transport'];
+    $arr2_driver = $_POST['arr2_driver'];
+    $arr2_vehicle_no = $_POST['arr2_vehicle_no'];
+
+
+    $arrival2_transport_array = array();
+    if(!empty($arr2_transport_mode) and is_array($arr2_transport_mode)){
+        foreach($arr2_transport_mode as $key=>$val){
+            $tempArray = array(
+                'transport_mode' => $val,
+                'driver' => $arr2_driver[$key],
+                'vehicle' => $arr2_vehicle_no[$key]
+            );
+            $arrival2_transport_array[$key] = $tempArray;
+        }
+    }
     //Arrival 3
     $arr_date3 = QuoteSmart(@$_POST['arr_date3']);
     $arr_time3 = QuoteSmart(@$_POST['arr_time3']);
@@ -306,11 +361,29 @@ if (isset($_POST['addreservation'])) {
         $arr3_room_last_name4 = $_POST['arr3_room_last_name4'];
     }
     //Room5
+
     if (isset($_POST['arr3_room_no5'])) {
         $arr3_room_type5 = $_POST['arr3_room_type5'];
         $arr3_room_no5 = $_POST['arr3_room_no5'];
         $arr3_room_last_name5 = $_POST['arr3_room_last_name5'];
     }
+    //Arrivals 3 Transport Mode.
+    $arr3_transport_mode = $_POST['arr3_transport'];
+    $arr3_driver = $_POST['arr3_driver'];
+    $arr3_vehicle_no = $_POST['arr3_vehicle_no'];
+    //Making Array of all transports for Arrivals 3
+    $arrival3_transport_array = array();
+    if(!empty($arr3_transport_mode) and is_array($arr3_transport_mode)){
+        foreach($arr3_transport_mode as $key=>$val){
+            $tempArray = array(
+                'transport_mode' => $val,
+                'driver' => $arr3_driver[$key],
+                'vehicle' => $arr3_vehicle_no[$key]
+            );
+            $arrival3_transport_array[$key] = $tempArray;
+        }
+    }
+
     //Departure 1
     $dpt_date1 = QuoteSmart(@$_POST['dpt_date1']);
     $dpt_time1 = QuoteSmart(@$_POST['dpt_time1']);
@@ -462,6 +535,21 @@ if (isset($_POST['addreservation'])) {
         $lastArrival0ID = mysql_insert_id();
     }
     if (!empty($lastArrival0ID)) {
+
+        //Need to Insert Arrival Id Column in array also
+        array_walk($arrival_transport_array,function(&$subArray,$key,$lastArrival0ID){
+            $subArray['arrival_id'] = $lastArrival0ID;
+        },$lastArrival0ID);
+        foreach($arrival_transport_array as $subArray){
+            $arrivals_transport_sql = build_sql_insert('fll_arrivals_transports',$subArray);
+            //Now Run the Queries for this.
+            $arrivals_transport_resource = mysql_query($arrivals_transport_sql,$conn);
+            if(mysql_errno()) {
+                echo $arrivals_transport_sql;
+                echo "<pre><br/>LINE::".__LINE__."::". mysql_error().'</pre>';
+            }
+        }
+
         //Insert the First Arrival Room Details.
         //For Room 0
         $sql_arrival0_room = "INSERT INTO fll_arrivals_rooms " .
@@ -536,6 +624,22 @@ if (isset($_POST['addreservation'])) {
         }
         //Now we need to check if we have rooms.
         if (!empty($lastArrival1ID)) {
+
+            //Need to Insert Arrival Id Column in array also
+            array_walk($arrival1_transport_array,function(&$subArray,$key,$lastArrival1ID){
+                $subArray['arrival_id'] = $lastArrival1ID;
+            },$lastArrival1ID);
+
+            foreach($arrival1_transport_array as $subArray){
+                $arrivals1_transport_sql = build_sql_insert('fll_arrivals_transports',$subArray);
+                //Now Run the Queries for this.
+                $arrivals1_transport_resource = mysql_query($arrivals1_transport_sql,$conn);
+                if(mysql_errno()) {
+                    echo $arrivals1_transport_sql;
+                    echo "<br/>LINE::".__LINE__."::". mysql_error();
+                }
+            }
+
             //Insert the First Arrival Room Details.
             //For Room 0
             $sql_arrival1_room = "INSERT INTO fll_arrivals_rooms " .
@@ -632,6 +736,22 @@ if (isset($_POST['addreservation'])) {
             $lastArrival2ID = mysql_insert_id();
         }
         if (!empty($lastArrival2ID)) {
+
+            //Need to Insert Arrival Id Column in array also
+            array_walk($arrival2_transport_array,function(&$subArray,$key,$lastArrival2ID){
+                $subArray['arrival_id'] = $lastArrival2ID;
+            },$lastArrival2ID);
+
+            foreach($arrival2_transport_array as $subArray){
+                $arrivals2_transport_sql = build_sql_insert('fll_arrivals_transports',$subArray);
+                //Now Run the Queries for this.
+                $arrivals2_transport_resource = mysql_query($arrivals2_transport_sql,$conn);
+                if(mysql_errno()) {
+                    echo $arrivals2_transport_sql;
+                    echo "<br/>LINE::".__LINE__."::". mysql_error();
+                }
+            }
+
             //Arr2 Room0
             //Insert the First Arrival Room Details.
             $sql_arrival2_room = "INSERT INTO fll_arrivals_rooms " .
@@ -724,6 +844,22 @@ if (isset($_POST['addreservation'])) {
             $lastArrival3ID = mysql_insert_id();
         }
         if (!empty($lastArrival3ID)) {
+
+            //Need to Insert Arrival Id Column in array also
+            array_walk($arrival3_transport_array,function(&$subArray,$key,$lastArrival3ID){
+                $subArray['arrival_id'] = $lastArrival3ID;
+            },$lastArrival3ID);
+
+            foreach($arrival3_transport_array as $subArray){
+                $arrivals3_transport_sql = build_sql_insert('fll_arrivals_transports',$subArray);
+                //Now Run the Queries for this.
+                $arrivals3_transport_resource = mysql_query($arrivals3_transport_sql,$conn);
+                if(mysql_errno()) {
+                    echo $arrivals3_transport_sql;
+                    echo "<pre><br/>LINE::".__LINE__."::". mysql_error()."</pre>";
+                }
+            }
+
             //Arr3 Room0
             //Insert the First Arrival Room Details.
             $sql_arrival3_room = "INSERT INTO fll_arrivals_rooms " .
@@ -1755,6 +1891,7 @@ if (isset($_POST['addreservation'])) {
                             <!-- arrival main -->
 
                             <h4>Arrival Details</h4>
+                            <div class="arrivalsDiv" data-id="0">
                             <div class="form-group">
                                 <div class="form-inline left20">
                                     <!-- arrival date -->
@@ -1792,16 +1929,32 @@ if (isset($_POST['addreservation'])) {
                             <div class="clearfix"></div>
                             <!-- initiate chained selection drivers -->
                             <div class="form-group col-xs-4"><!-- available driver selection -->
-                                <label>Driver</label>
+                                <label for="arr-driver">Driver</label>
                                 <select class="form-control" id="arr-driver" name="arr_driver">
                                     <?php echo $opt->ShowTransport(); ?>
                                 </select>
                             </div>
                             <div class="form-group col-xs-3"><!-- vehicle # selection -->
-                                <label class="left20">Vehicle</label>
+                                <label for="arr-vehicle-no" class="left20">Vehicle</label>
                                 <select class="form-control left20" id="arr-vehicle-no" name="arr_vehicle_no">
                                     <option value="0">Select vehicle</option>
                                 </select>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="form-group col-xs-6"><!-- vehicle # selection -->
+                                <label for="arr-luggage-vehicle-no">Luggage Vehicle</label>
+                                <select class="form-control arr_luggage_vehicle" id="arr-luggage-vehicle-no" name="arr_luggage_vehicle_no[]">
+                                    <option value="0">Select luggage vehicle</option>
+                                    <?php include ('custom_updates/luggage_vehicle.php');?>
+                                </select>
+                            </div>
+                            <div class="left20 actionBtnsArrTransportDiv">
+                                <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
+                                    <a class="btn btn-default addArrTransportBtn left20" data-id="0"><i class="fa fa-plus"></i> Add Transport</a>
+                                </div>
+                            </div>
+                            <div class="clearfix"></div>
+                            <div class="arrTransportsDiv">
                             </div>
                             <div class="form-group"><!-- hotel notes -->
                                 <div class="col-xs-7">
@@ -1885,11 +2038,12 @@ if (isset($_POST['addreservation'])) {
                             </div>
                             <br/>
                             <button id="arrival1" class="btn btn-warning">Add Arrival</button>
+                            </div>
                             <div class="clearfix"></div>
                             <!-- end arrival main -->
 
                             <!-- arrival 1 -->
-                            <div id="arrival1show">
+                            <div class="arrivalsDiv" data-id="1" id="arrival1show">
                                 <input type="hidden" id="arrival1active" name="arrival1active" value="0"/>
                                 <hr/>
                                 <h4>Arrival Details</h4>
@@ -1954,10 +2108,18 @@ if (isset($_POST['addreservation'])) {
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-3"><!-- vehicle # selection -->
-                                    <label class="left20">Vehicle</label>
+                                    <label for="arr-vehicle-no1" class="left20">Vehicle</label>
                                     <select class="form-control left20" id="arr-vehicle-no1" name="arr_vehicle_no1">
                                         <option value="0">Select vehicle</option>
                                     </select>
+                                </div>
+                                <div class="left20 actionBtnsArrTransportDiv">
+                                    <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
+                                        <a class="btn btn-default addArrTransportBtn left20" data-id="1"><i class="fa fa-plus"></i> Add Transport</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="arrTransportsDiv">
                                 </div>
                                 <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">
@@ -1980,38 +2142,6 @@ if (isset($_POST['addreservation'])) {
                                     <select class="form-control dropSelect" id="arr-dropoff1" name="arr_dropoff1">
                                         <?php echo $opt->ShowLocation(); ?>
                                     </select>
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="form-group col-lg-2 col-md-6 col-xs-6"><!-- number of rooms -->
-                                    <label>Number of Rooms</label>
-                                    <input type="number" min=0 max=99 class="form-control" id="no-of-rooms"
-                                           name="no_of_rooms" value="" placeholder="Number of Rooms">
-                                </div>
-                                <div class="clearfix"></div>
-                                <div class="form-group col-lg-3 col-sm-7 col-xs-12"
-                                     style="margin-right: 10px !important;"><!-- room type selection -->
-                                    <label for="arr1_room_type">Room type</label>
-                                    <select class="form-control right20" id="arr1_room_type" name="arr1_room_type">
-                                        <option>Room Type</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-lg-2 col-sm-7 col-xs-12"
-                                     style="margin-right: 10px !important;"><!-- room number -->
-                                    <label for="arr1_room_no" class="right20">Room number</label>
-                                    <input class="form-control right20" id="arr1_room-no" name="arr1_room_no"
-                                           placeholder="Room number">
-                                </div>
-                                <div class="form-group col-lg-2 col-sm-7 col-xs-12"
-                                     style="margin-right: 10px !important;">
-                                    <label for="arr1_room_last_name">Last Name</label>
-                                    <input type="text" class="form-control right20" id="arr1_room_last_name"
-                                           name="arr1_room_last_name" placeholder="Guest last name">
-                                </div>
-                                <div class="form-group col-lg-1" style="margin-top: 20px;">
-                                    <a class="btn btn-default addRoomBtn" data-id="1"><i class="fa fa-plus"></i> Add
-                                        Room</a>
-                                </div>
-                                <div id="sub-forms-div1" data-id="1">
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group"><!-- hotel notes -->
@@ -2108,7 +2238,7 @@ if (isset($_POST['addreservation'])) {
                             <!-- end arrival 1 -->
 
                             <!-- arrival 2 -->
-                            <div id="arrival2show">
+                            <div class="arrivalsDiv" data-id="2" id="arrival2show">
                                 <input type="hidden" id="arrival2active" name="arrival2active" value="0"/>
                                 <hr/>
                                 <h4>Arrival Details</h4>
@@ -2177,6 +2307,14 @@ if (isset($_POST['addreservation'])) {
                                     <select class="form-control left20" id="arr-vehicle-no2" name="arr_vehicle_no2">
                                         <option value="0">Select vehicle</option>
                                     </select>
+                                </div>
+                                <div class="left20 actionBtnsArrTransportDiv">
+                                    <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
+                                        <a class="btn btn-default addArrTransportBtn left20" data-id="2"><i class="fa fa-plus"></i> Add Transport</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="arrTransportsDiv">
                                 </div>
                                 <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">
@@ -2328,7 +2466,7 @@ if (isset($_POST['addreservation'])) {
                             <!-- end arrival 2 -->
 
                             <!-- arrival 3 -->
-                            <div id="arrival3show">
+                            <div class="arrivalsDiv" data-id="3" id="arrival3show">
                                 <input type="hidden" id="arrival3active" name="arrival3active" value="0"/>
                                 <hr/>
                                 <h4>Arrival Details</h4>
@@ -2393,10 +2531,18 @@ if (isset($_POST['addreservation'])) {
                                     </select>
                                 </div>
                                 <div class="form-group col-xs-3"><!-- vehicle # selection -->
-                                    <label class="left20">Vehicle</label>
+                                    <label for="arr-vehicle-no3" class="left20">Vehicle</label>
                                     <select class="form-control left20" id="arr-vehicle-no3" name="arr_vehicle_no3">
                                         <option value="0">Select vehicle</option>
                                     </select>
+                                </div>
+                                <div class="left20 actionBtnsArrTransportDiv">
+                                    <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
+                                        <a class="btn btn-default addArrTransportBtn left20" data-id="3"><i class="fa fa-plus"></i> Add Transport</a>
+                                    </div>
+                                </div>
+                                <div class="clearfix"></div>
+                                <div class="arrTransportsDiv">
                                 </div>
                                 <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">
@@ -3541,6 +3687,81 @@ if (isset($_POST['addreservation'])) {
                 $('#paymentAmountDiv').hide();
             }
         });
+    });
+
+
+    //Need to code fro Arrival Transport
+    //When Clicked on Add Transport
+    body.on('click','.addArrTransportBtn',function(){
+        var button = $(this);
+        var arrivalDiv = button.parents('.arrivalsDiv');
+        var mainTransportsDiv = arrivalDiv.find('.arrTransportsDiv');
+        var totalTransportDivs = mainTransportsDiv.find('div.arr_transport_div').length + 1;
+        var arrivalsID = arrivalDiv.attr('data-id');
+        console.log(arrivalDiv);
+        var maxDivs = 5;
+        if(totalTransportDivs<maxDivs){
+            $.ajax({
+                url: "<?=$url?>/custom_updates/arr_transports.php",
+                type:"POST",
+                data:{max:maxDivs,dataID:totalTransportDivs,arrID:arrivalsID},
+                success:function(output){
+//                    console.log(output);
+                    mainTransportsDiv.append(output);
+                    button.parents('div.actionBtnsArrTransportDiv').hide();
+                }
+            });
+        }else{
+            console.log('Max Arrival Transport Divs Reached');
+        }
+    });
+    body.on('click','.remArrTransportBtn',function(){
+        var mainTransportsDiv = $('.arrTransportsDiv');
+        var currentMainDiv = $(this).parents('div.arr_transport_div');
+        //Remove this Current Div.
+        currentMainDiv.remove();
+        //Now Need to Check if there are any other divs in the super main div.
+        var totalTransportDivs = mainTransportsDiv.find('div.arr_transport_div').length;
+        if(totalTransportDivs > 0){
+            mainTransportsDiv.find('div.arr_transport_div').last().find('div.actionBtnsArrTransportDiv').show();
+        }else{
+            mainTransportsDiv.html('');
+            $('div.actionBtnsArrTransportDiv').show();
+        }
+
+    });
+    //Now need to work on transport mode
+    body.on('change','.transport_mode',function(){
+        var parentDiv = $(this).parents('.arr_transport_div');
+        var changedValue = $(this).val();
+        console.log(changedValue);
+        if(changedValue && (changedValue !== 'Group Transfers')){
+            parentDiv.find('.arr_driver').removeAttr('disabled');
+        }else{
+            parentDiv.find('.arr_driver').attr('disabled','disabled');
+            parentDiv.find('.arr_driver').val('0');
+            //IF THIS GOES TO DISABLE THEN THE OTHER THING SHOULD ALSO GO DISABLE.
+            parentDiv.find('.arr_vehicle').attr('disabled','disabled');
+            parentDiv.find('.arr_vehicle').val('0');
+        }
+
+    });
+    body.on('change','.arr_driver',function(){
+        var parentDiv = $(this).parents('.arr_transport_div');
+        var changedValue = $(this).val();
+        var arr_vehicle = parentDiv.find('.arr_vehicle');
+        if(changedValue && parseInt(changedValue) > 0){
+            parentDiv.find('.arr_vehicle').removeAttr('disabled');
+            arr_vehicle.html("<option>Loading vehicles ...</option>");
+            $.post("select_vehicle.php", {driverid:changedValue}, function(data){
+                arr_vehicle.html(data);
+            });
+        }else{
+            parentDiv.find('.arr_vehicle').attr('disabled','disabled');
+            parentDiv.find('.arr_vehicle').val('0');
+        }
+
+
     });
 </script>
 <?php
