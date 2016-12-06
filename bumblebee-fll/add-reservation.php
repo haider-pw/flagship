@@ -197,6 +197,7 @@ if(isset($_POST['addreservation']))
     $arr_transport_mode = $_POST['arr_transport'];
     $arr_driver = $_POST['arr_driver'];
     $arr_vehicle_no = $_POST['arr_vehicle_no'];
+    $arr_luggage_vehicle_no = $_POST['arr_luggage_vehicle_no'];
 
     $arrival_transport_array = array();
     if(!empty($arr_transport_mode) and is_array($arr_transport_mode)){
@@ -204,7 +205,8 @@ if(isset($_POST['addreservation']))
             $tempArray = array(
                 'transport_mode' => $val,
                 'driver' => $arr_driver[$key],
-                'vehicle' => $arr_vehicle_no[$key]
+                'vehicle' => $arr_vehicle_no[$key],
+                'luggage_vehicle' => $arr_luggage_vehicle_no[$key]
             );
             $arrival_transport_array[$key] = $tempArray;
         }
@@ -214,12 +216,12 @@ if(isset($_POST['addreservation']))
 
 
 /*    echo '<pre>';
-            var_dump($arr_transport_mode);
-            var_dump($arr_driver);
-            var_dump($arr_vehicle_no);
+//            var_dump($arr_transport_mode);
+//            var_dump($arr_driver);
+//            var_dump($arr_vehicle_no);
             var_dump($arrival_transport_array);
 //        var_dump($arrival_transport_array);
-    var_dump($arrivals_transport_sql);
+//    var_dump($arrivals_transport_sql);
     echo '</pre>';
     exit;*/
 
@@ -300,6 +302,7 @@ if(isset($_POST['addreservation']))
     $arr1_transport_mode = $_POST['arr1_transport'];
     $arr1_driver = $_POST['arr1_driver'];
     $arr1_vehicle_no = $_POST['arr1_vehicle_no'];
+//    $arr1_luggage_vehicle_no = $_POST['arr1_luggage_vehicle_no'];
 
 
     $arrival1_transport_array = array();
@@ -308,16 +311,17 @@ if(isset($_POST['addreservation']))
             $tempArray = array(
                 'transport_mode' => $val,
                 'driver' => $arr1_driver[$key],
-                'vehicle' => $arr1_vehicle_no[$key]
+                'vehicle' => $arr1_vehicle_no[$key],
+//                'luggage_vehicle' => $arr1_luggage_vehicle_no[$key]
             );
             $arrival1_transport_array[$key] = $tempArray;
         }
     }
 
 /*    echo '<pre>';
-    var_dump($arr1_transport_mode);
-    var_dump($arr1_driver);
-    var_dump($arr1_vehicle_no);
+//    var_dump($arr1_transport_mode);
+//    var_dump($arr1_driver);
+//    var_dump($arr1_vehicle_no);
     var_dump($arrival1_transport_array);
     echo '</pre>';
     exit;*/
@@ -393,6 +397,7 @@ if(isset($_POST['addreservation']))
     $arr2_transport_mode = $_POST['arr2_transport'];
     $arr2_driver = $_POST['arr2_driver'];
     $arr2_vehicle_no = $_POST['arr2_vehicle_no'];
+//    $arr2_luggage_vehicle_no = $_POST['arr2_luggage_vehicle_no'];
 
 
     $arrival2_transport_array = array();
@@ -401,7 +406,8 @@ if(isset($_POST['addreservation']))
             $tempArray = array(
                 'transport_mode' => $val,
                 'driver' => $arr2_driver[$key],
-                'vehicle' => $arr2_vehicle_no[$key]
+                'vehicle' => $arr2_vehicle_no[$key],
+//                'luggage_vehicle' => $arr2_luggage_vehicle_no[$key]
             );
             $arrival2_transport_array[$key] = $tempArray;
         }
@@ -483,10 +489,11 @@ if(isset($_POST['addreservation']))
         $arr3_room_last_name5 = $_POST['arr3_room_last_name5'];
     }
 
-    //Arrivals 2 Transport Mode.
+    //Arrivals 3 Transport Mode.
     $arr3_transport_mode = $_POST['arr3_transport'];
     $arr3_driver = $_POST['arr3_driver'];
     $arr3_vehicle_no = $_POST['arr3_vehicle_no'];
+//    $arr3_luggage_vehicle_no = $_POST['arr3_luggage_vehicle_no'];
 
 
     $arrival3_transport_array = array();
@@ -495,7 +502,8 @@ if(isset($_POST['addreservation']))
             $tempArray = array(
                 'transport_mode' => $val,
                 'driver' => $arr3_driver[$key],
-                'vehicle' => $arr3_vehicle_no[$key]
+                'vehicle' => $arr3_vehicle_no[$key],
+//                'luggage_vehicle' => $arr3_luggage_vehicle_no[$key]
             );
             $arrival3_transport_array[$key] = $tempArray;
         }
@@ -2158,6 +2166,14 @@ if(isset($_POST['addreservation']))
                                         <option value="0">Select vehicle</option>    
                                     </select>
                                 </div>
+                                    <div class="clearfix"></div>
+                                    <div class="form-group col-xs-6"><!-- vehicle # selection -->
+                                        <label for="arr-luggage-vehicle-no">Luggage Vehicle</label>
+                                        <select class="form-control arr_luggage_vehicle" id="arr-luggage-vehicle-no" name="arr_luggage_vehicle_no[]">
+                                            <option value="0">Select luggage vehicle</option>
+                                            <?php include ('custom_updates/luggage_vehicle.php');?>
+                                        </select>
+                                    </div>
 
                                     <div class="left20 actionBtnsArrTransportDiv">
                                         <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
@@ -3999,6 +4015,40 @@ if(isset($_POST['addreservation']))
             mainTransportsDiv.html('');
             $('div.actionBtnsArrTransportDiv').show();
         }
+
+    });
+
+    //Now need to work on transport mode
+    body.on('change','.transport_mode',function(){
+        var parentDiv = $(this).parents('.arr_transport_div');
+        var changedValue = $(this).val();
+        console.log(changedValue);
+        if(changedValue && (changedValue !== 'Group Transfers')){
+            parentDiv.find('.arr_driver').removeAttr('disabled');
+        }else{
+            parentDiv.find('.arr_driver').attr('disabled','disabled');
+            parentDiv.find('.arr_driver').val('0');
+            //IF THIS GOES TO DISABLE THEN THE OTHER THING SHOULD ALSO GO DISABLE.
+            parentDiv.find('.arr_vehicle').attr('disabled','disabled');
+            parentDiv.find('.arr_vehicle').val('0');
+        }
+
+    });
+    body.on('change','.arr_driver',function(){
+        var parentDiv = $(this).parents('.arr_transport_div');
+        var changedValue = $(this).val();
+        var arr_vehicle = parentDiv.find('.arr_vehicle');
+        if(changedValue && parseInt(changedValue) > 0){
+            parentDiv.find('.arr_vehicle').removeAttr('disabled');
+            arr_vehicle.html("<option>Loading vehicles ...</option>");
+            $.post("select_vehicle.php", {driverid:changedValue}, function(data){
+                arr_vehicle.html(data);
+            });
+        }else{
+            parentDiv.find('.arr_vehicle').attr('disabled','disabled');
+            parentDiv.find('.arr_vehicle').val('0');
+        }
+
 
     });
 </script>

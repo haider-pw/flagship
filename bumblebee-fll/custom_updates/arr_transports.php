@@ -28,7 +28,7 @@ if($_POST){
 <div class="form-group col-xs-7"> <!-- transport mode field -->
     <label for="arr<?=isset($arrivalID)?$arrivalID:''?>-transport">Transport mode</label>
     <?php
-    echo '<select class="form-control select" id="arr'.(isset($arrivalID)?$arrivalID:'').'-transport" name="arr'.(isset($arrivalID)?$arrivalID:'').'_transport[]">';
+    echo '<select class="form-control select transport_mode" id="arr'.(isset($arrivalID)?$arrivalID:'').'-transport" required="required" name="arr'.(isset($arrivalID)?$arrivalID:'').'_transport[]">';
     include ('transport_mode_arr.php');
     echo "</select>";
     ?>
@@ -37,13 +37,13 @@ if($_POST){
 <!-- initiate chained selection drivers -->
 <div class="form-group col-xs-4"><!-- available driver selection -->
     <label for="arr<?=isset($arrivalID)?$arrivalID:''?>-driver">Driver</label>
-    <select class="form-control" id="arr<?=isset($arrivalID)?$arrivalID:''?>-driver" name="arr<?=isset($arrivalID)?$arrivalID:''?>_driver[]" required="required">
+    <select class="form-control arr_driver" id="arr<?=isset($arrivalID)?$arrivalID:''?>-driver" name="arr<?=isset($arrivalID)?$arrivalID:''?>_driver[]" disabled="disabled">
         <?php echo $opt->ShowTransport(); ?>
     </select>
 </div>
 <div class="form-group col-xs-3"><!-- vehicle # selection -->
     <label for="arr<?=isset($arrivalID)?$arrivalID:''?>-vehicle-no" class="left20">Vehicle</label>
-    <select class="form-control left20" id="arr<?=isset($arrivalID)?$arrivalID:''?>-vehicle-no" name="arr<?=isset($arrivalID)?$arrivalID:''?>_vehicle_no[]">
+    <select class="form-control left20 arr_vehicle" id="arr<?=isset($arrivalID)?$arrivalID:''?>-vehicle-no" name="arr<?=isset($arrivalID)?$arrivalID:''?>_vehicle_no[]" disabled="disabled">
         <option value="0">Select vehicle</option>
     </select>
 </div>
