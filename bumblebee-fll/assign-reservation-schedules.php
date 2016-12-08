@@ -170,6 +170,9 @@ if($_POST){
                                             <?php include('custom_updates/rep_select.php'); ?>
                                             </select>
                                         </div>
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                            <a href="#" class="btn btn-default" style="margin-top: 20px;" id="assignAirportReps"> Assign Airport Reps</a>
+                                        </div>
                                     <?php
                                     }
                                     ?>
@@ -262,7 +265,13 @@ if($_POST){
     <!-- END SCRIPTS -->
 <script type="text/javascript" language="javascript" class="init">
     $(function(){
-        $("#flightDateType").on('change',function(){
+
+        //On Page Load Request the FlightNumbers
+        var flightDateType = $("#flightDateType");
+        var loadedSelectedOption = flightDateType.find("option:selected");
+
+
+        flightDateType.on('change',function(){
             var selectedOption = $(this).find("option:selected");
             var selectedOptionText = selectedOption.text();
             var selectedOptionGroup = selectedOption.closest('optgroup').attr('data-label');

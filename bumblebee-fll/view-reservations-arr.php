@@ -678,9 +678,7 @@ site_header('Reservation List - Arrivals');
             $.redirect(postURL,postFilterData,'POST','_SELF');
         });
 
-
-
-
+        
         //Rep Notes
         $(".repNotes").on("click",function(){
             var m = $("#repNotesModal");
