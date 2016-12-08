@@ -262,7 +262,6 @@ if(isset($_POST['update']))
                                                 if ($row['id_rep'] == $get_rep[0]) {
                                                 echo "<option value='" . $row['id_rep'] . "' selected>" . $row['name'] . "</option>";
                                                 } else {
-                                                
                                                 echo "<option value='" . $row['id_rep'] . "'>" . $row['name'] . "</option>";
                                                 }
                                             }

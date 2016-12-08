@@ -1,4 +1,5 @@
 <?php
+$url = '//'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
@@ -6,35 +7,60 @@
       redirect_to("index.php");
       
   $row = $user->getUserData();
-?> 
-<?php
-/**
- * @author Alvin Herbert
- * @copyright 2015
- */
+
 
 include('header.php');
 site_header('Assign Reservation Reps');
 
-//Grab all reservation info
-$query = "SELECT * FROM fll_reservations WHERE assigned = 0 AND arr_date >= DATE(NOW())";
 
-$dateFilter = false;
-if(isset($_POST['fromDate'])){
-    $fromDate = $_POST['fromDate'];
-    $toDate = $_POST['toDate'];
+if($_POST){
+    $selectedDate = $_POST['date'];
+    $selectedFlightNum = $_POST['flightNumID'];
+    $selectedTourOperator = $_POST['tourOperator'];
+    $selectedRepType = $_POST['repType'];
 
-    if(validateDate($fromDate) and validateDate($toDate)){
-        $dateFilter = true;
-        $reservationQuery .= " AND (arr_date BETWEEN '".$fromDate."' AND '".$toDate."' OR dpt_date BETWEEN '".$fromDate."' AND '".$toDate."')";
-        $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
-    }else{
-        $dateFilter = false;
+
+    if(!empty($selectedDate)){
+        $selectedDate = date('Y-m-d',strtotime($selectedDate));
+        //Grab all reservation info
+        $query = "SELECT
+                    CONCAT(title_name,' ', first_name,' ',last_name) AS resUserName,
+                    fto.`tour_operator` AS TourOperator, r.`adult` AS Adult, 
+                    r.`child` AS Child, 
+                    r.`infant` AS Infant, 
+                    r.`tour_notes` AS TourNotes,
+                    flights.arr_date AS arrivalDate,
+                    flights.`arr_flight_no` AS FlightID 
+                FROM fll_reservations r
+                INNER JOIN fll_arrivals flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
+                INNER JOIN fll_flights ff ON flights.`arr_flight_no` = ff.`id_flight`
+                LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
+                WHERE r.`assigned` = 0
+                AND flights.arr_date = '$selectedDate'
+                ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'');
+        $reservations = mysql_query($query);
+    } //end of if selectedDate statement
+
+
+    //reservation result
+    if(isset($reservations)){
+        $resultReservations = array();
+        while($reservationRow = mysql_fetch_array($reservations)){
+            array_push($resultReservations,$reservationRow);
+        }
     }
-}
-$reservations = mysql_query($query);
-?>
 
+/*    echo '<pre>';
+    var_dump($resultReservations);
+    print_r($selectedFlightNum);
+    echo $query;
+    echo '</pre>';
+    exit;*/
+
+}//end of main if $_POST
+
+
+?>
 
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
@@ -69,78 +95,88 @@ $reservations = mysql_query($query);
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Arrival & Departure Schedules</h3>
-                                    <!-- Date picker -->
-                                    <ul class="panel-controls panel-controls-title">
-                                        <li>
-                                            <label for="reportrange" style="display: block;">Arrival Date Filter</label>
-                                            <div id="reportrange" class="dtrange">
-                                                <span></span><b class="caret"></b>
-                                            </div>
-                                        </li>
-                                    </ul>
                                 </div>
-                                <div class="panel-body">
-                                    <table id="res-arrivals" class="table table-hover">
-                                        <thead>
-                                            <tr>
-                                                <th></th>
-                                                <th>Ref #</th>
-                                                <th>Arrival Date</th>
-                                                <th>Arr Flight#</th>
-                                                <th>Arrival Time</th>
-                                                <th>Depart Date</th>
-                                                <th>Depart Flight#</th>
-                                                <th>Depart Time</th>
-                                                <th>First Name</th>
-                                                <th>Last Name</th>
-                                                <th>Tour Operator</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            while($row = mysql_fetch_array($reservations)) {
-                                                
-                                                $arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[16] . "'"));
-                                                $arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[15] . "'"));
-                                                $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[28] . "'"));
-                                                $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[27] . "'"));                                                     
-                                                $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM fll_touroperator WHERE id='" . $row[5] . "'"));
-                                                //assign names to results that are readable
-                                                $id = $row[0];
-                                                $title_name = $row[1];
-                                                $first_name = $row[2];
-                                                $last_name = $row[3];
-                                                $ref_no = $row[7];
-                                                $arr_date = $row[14];
-                                                $dpt_date = $row[26];
-                                                
-                                                if ($row[12]>0){
-                                                    $displayft='5<i class="fa fa-star"></i>';
-                                                    
-                                                    } else {
-                                                        $displayft='';
-                                                    
-                                                    }
-                                                
-                                                echo '<tr>
-                                                        <td><a href="reservation-details-rep.php?id=' . $id . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Assign a rep"></i></a> ' . $displayft . '</td>
-                                                        <td>' . $ref_no . '</td>
-                                                        <td>' . $arr_date . '</td>
-                                                        <td>' . $arr_flight_no[1] . '</td>
-                                                        <td>' . $arr_time[2] . '</td>
-                                                        <td>' . $dpt_date . '</td>
-                                                        <td>' . $dpt_flight_no[1] . '</td>
-                                                        <td>' . $dpt_time[2] . '</td>
-                                                        <td>' . $title_name . '. ' . $first_name . '</td>
-                                                        <td>' . $last_name . '</td>
-                                                        <td>' . $tour_oper[1] . '</td>                                                        
-                                                </tr>';
-                                            }
+                                <form id="mainFilterForm">
+                                <div class="panel-body table-responsive">
+                                    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <label for="flightDateType">Flight Date Type</label>
+                                        <select class="form-control selector2" id="flightDateType" name="flightDateType">
+                                            <?php include('custom_updates/select_flight_dates.php'); ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <label for="flightNumber">Flight Number</label>
+                                        <select class="form-control selector2" id="flightNumber" name="flightNumber">
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <label for="tourOperator">Tour Operator</label>
+                                        <?php include('tour_oper_select.php'); ?>
+                                    </div>
+                                    <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        <a href="#" class="btn btn-default" style="margin-top: 20px;" id="applyFilterBtn"> Apply Filter </a>
+                                    </div>
+
+                                    <?php
+                                    if(isset($resultReservations) and !empty($resultReservations)){
                                         ?>
-                                        </tbody>
-                                    </table>                                    
-                                    
+                                    <div class="dataTables_wrapper no-footer">
+                                        <table class="table" id="resultsTable">
+                                            <thead>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Tour Operator</th>
+                                                <th>Affiliate</th>
+                                                <th>A</th>
+                                                <th>C</th>
+                                                <th>I</th>
+                                                <th>Arrival Time</th>
+                                                <th>Flight Class</th>
+                                                <th>Hotel</th>
+                                                <th>Notes</th>
+                                            </tr>
+                                            </thead>
+                                                <tbody>
+                                                <?php
+                                                    foreach($resultReservations as $key=>$row){
+                                                        echo '<tr>';
+                                                        echo "
+                                                                <td>".$row['resUserName']."</td>
+                                                                <td>".$row['resUserName']."</td>
+                                                                <td>".$row['resUserName']."</td>
+                                                                <td>".$row['Adult']."</td>
+                                                                <td>".$row['Child']."</td>
+                                                                <td>".$row['Infant']."</td>
+                                                                <td>".$row['resUserName']."</td>
+                                                                <td>".$row['resUserName']."</td>
+                                                                <td>".$row['resUserName']."</td>
+                                                                <td>".$row['TourNotes']."</td>
+                                                             ";
+                                                        echo '</tr>';
+                                                    }
+                                                ?>
+                                                </tbody>
+                                            </table>
+                                    </div>
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                            <label for="repType">Rep Type</label>
+                                            <select class="form-control selector2" name="repType" id="repType">
+                                                <option value="<?=$selectedRepType?>"><?=$selectedRepType?></option>
+                                            </select>
+                                        </div>
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                            <label for="tourOperator">Tour Operator</label>
+                                            <select class="form-control selector2" name="repType" id="repType">
+                                            <?php include('custom_updates/rep_select.php'); ?>
+                                            </select>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
+
+
                                 </div>
+                                </form>
                             </div>
                             <!-- END DATATABLE EXPORT -->
                         </div>
@@ -151,27 +187,7 @@ $reservations = mysql_query($query);
             </div>            
             <!-- END PAGE CONTENT -->
         </div>
-        <!-- END PAGE CONTAINER -->    
-
-        <!-- MESSAGE BOX-->
-        <div class="message-box animated fadeIn" data-sound="alert" id="mb-remove-row">
-            <div class="mb-container">
-                <div class="mb-middle">
-                    <div class="mb-title"><span class="fa fa-times"></span> Remove <strong>Data</strong> ?</div>
-                    <div class="mb-content">
-                        <p>Are you sure you want to remove this row?</p>                    
-                        <p>Press Yes if you sure.</p>
-                    </div>
-                    <div class="mb-footer">
-                        <div class="pull-right">
-                            <button class="btn btn-success btn-lg mb-control-yes">Yes</button>
-                            <button class="btn btn-default btn-lg mb-control-close">No</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- END MESSAGE BOX-->        
+        <!-- END PAGE CONTAINER -->
         
         <!-- MESSAGE BOX-->
         <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
@@ -228,6 +244,9 @@ $reservations = mysql_query($query);
 	<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>
 <script type="text/javascript" src="js/plugins/moment.min.js"></script>
 <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>
+<!--Select2-->
+<script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript" src="js/jquery.redirect.js"></script>
 <!-- END THIS PAGE PLUGINS-->
         
         <!-- START TEMPLATE -->      
@@ -242,73 +261,40 @@ $reservations = mysql_query($query);
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
 <script type="text/javascript" language="javascript" class="init">
-    $(document).ready(function() {
-        $('#res-arrivals').DataTable( {
-            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-            "dom": 'T<"clear">lBfrtip',
-            "buttons": [
-                {
-                    extend: 'excel',
-                    text: 'Export current page',
-                    exportOptions: {
-                        modifier: {
-                            page: 'current'
-                        }
-                    }
-                },
-                {
-                    extend: 'excel',
-                    text: 'Export all pages',
-                    exportOptions: {
-                        modifier: {
-                            page: 'all'
-                        }
-                    }
-                }
-
-            ]
-        } );
-    } );
     $(function(){
+        $("#flightDateType").on('change',function(){
+            var selectedOption = $(this).find("option:selected");
+            var selectedOptionText = selectedOption.text();
+            var selectedOptionGroup = selectedOption.closest('optgroup').attr('data-label');
+            $.ajax({
+                    url:'<?=$url?>/custom_updates/select_flight_numbers.php',
+                    type:"POST",
+                    data: {date:selectedOptionText,type:selectedOptionGroup},
+                    success:function(output){
+                        $("#flightNumber").html(output);
+                    }
+                });
+        }); // End of on change function
+        $(".selector2").select2();
+//        $('#resultsTable').DataTable();
 
-        /* reportrange */
-        if($("#reportrange").length > 0){
-            $("#reportrange").daterangepicker({
-                ranges: {
-                    'Today': [moment(), moment()],
-                    //'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                    //'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                    //'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                    //'This Month': [moment().startOf('month'), moment().endOf('month')],
-                    //'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-                },
-                opens: 'left',
-                buttonClasses: ['btn btn-default'],
-                applyClass: 'btn-small btn-primary',
-                cancelClass: 'btn-small',
-                format: 'YYYY-MM-DD',
-                separator: ' to ',
-                startDate: moment().subtract('days', 29),
-                endDate: moment()
-            },function(start, end) {
-                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-            });
-
-            <?php
-
-            if(isset($dateRangeText) and !empty($dateRangeText)){
-                echo "$(\"#reportrange span\").html('".$dateRangeText."');";
-                echo "console.log('".$dateRangeText."')";
-            }else{
-                echo "$(\"#reportrange span\").html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));";
+        $('#applyFilterBtn').on('click',function(){
+            var form = $('#mainFilterForm');
+            var flightDateSelector = $('#flightDateType');
+            var flightNumber = $('#flightNumber');
+            var tourOperator = $("#tour-oper").find('option:selected').val();
+            var postFilterData = {
+                date:flightDateSelector.find('option:selected').text(),
+                flightNumID:flightNumber.find('option:selected').val(),
+                repType:flightDateSelector.find('option:selected').closest('optgroup').attr('data-label')
+            };
+            if(tourOperator){
+                postFilterData.tourOperator = tourOperator;
             }
-
-            ?>
-        }
-
-        /* end reportrange */
-
-    });
+            var postURL = "<?=$url?>/assign-reservation-schedules.php";
+            $.redirect(postURL,postFilterData,'POST','_SELF');
+        });
+    }); // End of document Ready Function.
 </script>
 </body>
 </html>
