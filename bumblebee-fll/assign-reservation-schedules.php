@@ -29,16 +29,13 @@ if($_POST){
             $assigned = 0;
         }
 
-        echo '<pre>';
-            var_dump($reservationIDs);
-        echo '</pre>';
-        exit;
         $updateReps_sql = "UPDATE fll_reservations ".
             "SET modified_date = NOW(), modified_by = '$loggedinas', assigned = '$assigned', rep = '$repName'".
             " WHERE id IN ($reservationIDs)";
             mysql_query($updateReps_sql);
         if(mysql_error()){
             echo "<br>".$updateReps_sql;
+            exit;
         }
     }
 
