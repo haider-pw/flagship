@@ -14,7 +14,7 @@ $result = mysql_query($sql);
 echo '<select class="form-control selector2" id="tour-oper" name="tour_oper">
       <option>Select tour operator</option>';
 while ($row = mysql_fetch_array($result)) {
-    echo "<option value='" . $row['id'] . "'>" . $row['tour_operator'] . "</option>";
+    echo "<option value='" . $row['id'] . "' ".((isset($selectedTourOperator) and !empty($selectedTourOperator) and $selectedTourOperator==$row['id'])?' selected="selected"':'').">" . $row['tour_operator'] . "</option>";
 }
 echo "</select>";
 ?>

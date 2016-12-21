@@ -271,7 +271,6 @@ if(isset($_POST['update']))
                                 <div class="form-group col-xs-2"><!-- Rep assignment -->
                                     <label for="assignment" style="margin-left: 21px;">Assignment</label>
                                    <select class="form-control left20" id="assignment" name="assignment">
-                                       
                                         <?php echo $assignment_select; ?>    
                                     </select>
                                 </div>

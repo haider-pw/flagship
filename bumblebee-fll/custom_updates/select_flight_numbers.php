@@ -24,6 +24,9 @@ if($_POST){
         echo 'bad post';
         exit;
     }
+
+    //If Date Was Already Been Filtered, we need to show the date.
+    $flight = $_POST['flight'];
 }
 
 mysql_connect('localhost', 'root', 'chocolate');
@@ -33,5 +36,5 @@ $selectedDateFlights_sql = "SELECT ff.id_flight AS flightNumberID, ff.flight_num
 $selectedDateFlights_resource = mysql_query($selectedDateFlights_sql);
 echo "<option value='0'>Select Flight Number</option>";
 while ($row = mysql_fetch_array($selectedDateFlights_resource)) {
-    echo "<option value='".$row['flightNumberID']."'>".$row['flight_number']."</option>";
+    echo "<option value='".$row['flightNumberID']."' ".((isset($flight) and !empty($flight) and $flight == $row['flightNumberID'])?'selected="selected"':'').">".$row['flight_number']."</option>";
 }
