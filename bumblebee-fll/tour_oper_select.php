@@ -4,7 +4,7 @@
  * @author Alvin Herbert
  * @copyright 2015
  */
-
+error_reporting(E_ALL &~ E_DEPRECATED);
 mysql_connect('localhost', 'root', 'chocolate');
 mysql_select_db ("cocoa_fll");
 

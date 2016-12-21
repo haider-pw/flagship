@@ -31,7 +31,8 @@ if ($ft_count > 0){
         <li class="xn-openable"><!-- Flight control dropdown -->
             <a href="#"><span class="fa fa-users"></span> <span class="xn-text">Rep Assignment</span></a>
             <ul>
-                <li><a href="assign-reservation-schedules.php"><span class="glyphicon glyphicon-transfer"></span> Assign</a></li>
+                <li><a href="assign-reservation-schedules.php"><span class="glyphicon glyphicon-transfer"></span> Assign Airport Reps</a></li>
+                <li><a href="assign_hotel_reps.php"><span class="glyphicon glyphicon-transfer"></span> Assign Hotel Reps</a></li>
                 <li><a href="reservation-schedules.php"><span class="fa fa-random"></span> View rep assignments</a></li>
             </ul>
         </li>
