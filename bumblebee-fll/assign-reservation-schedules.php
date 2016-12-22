@@ -95,7 +95,7 @@ if($_POST){
                 
                 <!-- PAGE TITLE -->
                 <div class="page-title">                    
-                    <h2><span class="fa fa-arrow-circle-o-left"></span> Add Schedules</h2>
+                    <h2><span class="fa fa-arrow-circle-o-left"></span> Assign Airport Reps</h2>
                 </div>
                 <!-- END PAGE TITLE -->                
                 
@@ -107,7 +107,7 @@ if($_POST){
                             <!-- START DATATABLE EXPORT -->
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Arrival & Departure Schedules</h3>
+                                    <h3 class="panel-title">Assign Airport Reps</h3>
                                 </div>
                                 <form id="mainFilterForm">
                                 <div class="panel-body table-responsive">

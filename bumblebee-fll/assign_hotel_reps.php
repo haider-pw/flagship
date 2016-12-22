@@ -69,7 +69,7 @@ if($_POST){
                 WHERE r.`assigned` = 0
                 ".(!empty($selectedHotel)?' AND loc.`id_location` ='.$selectedHotel:'')."
                 ".(!empty($selectedDate)?' AND flights.`arr_date` ="'.$selectedDate.'"':'')." 
-                ".(!empty($selectedDate)?' AND fto.`tour_operator` ="'.$selectedTourOperator.'"':'')." 
+                ".(!empty($selectedTourOperator)?' AND fto.`tour_operator` ="'.$selectedTourOperator.'"':'')." 
                 GROUP BY ReservationID";
         $reservations = mysql_query($query);
 
@@ -108,7 +108,7 @@ if($_POST){
 
     <!-- PAGE TITLE -->
     <div class="page-title">
-        <h2><span class="fa fa-arrow-circle-o-left"></span> Add Schedules</h2>
+        <h2><span class="fa fa-arrow-circle-o-left"></span> Assign Hotel Reps</h2>
     </div>
     <!-- END PAGE TITLE -->
 
@@ -120,7 +120,7 @@ if($_POST){
                 <!-- START DATATABLE EXPORT -->
                 <div class="panel panel-default">
                     <div class="panel-heading">
-                        <h3 class="panel-title">Arrival & Departure Schedules</h3>
+                        <h3 class="panel-title">Assign Hotel Reps</h3>
                     </div>
                     <form id="mainFilterForm">
                         <div class="panel-body table-responsive">
@@ -348,7 +348,7 @@ if($_POST){
             };
             console.log(postData);
 //            return;
-            var postURL = "<?=$url?>/assign-reservation-schedules.php";
+            var postURL = "<?=$url?>/assign_hotel_reps.php";
             $.redirect(postURL,postData,'POST','_SELF');
         });
     }); // End of document Ready Function.
