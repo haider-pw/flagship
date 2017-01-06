@@ -15,7 +15,6 @@ $loggedinas = $row->fname . ' ' . $row->lname;
 
 
 if($_POST){
-
     $selectedDate = isset($_POST['date'])?$_POST['date']:'';
     $selectedFlightNum = isset($_POST['flightNumID'])?$_POST['flightNumID']:'';
     $selectedTourOperator =  isset($_POST['tourOperator'])?$_POST['tourOperator']:'';
@@ -39,7 +38,9 @@ if($_POST){
         }
     }
 
-    if (!empty($selectedDate)) {
+
+    //This is for Arrivals only if date under arrivals gets selected.
+    if (!empty($selectedDate) and $selectedRepType === 'Arrivals') {
         $selectedDate = date('Y-m-d', strtotime($selectedDate));
         //Grab all reservation info
         $query = "SELECT
@@ -50,16 +51,21 @@ if($_POST){
                     r.`infant` AS Infant, 
                     r.`tour_notes` AS TourNotes,
                     flights.arr_date AS arrivalDate,
-                    flights.`arr_flight_no` AS FlightID 
+                    flights.arr_time AS flightTime,
+                    flights.`arr_flight_no` AS FlightID,
+                    fc.class AS FlightClass,
+                    loc.name AS Hotel,
+                    r.`affiliates` AS Affiliate
                 FROM fll_reservations r
                 INNER JOIN fll_arrivals flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
                 INNER JOIN fll_flights ff ON flights.`arr_flight_no` = ff.`id_flight`
                 LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
+                LEFT JOIN `fll_flightclass` fc ON FC.`id` = flights.flight_class
+                LEFT JOIN fll_location loc ON loc.`id_location` = flights.`arr_dropoff`
                 WHERE r.`assigned` = 0
                 AND flights.arr_date = '$selectedDate'
-                ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'')." GROUP BY ReservationID";
+                ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";
         $reservations = mysql_query($query);
-
             //reservation result
             if(isset($reservations)){
                 $resultReservations = array();
@@ -67,7 +73,41 @@ if($_POST){
                     array_push($resultReservations,$reservationRow);
                 }
             }
-    } //end of if selectedDate statement
+    } //end of if  arrivals selectedDate statement
+    else if(!empty($selectedDate) and $selectedRepType === 'Departures'){
+        $selectedDate = date('Y-m-d', strtotime($selectedDate));
+        //Grab all reservation info
+        $query = "SELECT
+                    r.id AS ReservationID,
+                    CONCAT(title_name,' ', first_name,' ',last_name) AS resUserName,
+                    fto.`tour_operator` AS TourOperator, r.`adult` AS Adult, 
+                    r.`child` AS Child, 
+                    r.`infant` AS Infant, 
+                    r.`tour_notes` AS TourNotes,
+                    flights.dpt_date AS departureDate,
+                    flights.dpt_time AS flightTime,
+                    flights.`dpt_flight_no` AS FlightID,
+                    fc.class AS FlightClass,
+                    loc.name AS Hotel,
+                    r.`affiliates` AS Affiliate
+                FROM fll_reservations r
+                INNER JOIN fll_departures flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
+                INNER JOIN fll_flights ff ON flights.`dpt_flight_no` = ff.`id_flight`
+                LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
+                LEFT JOIN `fll_flightclass` fc ON FC.`id` = flights.flight_class
+                LEFT JOIN fll_location loc ON loc.`id_location` = flights.`dpt_dropoff`
+                WHERE r.`assigned` = 0
+                AND flights.dpt_date = '$selectedDate'
+                ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";
+        $reservations = mysql_query($query);
+        //reservation result
+        if(isset($reservations)){
+            $resultReservations = array();
+            while($reservationRow = mysql_fetch_array($reservations)){
+                array_push($resultReservations,$reservationRow);
+            }
+        }
+    }//end of elseif  departures selectedDate statement
 
 
 }//end of main if $_POST
@@ -143,7 +183,7 @@ if($_POST){
                                                 <th>A</th>
                                                 <th>C</th>
                                                 <th>I</th>
-                                                <th>Arrival Time</th>
+                                                <th> <?= substr($selectedRepType, 0, -1);?> Time</th>
                                                 <th>Flight Class</th>
                                                 <th>Hotel</th>
                                                 <th>Notes</th>
@@ -155,14 +195,14 @@ if($_POST){
                                                         echo '<tr data-id="'.$row['ReservationID'].'">';
                                                         echo "
                                                                 <td>".$row['resUserName']."</td>
-                                                                <td>".$row['resUserName']."</td>
-                                                                <td>".$row['resUserName']."</td>
+                                                                <td>".$row['TourOperator']."</td>
+                                                                <td>".$row['Affiliate']."</td>
                                                                 <td>".$row['Adult']."</td>
                                                                 <td>".$row['Child']."</td>
                                                                 <td>".$row['Infant']."</td>
-                                                                <td>".$row['resUserName']."</td>
-                                                                <td>".$row['resUserName']."</td>
-                                                                <td>".$row['resUserName']."</td>
+                                                                <td>".$row['flightTime']."</td>
+                                                                <td>".$row['FlightClass']."</td>
+                                                                <td>".$row['Hotel']."</td>
                                                                 <td>".$row['TourNotes']."</td>
                                                              ";
                                                         echo '</tr>';

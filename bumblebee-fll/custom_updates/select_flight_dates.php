@@ -9,9 +9,9 @@ error_reporting(E_ALL &~ E_DEPRECATED);
 mysql_connect('localhost', 'root', 'chocolate');
 mysql_select_db ("cocoa_fll");
 
-$flightDates_sql = "(SELECT id AS ID, arr_date AS FlightDate, 'Arrivals' AS FlightType FROM fll_arrivals WHERE arr_date != '0000-00-00' GROUP BY FlightDate  ORDER BY FlightDate DESC)
+$flightDates_sql = "(SELECT flights.id AS ID, flights.arr_date AS FlightDate, 'Arrivals' AS FlightType FROM fll_arrivals flights INNER JOIN fll_reservations R on R.ref_no_sys = flights.ref_no_sys INNER JOIN fll_flights ff ON flights.`arr_flight_no` = ff.`id_flight` WHERE R.assigned = 0 AND flights.arr_date != '0000-00-00' GROUP BY FlightDate  ORDER BY FlightDate DESC)
 UNION ALL
-(SELECT id AS ID, `dpt_date` AS FlightDate, 'Departures' AS FlightType FROM `fll_departures` WHERE dpt_date != '0000-00-00' GROUP BY FlightDate ORDER BY FlightDate DESC)";
+(SELECT flights.id AS ID, flights.`dpt_date` AS FlightDate, 'Departures' AS FlightType FROM `fll_departures` flights INNER JOIN fll_reservations R on R.ref_no_sys = flights.ref_no_sys INNER JOIN fll_flights ff ON flights.`dpt_flight_no` = ff.`id_flight` WHERE R.assigned = 0 AND flights.dpt_date != '0000-00-00' GROUP BY FlightDate ORDER BY FlightDate DESC)";
 $flightDates = mysql_query($flightDates_sql);
 
 $flightDatesArray = array();
