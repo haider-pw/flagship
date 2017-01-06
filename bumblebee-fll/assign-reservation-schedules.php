@@ -67,6 +67,9 @@ if($_POST){
                 ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";
         $reservations = mysql_query($query);
             //reservation result
+/*        echo '<pre>';
+            var_dump($query);
+        echo '</pre>';*/
             if(isset($reservations)){
                 $resultReservations = array();
                 while($reservationRow = mysql_fetch_array($reservations)){

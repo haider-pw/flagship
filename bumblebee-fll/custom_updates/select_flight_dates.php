@@ -61,8 +61,12 @@ if($flightDatesArray['Arrivals'] and is_array($flightDatesArray['Arrivals'])){
 if($flightDatesArray['Departures'] and is_array($flightDatesArray['Departures'])) {
     usort($flightDatesArray['Departures'], "sortFunction");
     echo ' <optgroup data-label="Departures" label="Flight Departures Dates">';
+    ///Need to check if we have some set values.
+    if(isset($selectedDate) and isset($selectedRepType) and $selectedRepType==='Departures'){
+        $selectedValue = 'selected="selected"';
+    }
     foreach ($flightDatesArray['Departures'] as $key => $subArray) {
-        echo '<option value="' . $subArray['ID'] . '">' .date('d-M-Y',strtotime($subArray['FlightDate'])). '</option>';
+        echo '<option value="' . $subArray['ID'] . '" '.((isset($selectedDate) and(strtotime($selectedDate)===strtotime($subArray['FlightDate'])))?$selectedValue:'').'>' .date('d-M-Y',strtotime($subArray['FlightDate'])). '</option>';
     }
     echo '</optgroup>';
 }
