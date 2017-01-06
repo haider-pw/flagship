@@ -8,7 +8,8 @@ $url = '//'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
       
   $row = $user->getUserData();
 
-
+/*ini_set('display_errors', 'On');
+error_reporting(E_ALL &~ E_DEPRECATED);*/
 include('header.php');
 site_header('Assign Reservation Reps');
 $loggedinas = $row->fname . ' ' . $row->lname;
@@ -60,16 +61,13 @@ if($_POST){
                 INNER JOIN fll_arrivals flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
                 INNER JOIN fll_flights ff ON flights.`arr_flight_no` = ff.`id_flight`
                 LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
-                LEFT JOIN `fll_flightclass` fc ON FC.`id` = flights.flight_class
+                LEFT JOIN `fll_flightclass` fc ON fc.`id` = flights.flight_class
                 LEFT JOIN fll_location loc ON loc.`id_location` = flights.`arr_dropoff`
                 WHERE r.`assigned` = 0
                 AND flights.arr_date = '$selectedDate'
                 ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";
         $reservations = mysql_query($query);
-            //reservation result
-/*        echo '<pre>';
-            var_dump($query);
-        echo '</pre>';*/
+            //Arrivals reservation result
             if(isset($reservations)){
                 $resultReservations = array();
                 while($reservationRow = mysql_fetch_array($reservations)){
@@ -97,13 +95,13 @@ if($_POST){
                 INNER JOIN fll_departures flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
                 INNER JOIN fll_flights ff ON flights.`dpt_flight_no` = ff.`id_flight`
                 LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
-                LEFT JOIN `fll_flightclass` fc ON FC.`id` = flights.flight_class
+                LEFT JOIN `fll_flightclass` fc ON fc.`id` = flights.flight_class
                 LEFT JOIN fll_location loc ON loc.`id_location` = flights.`dpt_dropoff`
                 WHERE r.`assigned` = 0
                 AND flights.dpt_date = '$selectedDate'
                 ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";
         $reservations = mysql_query($query);
-        //reservation result
+        //Departures reservation result
         if(isset($reservations)){
             $resultReservations = array();
             while($reservationRow = mysql_fetch_array($reservations)){

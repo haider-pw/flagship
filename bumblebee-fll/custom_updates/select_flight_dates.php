@@ -5,7 +5,9 @@
  * Date: 12/6/2016
  * Time: 7:08 PM
  */
-error_reporting(E_ALL &~ E_DEPRECATED);
+/*ini_set('display_errors', 'On');
+//error_reporting(E_ALL);
+error_reporting(E_ALL &~ E_DEPRECATED);*/
 mysql_connect('localhost', 'root', 'chocolate');
 mysql_select_db ("cocoa_fll");
 
