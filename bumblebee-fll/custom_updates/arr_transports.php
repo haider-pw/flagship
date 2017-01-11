@@ -5,7 +5,7 @@
  * Date: 12/2/2016
  * Time: 11:06 AM
  */
-include ('..\select.class.php');
+include ('../select.class.php');
 error_reporting(E_ALL ^ E_DEPRECATED);
 
 if($_POST){
