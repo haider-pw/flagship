@@ -290,7 +290,7 @@ class Flight extends MY_Controller {
 			if(is_array($times) && !empty($times)){
 				foreach($times as $time){
 					$timeStr=strtotime($time->flight_time);
-					if($timeStr>$timefrom && $timeStr<$timeTo){
+					if($timeStr>=$timefrom && $timeStr<=$timeTo){
 						array_push($flightIds, $time->id_flight);
 					} // end of if
 				} // end of foreach
