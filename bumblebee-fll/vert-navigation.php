@@ -48,6 +48,11 @@
                     <li class="xn-icon-button pull-right" style="margin-right: 35px;">
                         <a href="#" class="mb-control" data-box="#mb-signout"> <span class="fa fa-sign-out"><strong>Logout</strong></span></a>                        
                     </li> 
+                    <?php if(isset($_SESSION['userlevel']) && $_SESSION['userlevel']=='9'){  ?>
+                     <li class="xn-icon-button pull-right" style="margin-right: 35px;">
+                        <a href="../admin_panel" class="mb-control"> <span class="fa fa-user"><strong>Admin</strong></span></a>                        
+                    </li> 
+                    <?php }?>
                     <!-- END SIGN OUT -->
                 </ul>
                 <!-- END X-NAVIGATION VERTICAL -->

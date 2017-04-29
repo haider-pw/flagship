@@ -7,7 +7,9 @@
 include('config.php');
 
 //Check for valid user and store information of login
-if (!isset($_SESSION)) session_start();
+if (!isset($_SESSION)) session_start(); 
+// check user level, if it's super admin, then set session to show admin link 
+
 
 function site_header($title) {
 	global $application, $site_title_deliminator, $tab;

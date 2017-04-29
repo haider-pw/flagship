@@ -6,7 +6,7 @@
  */
 define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
-  
+ // echo '<pre>'; print_r($user); exit;
   if ($user->logged_in)
       redirect_to("dashboard.php");
 	  

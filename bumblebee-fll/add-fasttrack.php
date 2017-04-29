@@ -1771,9 +1771,10 @@ if (isset($_POST['addreservation'])) {
                             </div>
 
                             <div class="form-group col-xs-7"><!-- tour operator selection -->
-                                <label>Tour Operator</label>
+                                <label>Supplier</label>
                                 <?php include('fsft_tour_oper_select.php'); ?>
                             </div>
+                            <a data-id="supplier" data-toggle="modal" data-target="#add_mdl" class="btn btn-success" style="float:left;margin-top:20px;margin-left:3px;"><i class="fa fa-plus"></i></a>
                             <div class="form-group col-xs-7"><!-- operator code field -->
                                 <label>Operator code/Brand</label>
                                 <input type="text" class="form-control" placeholder="operator code / brand"
@@ -1810,9 +1811,12 @@ if (isset($_POST['addreservation'])) {
                             <div class="form-group col-xs-7"><!-- tour operator selection -->
                                 <label for="paymentType">Payment</label>
                                 <select class="form-control select" id="paymentType" name="paymentType">
-                                    <option value="0">Select Payment Type</option>
+                                    <option value="0">Select Payment Type</option><!-- 
                                     <option value="1">Payment Received</option>
-                                    <option value="2">Pay on Arrival</option>
+                                    <option value="2">Pay on Arrival</option> -->
+                                    <option value="1">Payment Received – Credit Card</option>
+                                    <option value="2">Payment Received – Cash</option> 
+                                    <option value="2">To Be Invoiced</option> 
                                 </select>
                             </div>
                             <div class="form-group col-xs-7" id="paymentAmountDiv" style="display: none;"><!-- affiliates field -->
@@ -1926,6 +1930,8 @@ if (isset($_POST['addreservation'])) {
                                 <label>Transport mode 0</label>
                                 <?php include('transport_mode_arr.php'); ?>
                             </div>
+
+                            <a data-id="transport_mode" data-toggle="modal" data-target="#add_mdl" class="btn btn-success" style="float:left;margin-top:20px;margin-left:3px;"><i class="fa fa-plus"></i></a>
                             <div class="clearfix"></div>
                             <!-- initiate chained selection drivers -->
                             <div class="form-group col-xs-4"><!-- available driver selection -->
@@ -3128,6 +3134,8 @@ if (isset($_POST['addreservation'])) {
                                     <label>Transport mode 8</label>
                                     <?php include('transport_mode_dpt.php'); ?>
                                 </div>
+                                
+                                <a data-id="transport_mode" data-toggle="modal" data-target="#add_mdl" class="btn btn-success" style="float:left;margin-top:20px;margin-left:3px;"><i class="fa fa-plus"></i></a>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
                                     <label>Driver</label>
@@ -3763,8 +3771,13 @@ if (isset($_POST['addreservation'])) {
 
 
     });
+
+     
+
 </script>
-<?php
+        <?php // to add supplier 
+         include ('add_field_val_mdl.php'); ?>
+<?php 
 $ok = isset($_GET['ok']);
 if ($ok) {
     echo '<script> alert("Reservation successfully added"); </script>';

@@ -2182,6 +2182,7 @@ if(isset($_POST['addreservation']))
                                     <label>Transport mode</label>
                                     <?php include ('transport_mode_arr.php'); ?>
                                 </div>
+                                    <a data-id="transport_mode" data-toggle="modal" data-target="#add_mdl" class="btn btn-success" style="float:left;margin-top:20px;margin-left:3px;"><i class="fa fa-plus"></i></a>
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-12 col-lg-3"><!-- available driver selection -->
@@ -3379,6 +3380,8 @@ if(isset($_POST['addreservation']))
                                     <label>Transport mode</label>
                                     <?php include ('transport_mode_dpt.php'); ?>
                                 </div>
+                                
+                                <a data-id="transport_mode" data-toggle="modal" data-target="#add_mdl" class="btn btn-success" style="float:left;margin-top:20px;margin-left:3px;"><i class="fa fa-plus"></i></a>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
                                     <label>Driver</label>
@@ -3829,6 +3832,7 @@ if(isset($_POST['addreservation']))
                 </div>
             </div>
         </div>
+
         <!-- END MESSAGE BOX-->
 
         <!-- START PRELOADS -->
@@ -4080,8 +4084,12 @@ if(isset($_POST['addreservation']))
 
 
     });
+
 </script>
-        <?php 
+
+        <?php // to add transport mode 
+         include ('add_field_val_mdl.php'); ?>
+        <?php
         $ok= isset($_GET['ok']);
         if($ok)  {
             echo '<script> alert("Reservation successfully added"); </script>';
