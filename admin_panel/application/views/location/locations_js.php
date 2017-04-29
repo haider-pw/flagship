@@ -35,9 +35,18 @@
         $("#search_by_name").on("keyup", function (e) {
             oTable.fnFilter($(this).val());
         });
-        $('#Search_by_zone').keyup(function(){
-            oTable.fnFilter($(this).val()); 
-        })
+        /*$('#Search_by_zone').change(function(){
+            //oTable.fnFilter($(this).val()); 
+             oTable.fnFilter("^" + $(this).val() + "$", true, false, true);
+        })*/
+        $("#Search_by_zone").on("change", function (e) {
+          if($(this).val()==0){
+             oTable.fnFilter('coast');
+          } else {
+            oTable.fnFilter($(this).select2('data')[0]['text']);
+          }
+        });
+
        
     // on show bs modal edit location
      $('#edit-loc').on('show.bs.modal', function (e) {
@@ -126,11 +135,11 @@
               }
               // if operation fail
               else {
-                notify('Tour Operator not updated. Try again','error');
+                notify('Location not updated. Try again','error');
               }
             },
             error:function(){
-              notify('Tour Operator not updated. Try again','error');
+              notify('Location not updated. Try again','error');
             }
           }); // end of ajax
         } // end of outer if

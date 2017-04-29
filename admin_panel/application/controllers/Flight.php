@@ -43,7 +43,7 @@ class Flight extends MY_Controller {
 		if($this->input->post('flightId') and !empty($this->input->post('flightId'))){
 			// delete row where opId match
 			$tbl=$this->session->userdata('prefix').'flights';
-			$result=$this->Common_model->delete($tbl, array('id'=> $this->input->post('flightId')));
+			$result=$this->Common_model->delete($tbl, array('id_flight'=> $this->input->post('flightId')));
 
 			if($result>0){ // in case when record successfully deleted
 				echo 'OK::Flight has been deleted Successfully::success';
@@ -62,7 +62,7 @@ class Flight extends MY_Controller {
 			$tbl=$this->session->userdata('prefix').'flights';
 			// update row where opId exist
 			if($this->input->post('flightId') and !empty($this->input->post('flightId'))){
-				$result=$this->Common_model->update($tbl, array('id'=> $this->input->post('flightId')), $data);
+				$result=$this->Common_model->update($tbl, array('id_flight'=> $this->input->post('flightId')), $data);
 
 				if($result){ // in case when record successfully update
 					echo 'OK::Flight has been updated Successfully::success::update';
@@ -70,13 +70,13 @@ class Flight extends MY_Controller {
 					echo 'OK::Flight Not Updated. Try again::error';
 				}
 			} 
-			// if opId not exist, means user want to add new record
+			// if flightid not exist, means user want to add new record
 			else {
 				$result=$this->Common_model->insert_record($tbl, $data);
 
 				if($result){ // in case when record successfully added
 					//get record corresponding to that id
-					$data=$this->Common_model->select_fields_where($tbl, '*', array('id'=>$result), true);
+					$data=$this->Common_model->select_fields_where($tbl, '*', array('id_flight'=>$result), true);
 					if($data){ // in case if row successfully fetch
 						echo 'OK::New Flight has been added Successfully::success::add::'.json_encode($data);
 					}
@@ -101,7 +101,7 @@ class Flight extends MY_Controller {
 			$tableList=getTables(); // define in custom helper
 			// check if the tbl exist in db 
 			if(in_array($tbl, $tableList)){
-				$data['fl_times']=$this->Common_model->select_fields_where($tbl,'*',array('id'=>$flightId));
+				$data['fl_times']=$this->Common_model->select_fields_where($tbl,'*',array('id_flight'=>$flightId));
 			} 
 			$this->load->view('flight/flight_times', $data);
 
@@ -119,7 +119,7 @@ class Flight extends MY_Controller {
 				// check if the tbl exist in db 
 				if(in_array($tbl, $tableList)){
 					$result=$this->Common_model->update($tbl,
-						array('id'=>$this->input->post('flightId'),'id_fltime'=>$this->input->post('fltime_id')),
+						array('id_flight'=>$this->input->post('flightId'),'id_fltime'=>$this->input->post('fltime_id')),
 						array('flight_time'=>$this->input->post('fltime')));
 					if($result){
 						echo 'OK::Flight Time has been updated successfully::success';
@@ -141,7 +141,7 @@ class Flight extends MY_Controller {
 						// check if the tbl exist in db 
 						if(in_array($tbl, $tableList)){
 							$result=$this->Common_model->delete($tbl,
-								array('id'=>$this->input->post('flightId'),'id_fltime'=>$this->input->post('fltime_id')));
+								array('id_flight'=>$this->input->post('flightId'),'id_fltime'=>$this->input->post('fltime_id')));
 							if($result>0){
 								echo 'OK::One Record has been deleted successfully::success';
 							} else {
@@ -162,7 +162,7 @@ class Flight extends MY_Controller {
 			// check if the tbl exist in db 
 			if(in_array($tbl, $tableList)){
 				$data=array(
-					'id'=>$this->input->post('flightId'),
+					'id_flight'=>$this->input->post('flightId'),
 					'flight_time'=>$this->input->post('fl_time')
 
 					);
@@ -214,7 +214,7 @@ class Flight extends MY_Controller {
 			$join=array(
 						array(
 						'table'=>$flightime,
-						'condition'=>$flights.'.id='.$flightime.'.id',
+						'condition'=>$flights.'.id_flight='.$flightime.'.id_flight',
 						'type'=>'inner'
 						)
 					);
@@ -253,19 +253,19 @@ class Flight extends MY_Controller {
 			
 			if(!empty($flightIds)){
 				$flights=$this->session->userdata('prefix').'flights';
-				$flightime=$this->session->userdata('prefix').'flighttime';
+				/*$flightime=$this->session->userdata('prefix').'flighttime';
 				$join=array(
 							array(
 							'table'=>$flightime,
-							'condition'=>$flights.'.id='.$flightime.'.id',
+							'condition'=>$flights.'.id_flight='.$flightime.'.id_flight',
 							'type'=>'inner'
 							)
-						);
+						);*/
 				$where_in = array(
-					'field'=>$flights.'.id',
+					'field'=>$flights.'.id_flight',
 					'in_array'=>$flightIds
 					);
-				$data['flights'] = $this->Common_model->select_fields_where_in_like_join($flights, '*', $join, '', $where_in);
+				$data['flights'] = $this->Common_model->select_fields_where_in_like_join($flights, '*', '', '', $where_in);
 			} else {
 				$data=array();
 			}
@@ -283,7 +283,7 @@ class Flight extends MY_Controller {
 		// get the db tables list
 		$tableList=getTables(); // define in custom helper
 
-		$flightIds=array();
+		$flightIds=array(); 
 		// check if the tbl exist in db 
 		if(in_array($tbl, $tableList)){
 			$times=$this->Common_model->select($tbl);
@@ -291,7 +291,7 @@ class Flight extends MY_Controller {
 				foreach($times as $time){
 					$timeStr=strtotime($time->flight_time);
 					if($timeStr>$timefrom && $timeStr<$timeTo){
-						array_push($flightIds, $time->id);
+						array_push($flightIds, $time->id_flight);
 					} // end of if
 				} // end of foreach
 			} // end of inner if

@@ -37,7 +37,17 @@
                         <div class="col-md-3">
                             <div class="form-group">
                                 <label>Zone:</label>
-                                <input type="text" id="Search_by_zone" class="form-control " placeholder="Search By Zone">
+                               <!--  <input type="text" id="Search_by_zone" class="form-control " placeholder="Search By Zone"> -->
+                                <select class="from-control  select2" id="Search_by_zone" style="width:100%" >
+                                <?php 
+                                  if(isset($coasts) and is_array($coasts) and !empty($coasts)){
+                                    echo '<option value="0">All</option>';
+                                    foreach($coasts as $coast){
+                                      echo '<option value="'.$coast->id.'">'.$coast->coast.'</option>';
+                                    } // end of foreach
+                                  } // end of if
+                                ?>
+                                </select>
                             </div><!-- /.form-group -->
                         </div><!-- /.col -->
                     </div>
@@ -93,10 +103,17 @@
             <label>Zone :</label>
             <!-- <input type="text" class="form-control loc_zone" value="" /> -->
             <select class="from-control loc_zone select2" style="width:100%" >
+            <?php 
+              if(isset($coasts) and is_array($coasts) and !empty($coasts)){
+                foreach($coasts as $coast){
+                  echo '<option value="'.$coast->id.'">'.$coast->coast.'</option>';
+                }
+              }
+            ?><!-- 
               <option value="1">East Coast</option>
               <option value="2">West Coast</option>
               <option value="3">North Coast</option>
-              <option value="4">South Coast</option>
+              <option value="4">South Coast</option> -->
             </select>
             <input type="hidden" value="" class="loc_id">
             <input type="hidden" value="" class="zone_id">

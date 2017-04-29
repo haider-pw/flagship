@@ -85,7 +85,7 @@
                 <option <?=$db =='cocoa_bgi' ? 'selected' : ''?> value="B">BGI - Barbados</option>
                 <option <?=$db =='cocoa_anu' ? 'selected' : ''?> value="A">ANU - Antigua</option>
                 <option <?=$db =='cocoa_gnd' ? 'selected' : ''?> value="G">GND - Grenada</option>
-                <option value="S">SKB - St.Kitts &amp; Nevis</option>
+                <option <?=$db =='cocoa_skb' ? 'selected' : ''?> value="S">SKB - St.Kitts &amp; Nevis</option>
             </select>
             <input type="hidden" name="path" value="<?=base_url(uri_string()) ?>">
            

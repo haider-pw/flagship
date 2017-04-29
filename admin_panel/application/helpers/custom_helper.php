@@ -37,7 +37,7 @@ function countRecords(){
 	$ci=&get_instance();
 	$ci->load->model('Cruise_model');
 	$ci->load->model('Common_model');
-	$users=$operators=$vehicles=$flights=$locations=$transport=$activeUsers=$fl_class=$suppliers=0;
+	$users=$operators=$vehicles=$flights=$locations=$transport=$activeUsers=$fl_class=$suppliers=$modes=0;
 	//  count total users count
 	$activeUsers=$ci->Cruise_model->count_all_rows('users', array('active'=>'y'));
 	// count active users

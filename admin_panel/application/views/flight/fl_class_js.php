@@ -95,7 +95,7 @@
                     $('.flight-count').html(flight_count);
                   // data table add new row 
                   var rowNode = table.row.add(['', record['class'] ,'<a class="btn btn-sm btn-primary edit" data-toggle="modal" data-target="#edit-fl-class"><i class="fa fa-pencil"></i> Edit</a>', '<a data-id="del-fl-class" data-toggle="modal" data-target="#confirm_modal" class="btn btn-sm btn-danger del-flight"><i class="fa fa-trash"></i> Delete</a>',record['id']] ).draw().node();
-                    $(rowNode).attr( {'data-id':record['id'], 'class':'flight_class' } );
+                    $(rowNode).attr( {'data-id':record['id'], 'class':'flight' } );
                     
                 }
                 notify(data[1], data[2]);

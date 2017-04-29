@@ -28,11 +28,31 @@ class Driver extends MY_Controller {
 		$data['drivers']=array();
 		// get the touroperator from db
 		$tbl=$this->session->userdata('prefix').'transport';
+		$tblVehicle=$this->session->userdata('prefix').'vehicles';
+		$vdata=$tbl.'.* , COUNT('.$tblVehicle.'.id_vehicle) as TotalVehicles';
+	    $join=array(
+	  			array(
+	  				'table'=>$tblVehicle,
+	  				'condition'=> $tbl.'.id_transport = '.$tblVehicle.'.id_transport',
+	  				'type'=>'LEFT'
+	  				)
+	  		);
+	    $group_by=$tbl.'.id_transport';
 		// get the db tables list
 		$tableList=getTables(); // define in custom helper
 		// check if the tbl exist in db 
 		if(in_array($tbl, $tableList)){
-			$data['drivers']=$this->Common_model->select($tbl);
+			//$data['drivers']=$this->Common_model->select($tbl);
+		/*	SELECT 
+			  `T`.*, COUNT(V.id_vehicle) AS TotalVehicles
+			FROM
+			  `fll_transport` `T` 
+			  LEFT JOIN fll_vehicles V
+			  ON V.`id_transport` = T.`id_transport`
+			  GROUP BY T.`id_transport`*/
+			$data['drivers']=$this->Common_model->select_fields_where_like_join($tbl, $vdata, $join,'','','','',$group_by);
+			// var_dump($this->db->last_query());
+			// exit;
 		} 
 		$this->show_front('driver/drivers', $data);
 	}

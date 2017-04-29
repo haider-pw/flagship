@@ -55,6 +55,14 @@ class Home extends MY_Controller {
 		     			 )
 		     		);	
 		    	break;
+		    case 'S':
+		     	$this->session->set_userdata( 
+		     		array('db_name' =>'cocoa_skb',
+		     			  'prefix'=>'skb_',
+						  'cruise_db'=>'cruisecontrol_skb'
+		     			 )
+		     		);	
+		    	break;
 		    default:
 		     	$this->session->set_userdata( 
 		     		array('db_name' =>'cocoa_fll',

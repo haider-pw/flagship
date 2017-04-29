@@ -16,8 +16,7 @@ class MY_Controller extends CI_Controller{
     {
         parent::__construct();
         // to load assets from front end
-        //$this->frontEndPath='http://localhost/flights_project/';
-        $this->frontEndPath='http://25.114.31.88/';
+        $this->frontEndPath='http://localhost/flights_project/';
         $this->defaultImg='blank.png';
         //$cruiseDb='mysqli://root:chocolate@localhost/cocoa_admin?char_set=utf8&dbcollat=utf8_general_ci&cache_on=true&cachedir=';
         $this->cruiseDb = $this->load->database('cruiseDb', TRUE);

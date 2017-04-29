@@ -25,7 +25,15 @@ class Location extends MY_Controller {
     
 	public function index()
 	{
-		$this->show_front('location/locations');
+		$data['coasts']=array();
+		$tbl=$this->session->userdata('prefix').'loc_coast';
+			// get the db tables list
+		$tableList=getTables(); // define in custom helper
+		// check if the tbl exist in db 
+		if(in_array($tbl, $tableList)){
+			$data['coasts']=$this->Common_model->select($tbl);
+		}
+		$this->show_front('location/locations', $data);
 	}
 	//
 	public function listing(){
@@ -40,6 +48,7 @@ class Location extends MY_Controller {
 				'type'=>'inner'
 				)
 			);
+
 		// get the db tables list
 		$tableList=getTables(); // define in custom helper
 		// check if the tbl exist in db 

@@ -22,11 +22,11 @@
             notify(data[1], data[2]);
           }
           else {
-            notify('Tour Operator not deleted. Try again','error');
+            notify('Flight not deleted. Try again','error');
           }
         },
         error:function(){
-          notify('Tour Operator not deleted. Try again','error');
+          notify('Flight not deleted. Try again','error');
         }
       });// end of ajax
     } // end of del flight function
@@ -82,7 +82,8 @@
                 parentMdl.modal('toggle');
                 // if record updated
                 if(data[3]=='update'){
-                  $('.flight[data-id="'+flightId+'"]').find('.flight_num').html(flight_num);
+                  $('.flight[data-id="'+flightId+'"]').find('.flight_num').html('<span class="fl_num">'+flight_num+'</span>'+
+                  '<a class="btn btn-success btn-xs pull-right" data-toggle="modal" data-target="#fl_times"> <i class="fa fa-clock-o" aria-hidden="true"></i> Timings</a>');
                 }
                 // if new record added
                 else if(data[3]=='add'){
@@ -102,11 +103,11 @@
               }
               // if operation fail
               else {
-                notify('Tour Operator not updated. Try again','error');
+                notify('Flight not updated. Try again','error');
               }
             },
             error:function(){
-              notify('Tour Operator not updated. Try again','error');
+              notify('Flight not updated. Try again','error');
             }
           }); // end of ajax
         } // end of outer if
