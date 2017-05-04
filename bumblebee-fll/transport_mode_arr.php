@@ -8,7 +8,7 @@
 mysql_connect('localhost', 'root', 'chocolate');
 mysql_select_db ("cocoa_fll");
 
-$sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+$sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
 $result = mysql_query($sql);
 
 echo '<select class="form-control select" id="arr-transport" name="arr_transport">';

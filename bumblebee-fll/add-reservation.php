@@ -24,11 +24,6 @@ $fsref = "$countrycode-$flagship_ref";
 $loggedinas = $row->fname . ' ' . $row->lname;
 site_header('Add Reservations');
 
-
-/*echo '<pre>';
-var_dump($_POST['rep_type']);*/
-//exit;
-
 if(isset($_POST['addreservation']))
 {
     //Arrivals And Departures Flight Details
@@ -2384,7 +2379,7 @@ if(isset($_POST['addreservation']))
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->                                      
                                     <label>Transport mode</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="arr-transport1" name="arr1_transport[]">
@@ -2600,9 +2595,8 @@ if(isset($_POST['addreservation']))
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->                                      
                                     <label>Transport mode</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
-                                    
                                     echo '<select multiple class="form-control select" id="arr-transport2" name="arr2_transport[]">
                                         <option>Arrival Transport mode</option>';
                                         while ($row = mysql_fetch_array($result)) {
@@ -2816,7 +2810,7 @@ if(isset($_POST['addreservation']))
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->                                      
                                     <label>Transport mode</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="arr-transport3" name="arr3_transport[]">
@@ -3018,7 +3012,7 @@ if(isset($_POST['addreservation']))
                                     <label class="left20">Transport mode</label>
                                     <div class="left20">
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="transfer-transport" name="transfer_transport[]">
@@ -3106,7 +3100,7 @@ if(isset($_POST['addreservation']))
                                     <label class="left20">Transport mode</label>
                                     <div class="left20">
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="transfer-transport1" name="transfer1_transport[]">
@@ -3194,7 +3188,7 @@ if(isset($_POST['addreservation']))
                                     <label class="left20">Transport mode</label>
                                     <div class="left20">
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="transfer-transport2" name="transfer2_transport[]">
@@ -3282,7 +3276,7 @@ if(isset($_POST['addreservation']))
                                     <label class="left20">Transport mode</label>
                                     <div class="left20">
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="transfer-transport3" name="transfer3_transport[]">
@@ -3471,7 +3465,7 @@ if(isset($_POST['addreservation']))
                                 <div class="form-group col-xs-7">                                       
                                     <label>Transport mode</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="dpt-transport1" name="dpt1_transport[]">
@@ -3592,7 +3586,7 @@ if(isset($_POST['addreservation']))
                                 <div class="form-group col-xs-7">                                       
                                     <label>Transport mode</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="dpt-transport2" name="dpt2_transport[]">
@@ -3712,7 +3706,7 @@ if(isset($_POST['addreservation']))
                                 <div class="form-group col-xs-7">                                       
                                     <label>Transport mode</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
                                     $result = mysql_query($sql);
                                     
                                     echo '<select multiple class="form-control select" id="dpt-transport3" name="dpt3_transport[]">

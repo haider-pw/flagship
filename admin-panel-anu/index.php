@@ -1,4 +1,5 @@
-<?php
+<?php header('Location:http://25.114.31.88/admin_panel');
+exit;
   /**
    * Index
    *
