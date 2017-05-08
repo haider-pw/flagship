@@ -205,7 +205,7 @@ if(isset($_POST['addtransfer']))
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="driver" name="driver">
                                         <?php echo $opt->ShowTransport(); ?>     
                                     </select>

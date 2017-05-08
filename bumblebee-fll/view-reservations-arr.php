@@ -189,7 +189,7 @@ site_header('Reservation List - Arrivals');
                                                 <th>Dpt Date</th>
                                                 <th>Dpt Flight #</th>
                                                 <th>Dpt Transport Mode</th>
-                                                <th>Dpt Driver</th>
+                                                <th>Dpt Transport Supplier</th>
                                                 <th>Dpt Vehicle</th>
                                                 <th>Dpt Pickup Location</th>
                                                 <th>Dpt Pickup Time</th>

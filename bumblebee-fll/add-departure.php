@@ -255,7 +255,7 @@ if(isset($_POST['adddeparture']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="dpt-driver" name="dpt_driver">
                                         <?php echo $opt->ShowTransport(); ?>    
                                     </select>

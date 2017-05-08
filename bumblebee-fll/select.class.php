@@ -26,7 +26,7 @@ class SelectList
         {
             $sql = "SELECT * FROM fll_transport ORDER BY name ASC";
             $resd= mysql_query($sql,$this->connd);
-            $driver = '<option value="0">Select driver</option>';
+            $driver = '<option value="0">Select Transport Supplier</option>';
             while($row = mysql_fetch_array($resd))
             {
                 $driver .= '<option value="' . $row['id_transport'] . '">' . $row['name'] . '</option>';
@@ -102,13 +102,16 @@ class SelectList
  
         public function ShowRoomType()
         {
-            $sql = "SELECT * FROM fll_roomtypes WHERE id_location=$_POST[locationid] ORDER BY room_type ASC";
+            //$sql = "SELECT * FROM fll_roomtypes WHERE id_location=$_POST[locationid] ORDER BY room_type ASC";
+            $sql = "SELECT * FROM fll_room_loc INNER JOIN fll_roomtypes WHERE fll_room_loc.id_location=$_POST[locationid] and
+                 fll_room_loc.id_roomtype=fll_roomtypes.id_room ORDER BY fll_roomtypes.room_type ASC";
             $roomd= mysql_query($sql,$this->connd);
             $room_type = '<option value="0">Room Type</option>';
             while($row = mysql_fetch_array($roomd))
             {
                 $room_type .= '<option value="' . $row['id_room'] . '">' . $row['room_type'] . '</option>';
             }
+
             return $room_type;
         }
 }

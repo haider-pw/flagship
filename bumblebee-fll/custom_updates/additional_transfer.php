@@ -91,7 +91,7 @@ if ($_POST) {
     <div class="clearfix"></div>
     <!-- initiate chained selection drivers -->
     <div class="form-group col-xs-4"><!-- available driver selection -->
-        <label for="<?=$transfer_driver?>">Driver</label>
+        <label for="<?=$transfer_driver?>">Transport Supplier</label>
         <select class="form-control" id="<?=$transfer_driver?>" name="<?=$transfer_driver?>">
             <?php echo $opt->ShowTransport(); ?>
         </select>

@@ -36,7 +36,7 @@ if($_POST){
 <div class="clearfix"></div>
 <!-- initiate chained selection drivers -->
 <div class="form-group col-xs-4"><!-- available driver selection -->
-    <label for="arr<?=isset($arrivalID)?$arrivalID:''?>-driver">Driver</label>
+    <label for="arr<?=isset($arrivalID)?$arrivalID:''?>-driver">Transport Supplier</label>
     <select class="form-control arr_driver" id="arr<?=isset($arrivalID)?$arrivalID:''?>-driver" name="arr<?=isset($arrivalID)?$arrivalID:''?>_driver[]" disabled="disabled">
         <?php echo $opt->ShowTransport(); ?>
     </select>

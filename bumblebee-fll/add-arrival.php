@@ -24,7 +24,8 @@ include('header.php');
 include ('select.class.php');
 $fsref = $_GET['ref'];
 $reservation_id = $_GET['reservation'];
-$fast_track_ref = $_GET['fsft_ref'];
+if(isset($_GET['fsft_ref']))
+    $fast_track_ref = $_GET['fsft_ref'];
 $loggedinas = $row->fname . ' ' . $row->lname;
 site_header('Add Arrival');
 
@@ -275,7 +276,7 @@ if(isset($_POST['addarrival']))
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="arr-driver" name="arr_driver">
                                         <?php echo $opt->ShowTransport(); ?>     
                                     </select>
@@ -324,7 +325,7 @@ if(isset($_POST['addarrival']))
                                     </div>
                                  </div>
 
-                                    <?php if(!$fast_track_ref){
+                                    <?php if(isset($fast_track_ref) && !$fast_track_ref){
                                         ?>
                                         <div class="form-group col-xs-7"><!-- representation type selection -->
                                             <label>Representation Type</label>

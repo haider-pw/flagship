@@ -91,7 +91,7 @@ $transport = mysql_query($transport);
                                     <table id="transfer-queue" class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Guest(s)</th>
                                                 <th>Date</th>
                                                 <th>Flight # | PU Time</th>                                               

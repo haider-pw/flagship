@@ -1927,7 +1927,7 @@ if (isset($_POST['addreservation'])) {
                                 <?php include('flightclass_select.php'); ?>
                             </div>
                             <div class="form-group col-xs-7"> <!-- transport mode field -->
-                                <label>Transport mode 0</label>
+                                <label>Transport mode</label>
                                 <?php include('transport_mode_arr.php'); ?>
                             </div>
 
@@ -1935,7 +1935,7 @@ if (isset($_POST['addreservation'])) {
                             <div class="clearfix"></div>
                             <!-- initiate chained selection drivers -->
                             <div class="form-group col-xs-4"><!-- available driver selection -->
-                                <label for="arr-driver">Driver</label>
+                                <label for="arr-driver">Transport Supplier</label>
                                 <select class="form-control" id="arr-driver" name="arr_driver">
                                     <?php echo $opt->ShowTransport(); ?>
                                 </select>
@@ -2095,7 +2095,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->
                                     <label>Transport mode 1</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     echo '<select multiple class="form-control select" id="arr-transport1" name="arr1_transport[]">
                                         <option selected="true">Arrival Transport mode</option>';
@@ -2108,7 +2108,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="arr-driver1" name="arr_driver1">
                                         <?php echo $opt->ShowTransport(); ?>
                                     </select>
@@ -2290,7 +2290,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->
                                     <label>Transport mode 2</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     echo '<select multiple class="form-control select" id="arr-transport2" name="arr2_transport[]">
                                         <option selected="true">Arrival Transport mode</option>';
@@ -2303,7 +2303,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="arr-driver2" name="arr_driver2">
                                         <?php echo $opt->ShowTransport(); ?>
                                     </select>
@@ -2518,7 +2518,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="form-group col-xs-7"> <!-- transport mode field -->
                                     <label>Transport mode 3</label>
                                     <?php
-                                    $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                    $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     echo '<select class="form-control select" id="arr-transport3" name="arr3_transport[]">
                                         <option selected="true">Arrival Transport mode</option>';
@@ -2531,7 +2531,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="arr-driver3" name="arr_driver3">
                                         <?php echo $opt->ShowTransport(); ?>
                                     </select>
@@ -2743,7 +2743,7 @@ if (isset($_POST['addreservation'])) {
                                     <label class="left20">Transport mode 4</label>
                                     <div class="left20">
                                         <?php
-                                        $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                        $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                         $result = mysql_query($sql);
                                         echo '<select class="form-control select" id="transfer-transport" name="transfer_transport[]">
                                             <option selected="true">Transfer Transport mode</option>';
@@ -2765,7 +2765,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="transfer-driver" name="transfer_driver">
                                         <?php echo $opt->ShowTransport(); ?>
                                     </select>
@@ -2841,7 +2841,7 @@ if (isset($_POST['addreservation'])) {
                                     <label class="left20">Transport mode 5</label>
                                     <div class="left20">
                                         <?php
-                                        $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                        $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                         $result = mysql_query($sql);
                                         echo '<select class="form-control select" id="transfer-transport1" name="transfer1_transport[]">
                                             <option selected="true">Transfer Transport mode</option>';
@@ -2863,7 +2863,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="transfer-driver1" name="transfer_driver1">
                                         <?php echo $opt->ShowTransport(); ?>
                                     </select>
@@ -2939,7 +2939,7 @@ if (isset($_POST['addreservation'])) {
                                     <label class="left20">Transport mode 6</label>
                                     <div class="left20">
                                         <?php
-                                        $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                        $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                         $result = mysql_query($sql);
                                         echo '<select class="form-control select" id="transfer-transport2" name="transfer2_transport[]">
                                             <option selected="true">Transfer Transport mode</option>';
@@ -2961,7 +2961,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="transfer-driver2" name="transfer_driver2">
                                         <?php echo $opt->ShowTransport(); ?>
                                     </select>
@@ -3037,7 +3037,7 @@ if (isset($_POST['addreservation'])) {
                                     <label class="left20">Transport mode 7</label>
                                     <div class="left20">
                                         <?php
-                                        $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                        $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                         $result = mysql_query($sql);
                                         echo '<select class="form-control select" id="transfer-transport3" name="transfer3_transport[]">
                                             <option selected="true">Transfer Transport mode</option>';
@@ -3059,7 +3059,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="transfer-driver3" name="transfer_driver3">
                                         <?php echo $opt->ShowTransport(); ?>
                                     </select>
@@ -3131,14 +3131,14 @@ if (isset($_POST['addreservation'])) {
                                     ?>
                                 </div>
                                 <div class="form-group col-xs-7">
-                                    <label>Transport mode 8</label>
+                                    <label>Transport mode</label>
                                     <?php include('transport_mode_dpt.php'); ?>
                                 </div>
                                 
                                 <a data-id="transport_mode" data-toggle="modal" data-target="#add_mdl" class="btn btn-success" style="float:left;margin-top:20px;margin-left:3px;"><i class="fa fa-plus"></i></a>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>ShowTransport</label>
                                     <select class="form-control" id="dpt-driver" name="dpt_driver">
                                         <?php echo $opt->ShowTransport(); ?>
                                     </select>
@@ -3234,7 +3234,7 @@ if (isset($_POST['addreservation'])) {
                                     <div class="form-group col-xs-7">
                                         <label>Transport mode 9</label>
                                         <?php
-                                        $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                        $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                         $result = mysql_query($sql);
                                         echo '<select multiple class="form-control select" id="dpt-transport1" name="dpt1_transport[]">
                                         <option selected="true">Departure Transport mode</option>';
@@ -3246,7 +3246,7 @@ if (isset($_POST['addreservation'])) {
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="form-group col-xs-4"><!-- available driver selection -->
-                                        <label>Driver</label>
+                                        <label>Transport Supplier</label>
                                         <select class="form-control" id="dpt-driver1" name="dpt_driver1">
                                             <?php echo $opt->ShowTransport(); ?>
                                         </select>
@@ -3363,7 +3363,7 @@ if (isset($_POST['addreservation'])) {
                                     <div class="form-group col-xs-7">
                                         <label>Transport mode 10</label>
                                         <?php
-                                        $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                        $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                         $result = mysql_query($sql);
                                         echo '<select class="form-control select" id="dpt-transport2" name="dpt2_transport[]">
                                         <option selected="true">Departure Transport mode</option>';
@@ -3375,7 +3375,7 @@ if (isset($_POST['addreservation'])) {
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="form-group col-xs-4"><!-- available driver selection -->
-                                        <label>Driver</label>
+                                        <label>Transport Supplier</label>
                                         <select class="form-control" id="dpt-driver2" name="dpt_driver2">
                                             <?php echo $opt->ShowTransport(); ?>
                                         </select>
@@ -3492,7 +3492,7 @@ if (isset($_POST['addreservation'])) {
                                     <div class="form-group col-xs-7">
                                         <label>Transport mode 11</label>
                                         <?php
-                                        $sql = "SELECT * FROM fll_transporttype ORDER BY `order` ASC";
+                                        $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                         $result = mysql_query($sql);
                                         echo '<select class="form-control select" id="dpt-transport3" name="dpt3_transport[]">
                                         <option selected="true">Departure Transport mode</option>';
@@ -3504,7 +3504,7 @@ if (isset($_POST['addreservation'])) {
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="form-group col-xs-4"><!-- available driver selection -->
-                                        <label>Driver</label>
+                                        <label>Transport Supplier</label>
                                         <select class="form-control" id="dpt-driver3" name="dpt_driver3">
                                             <?php echo $opt->ShowTransport(); ?>
                                         </select>

@@ -58,7 +58,7 @@ $transport = mysql_query("SELECT * FROM fll_resdrivers WHERE transport_date >= C
                                         <thead>
                                             <tr>
                                                 <th>Action</th>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                             </tr>
                                         </thead>
                                         <tbody>

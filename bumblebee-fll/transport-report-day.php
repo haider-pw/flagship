@@ -90,7 +90,7 @@ $transport = mysql_query("SELECT * FROM fll_resdrivers WHERE transport_date = DA
                                     <table id="transfer-queue" class="table table-hover datatable">
                                         <thead>
                                             <tr>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Guest(s)</th>
                                                 <th>Date</th>
                                                 <th>Flight # | PU Time</th>                                               

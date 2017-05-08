@@ -454,7 +454,7 @@ if(isset($_POST['update']))
                                                 <th>Flight class</th>
                                                 <th>Rep Service</th>
                                                 <th>Transport</th>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Vehicle</th>
                                                 <th>PU Location</th>
                                                 <th>Dropoff Location</th>
@@ -543,7 +543,7 @@ if(isset($_POST['update']))
                                                 <th>PU Time</th>
                                                 <th>Dropoff</th>
                                                 <th>Transport</th>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Vehicle</th>
                                                 <th>Transfer notes</th>
                                             </tr>
@@ -601,7 +601,7 @@ if(isset($_POST['update']))
                                                 <th>Flight time</th>
                                                 <th>Flight class</th>
                                                 <th>Transport</th>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Vehicle</th>
                                                 <th>PU Location</th>
                                                 <th>PU Time</th>

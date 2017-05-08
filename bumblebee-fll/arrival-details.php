@@ -281,7 +281,7 @@ if(isset($_POST['update']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label for="arr-driver">Driver</label>
+                                    <label for="arr-driver">Transport Supplier</label>
                                     <select class="form-control" id="arr-driver" name="arr_driver">
                                         <option value="<?php echo $get_arr_driver[0]; ?>"><?php echo $get_arr_driver[1]; ?></option>
                                         <?php echo $opt->ShowTransport(); ?>   

@@ -245,7 +245,7 @@ if(isset($_POST['updatetransfer']))
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="transfer-driver" name="driver">
                                         <option value="<?php echo $get_transfer_driver[0]; ?>"><?php echo $get_transfer_driver[1]; ?></option>
                                         <?php echo $opt->ShowTransport(); ?>
