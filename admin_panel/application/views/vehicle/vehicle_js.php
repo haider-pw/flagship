@@ -53,11 +53,11 @@ table.on( 'order.dt search.dt', function () {
             notify(data[1], data[2]);
           }
           else {
-            notify('Tour Operator not deleted. Try again','error');
+            notify('Vehicle not deleted. Try again','error');
           }
         },
         error:function(){
-          notify('Tour Operator not deleted. Try again','error');
+          notify('Vehicle not deleted. Try again','error');
         }
       });// end of ajax
     } // end of del tour click function
@@ -136,11 +136,11 @@ table.on( 'order.dt search.dt', function () {
               }
               // if operation fail
               else {
-                notify('Tour Operator not updated. Try again','error');
+                notify('Vehicle not updated. Try again','error');
               }
             },
             error:function(){
-              notify('Tour Operator not updated. Try again','error');
+              notify('Vehicle not updated. Try again','error');
             }
           }); // end of ajax
         } // end of outer if

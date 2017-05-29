@@ -48,7 +48,7 @@ class MY_Controller extends CI_Controller{
     public function show_front($viewPath,$data = array()){
         if(!$this->session->userdata('userlevel') or !$this->session->userdata('userlevel')==9){
             redirect(base_url('/account'));
-        }
+        } 
         $this->load->view('components/header',$data);
         $this->load->view($viewPath,$data);
         $this->load->view('components/footer',$data);

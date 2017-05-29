@@ -152,7 +152,7 @@
                    <strong>Are you sure to delete this record?</strong>
                    <br>
                    
-                This record will not be recover! 
+                This record will not be recovered! 
           </div>
           <div class="col-md-12"><br>
                 <a class="btn btn-default del" data-dismiss="modal">Cancel</a>

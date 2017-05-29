@@ -25,7 +25,7 @@ class Driver extends MY_Controller {
     // main Drivers list page
 	public function index()
 	{
-		$data['drivers']=array();
+		$data['drivers']=$data['vehicles']=array();
 		// get the touroperator from db
 		$tbl=$this->session->userdata('prefix').'transport';
 		$tblVehicle=$this->session->userdata('prefix').'vehicles';
@@ -42,17 +42,8 @@ class Driver extends MY_Controller {
 		$tableList=getTables(); // define in custom helper
 		// check if the tbl exist in db 
 		if(in_array($tbl, $tableList)){
-			//$data['drivers']=$this->Common_model->select($tbl);
-		/*	SELECT 
-			  `T`.*, COUNT(V.id_vehicle) AS TotalVehicles
-			FROM
-			  `fll_transport` `T` 
-			  LEFT JOIN fll_vehicles V
-			  ON V.`id_transport` = T.`id_transport`
-			  GROUP BY T.`id_transport`*/
 			$data['drivers']=$this->Common_model->select_fields_where_like_join($tbl, $vdata, $join,'','','','',$group_by);
-			// var_dump($this->db->last_query());
-			// exit;
+			$data['vehicles'] = $this->Common_model->select($tblVehicle);
 		} 
 		$this->show_front('driver/drivers', $data);
 	}
@@ -64,9 +55,9 @@ class Driver extends MY_Controller {
 			$tbl=$this->session->userdata('prefix').'transport';
 			$result=$this->Common_model->delete($tbl, array('id_transport'=> $this->input->post('drId')));
 			if($result>0){ // in case when record successfully deleted
-				echo 'OK::Driver has been deleted Successfully::success';
+				echo 'OK::Transport Supplier has been deleted Successfully::success';
 			} else {
-				echo 'OK::Driver Not Deleted. Try again::error';
+				echo 'OK::Transport Supplier Not Deleted. Try again::error';
 			}
 		} // end of if
 	} 
@@ -83,9 +74,9 @@ class Driver extends MY_Controller {
 				$result=$this->Common_model->update($tbl, array('id_transport'=> $this->input->post('drId')), $data);
 
 				if($result){ // in case when record successfully update
-					echo 'OK::Driver has been updated Successfully::success::update';
+					echo 'OK::Transport Supplier has been updated Successfully::success::update';
 				} else {
-					echo 'OK::Driver Not Updated. Try again::error';
+					echo 'OK::Transport Supplier Not Updated. Try again::error';
 				}
 			} 
 			// if drId not exist, means user want to add new record
@@ -96,10 +87,10 @@ class Driver extends MY_Controller {
 					//get record corresponding to that id
 					$data=$this->Common_model->select_fields_where($tbl, '*', array('id_transport'=>$result), true);
 					if($data){ // in case if row successfully fetch
-						echo 'OK::New Driver has been added Successfully::success::add::'.json_encode($data);
+						echo 'OK::New Transport Supplier has been added Successfully::success::add::'.json_encode($data);
 					}
 					else { // in case when row added, but not fetch due to some error
-						//echo 'OK::New Driver has been added Successfully::success::add::'.json_encode($data);
+						//echo 'OK::New Transport Supplier has been added Successfully::success::add::'.json_encode($data);
 					}
 				} else {
 					echo 'OK::Driver Not Added. Try again::error';
@@ -127,4 +118,37 @@ class Driver extends MY_Controller {
 			
 		}// end of outer if
 	} // end of function
+
+	public function getDriverByVehicle(){
+
+			$tbl=$this->session->userdata('prefix').'transport';
+			$tblVehicle=$this->session->userdata('prefix').'vehicles';
+			$vdata=$tbl.'.* , COUNT('.$tblVehicle.'.id_vehicle) as TotalVehicles';
+		    $join=array(
+		  			array(
+		  				'table'=>$tblVehicle,
+		  				'condition'=> $tbl.'.id_transport = '.$tblVehicle.'.id_transport',
+		  				'type'=>'LEFT'
+		  				)
+		  		);
+		    $group_by=$tbl.'.id_transport';
+			// get the db tables list
+			$tableList=getTables(); // define in custom helper
+			// check if the tbl exist in db 
+		    $where = '';
+		if($this->input->post('transportId') && !empty($this->input->post('transportId'))){
+		    $where = array($tblVehicle.'.id_transport'=>$this->input->post('transportId'));
+
+		} // end of if
+			if(in_array($tbl, $tableList) && in_array($tblVehicle, $tableList)){
+			    $data['drivers'] = $this->Common_model->select_fields_where_like_join($tbl, $vdata, $join, $where, '','','',$group_by);
+			    
+				if($data['drivers']){
+					$this->load->view('driver/drivers_list', $data); 
+				} else {
+					echo 'OK::Record Not found::error';
+				}
+			} 
+
+	}// end of function
 }

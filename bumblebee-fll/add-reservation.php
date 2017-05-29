@@ -2293,33 +2293,33 @@ if(isset($_POST['addreservation']))
                                         <span class="help-block"> Select one (1) or multiple Airport/Hotel requirements</span>
                                     </div>
                                     <div class="form-group">                                         
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-6 col-sm-12">
                                                 <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels" name="cold_towels" value="" placeholder="Cold Towels">
                                                 <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water" name="bottled_water" value="" placeholder="Bottled Water">
                                                 <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="vouchers" name="vouchers" value="" placeholder="Vouchers">
                                             </div>
                                     </div>
                                     <div class="form-group">                                         
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-6 col-sm-12">
                                                 <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats" name="infant_seats" value="" placeholder="Infant Seats">
                                                 <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats" name="child_seats" value="" placeholder="Child Seats">
                                                 <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
                                     <div class="form-group">
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-6 col-sm-12">
                                                 <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name" name="excursion_name" placeholder="Excursion Name">
                                                 <label class="right20">Excursion Date</label><input type="text" class="right20 form-control datepicker" id="excursion_date" name="excursion_date" placeholder="Excursion Date">
                                             </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-6 col-sm-12">
                                             <label class="right20">Pickup Time</label><input type="text" class="form-control timepicker24" id="pickup_time" name="pickup_time" placeholder="Pickup Time">
                                             <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by" name="excursion_confirm_by" placeholder="Confirmed By Whom">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-6 col-sm-12">
                                             <label class="right20">Date of Confirmation</label><input type="text" class="form-control datepicker" id="excursion_confirm_date" name="excursion_confirm_date" placeholder="Excursion Confirm Date">
                                             <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests" name="excursion_guests" placeholder="Number of Guests">
                                         </div>

@@ -1,34 +1,8 @@
 <?php ?>
 <script>
   $(function () {
-    var table=$("#data_list").DataTable({
-      columnDefs: [
-                    /*{
-                      targets: 1,
-                      className: 'dr_name'
-                    },*/
-                    {
-                      targets: 2,
-                      className: 'text-center'
-                    },
-                    {
-                      targets: 3,
-                      className: 'text-center'
-                    },
-                    {
-                      targets: 4,
-                      className: 'hidden'
-                    }
-                  ],
-                  order:[[4, 'desc' ]]
-    }
-);
-    table.on( 'order.dt search.dt', function () {
-        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
-            cell.innerHTML = i+1;
-        } );
-    } ).draw();
-
+    
+    var table = dataTableConfiguration();
     function delDriver(drId){
       var row=$('#data_list').find('tr[data-id="'+drId+'"]');
       $.ajax({
@@ -49,11 +23,11 @@
             notify(data[1], data[2]);
           }
           else {
-            notify('Driver not deleted. Try again','error');
+            notify('Transport Supplier not deleted. Try again','error');
           }
         },
         error:function(){
-          notify('Driver not deleted. Try again','error');
+          notify('Transport Supplier not deleted. Try again','error');
         }
       });// end of ajax
     } // end of del tour click function
@@ -81,14 +55,14 @@
           var dr_name = dr_name.replace(/&amp;/g, '&');
           $(this).find('.driver_name').val(dr_name);
           $(this).find('.driver_id').val(drid);
-          $(this).find('#tour_op_lbl').html('Edit Driver name'); // set the modal title according to functionality
+          $(this).find('#tour_op_lbl').html('Edit Transport Supplier'); // set the modal title according to functionality
         }
     })
 
      <?php // on modal close , delete all values  ?>
      $('#edit-driver').on('hidden.bs.modal', function () {
         $(this).find('input').val("");
-        $(this).find('#tour_op_lbl').html('Add New Driver'); // default title
+        $(this).find('#tour_op_lbl').html('Add New Transport Supplier'); // default title
     })
      // on save edit Driver
      $(document).on('click','.save-driver', function(){
@@ -120,24 +94,25 @@
                     }
                     $('.dr-count').html(dr_count);
                   // data table add new row 
-                  var rowNode = table.row.add( ['', '<span class="dr_name">'+record['name']+'</span> <a class="btn btn-xs btn-success pull-right" data-toggle="modal" data-target="#vehicle_md">Vehicles</a>' ,'<a class="btn btn-sm btn-primary edit" data-toggle="modal" data-target="#edit-driver"><i class="fa fa-pencil"></i> Edit</a>', '<a data-id="del-driver" data-toggle="modal" data-target="#confirm_modal" class="btn btn-sm btn-danger del-driver"><i class="fa fa-trash"></i> Delete</a>', record['id_transport'] ] ).draw().node();
+                  var rowNode = table.row.add( ['', '<span class="dr_name">'+record['name']+'</span> <a class="btn btn-xs btn-success pull-right" data-toggle="modal" data-target="#vehicle_md">Vehicles<span class="badge">0</span></a>' ,'<a class="btn btn-sm btn-primary edit" data-toggle="modal" data-target="#edit-driver"><i class="fa fa-pencil"></i> Edit</a>', '<a data-id="del-driver" data-toggle="modal" data-target="#confirm_modal" class="btn btn-sm btn-danger del-driver"><i class="fa fa-trash"></i> Delete</a>', record['id_transport'] ] ).draw().node();
                     $(rowNode).attr( {'data-id':record['id_transport'], 'class':'driver' } );
                     
+                  //var table = dataTableConfiguration();
                 }
                 notify(data[1], data[2]);
               }
               // if operation fail
               else {
-                notify('Driver not updated. Try again','error');
+                notify('Transport Supplier not updated. Try again','error');
               }
             },
             error:function(){
-              notify('Driver not updated. Try again','error');
+              notify('Transport Supplier not updated. Try again','error');
             }
           }); // end of ajax
         } // end of outer if
         else { // if input is empty
-            notify('Driver Name is Required','error');
+            notify('Transport Supplier Name is Required','error');
         }
      }) // end of save tour click function
 
@@ -175,6 +150,85 @@
           }
       });// end of ajax
     })
+
+       // on close vehicle_md modal
+      $('#vehicle_md').on('hidden.bs.modal', function (e) { 
+        $('.vehicle-list').empty();
+      })
+
+       // select2 place holder search by status
+    $('#search_by_vehicle').select2({
+       placeholder: "Search By Vehicle",
+        allowClear: true
+    }); 
+      // search by vehicle 
+    $('#search_by_vehicle').on('select2:select', function(e){
+        var transportId=$(this).val();
+        if(transportId!='' && transportId!='0'){
+           $.ajax({
+              url:"<?=base_url('driver/getDriverByVehicle')?>",
+              type:"POST",
+              data:{transportId:transportId},
+              beforeSend:function(){},
+              success:function(data){
+                  $('.driverslist').html(data);
+                  table = dataTableConfiguration();
+              },
+              error:function(){
+                notify('Error Occur. Try again','error');
+              }
+          });// end of ajax
+        }
+    })
+
+
+    // on unselect vehicle search 
+    $('#search_by_vehicle').on('select2:unselect', function(e){
+           $.ajax({
+              url:"<?=base_url('driver/getDriverByVehicle')?>",
+              beforeSend:function(){},
+               success:function(data){
+                  $('.driverslist').html(data);
+                  table = dataTableConfiguration();
+              },
+              error:function(){
+                notify('Error Occur. Try again','error');
+              }
+          });// end of ajax
+    })
+
+
+    function dataTableConfiguration(){
+      var table=$("#data_list").DataTable({
+      columnDefs: [
+                    /*{
+                      targets: 1,
+                      className: 'dr_name'
+                    },*/
+                    {
+                      targets: 2,
+                      className: 'text-center'
+                    },
+                    {
+                      targets: 3,
+                      className: 'text-center'
+                    },
+                    {
+                      targets: 4,
+                      className: 'hidden'
+                    }
+                  ],
+                  order:[[4, 'desc' ]]
+    }
+);
+    table.on( 'order.dt search.dt', function () {
+        table.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+            cell.innerHTML = i+1;
+        } );
+    } ).draw();
+
+    return table;
+    }
   });
-9   
+   
 </script>

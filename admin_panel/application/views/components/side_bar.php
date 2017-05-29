@@ -40,7 +40,7 @@
         </li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Operators/Supplier</span>
+            <i class="fa fa-building-o"></i> <span>Operators/Supplier</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -58,7 +58,7 @@
         </li>
         <li>
           <a href="<?=base_url('driver')?>">
-            <i class="fa fa-hdd-o" aria-hidden="true"></i> <span>Drivers</span>
+            <i class="fa fa-hdd-o" aria-hidden="true"></i> <span>Transport Supplier</span>
             <span class="pull-right-container">
               <small class="label pull-right bg-purple"><?=$this->counter['transport']? $this->counter['transport']:0?></small>
             </span>
@@ -74,7 +74,7 @@
         </li>
         <li class="treeview">
           <a href="#">
-            <i class="fa fa-dashboard"></i> <span>Flights</span>
+            <i class="fa fa-plane"></i> <span>Flights</span>
             <span class="pull-right-container">
               <i class="fa fa-angle-left pull-right"></i>
             </span>
@@ -90,14 +90,26 @@
             </span></a></li>
           </ul>
         </li>
-        <li>
-          <a href="<?=base_url('location')?>">
-            <i class="fa fa-location-arrow" aria-hidden="true"></i> <span>Locations <small>(Pickup/Dropoff)</small></span>
+
+        <li class="treeview">
+          <a href="#">
+            <i class="fa fa-location-arrow" aria-hidden="true"></i><span>Locations <small>(Pickup/Dropoff)</small></span>
             <span class="pull-right-container">
-              <small class="label pull-right bg-blue"><?=$this->counter['locations']? $this->counter['locations']:0?></small>
+              <i class="fa fa-angle-left pull-right"></i>
             </span>
           </a>
+          <ul class="treeview-menu">
+            <li class="active"><a href="<?=base_url('location')?>"><i class="fa fa-circle-o"></i><span> Locations </span>
+            <span class="pull-right-container">
+              <small class="label pull-right bg-purple"><?=$this->counter['locations']? $this->counter['locations']:0?></small>
+            </span></a></li>
+            <li><a href="<?=base_url('roomtype')?>"><i class="fa fa-circle-o"></i><span> Room Types</span> 
+            <span class="pull-right-container">
+              <small class="label pull-right bg-green"><?=$this->counter['roomtypes']? $this->counter['roomtypes']:0?></small>
+            </span></a></li>
+          </ul>
         </li>
+
       </ul>
     </section>
     <!-- /.sidebar -->

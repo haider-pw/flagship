@@ -37,7 +37,7 @@ function countRecords(){
 	$ci=&get_instance();
 	$ci->load->model('Cruise_model');
 	$ci->load->model('Common_model');
-	$users=$operators=$vehicles=$flights=$locations=$transport=$activeUsers=$fl_class=$suppliers=$modes=0;
+	$users=$operators=$vehicles=$flights=$locations=$transport=$activeUsers=$fl_class=$suppliers=$modes=$roomtypes=0;
 	//  count total users count
 	$activeUsers=$ci->Cruise_model->count_all_rows('users', array('active'=>'y'));
 	// count active users
@@ -78,6 +78,10 @@ function countRecords(){
 	$tbl=$ci->session->userdata('prefix').'transporttype';	
 	if(in_array($tbl, $tableList)){
 		$modes=$ci->Common_model->count_all_rows($tbl);
+	}    
+	$tbl=$ci->session->userdata('prefix').'roomtypes';	
+	if(in_array($tbl, $tableList)){
+		$roomtypes=$ci->Common_model->count_all_rows($tbl, null, 'room_type');
 	} 
 	$data=array(
 		'users'=>$users,
@@ -89,7 +93,8 @@ function countRecords(){
 		'activeUsers'=>$activeUsers,
 		'fl_class'=>$fl_class,
 		'suppliers'=>$suppliers,
-		'modes'=>$modes
+		'modes'=>$modes,
+		'roomtypes'=>$roomtypes
 		);
 	return $data;
 }

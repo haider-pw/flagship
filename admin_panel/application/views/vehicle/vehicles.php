@@ -26,18 +26,18 @@
                 <div class="row">
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Vehicle Name</label>
+                            <label>Vehicle Number</label>
                             <!-- <select class="form-control select2 vehicle-list" style="width: 100%;">
                             </select> -->
-                            <input type="text" id="search_by_vehicle" class="form-control " placeholder="Search By Name">
+                            <input type="text" id="search_by_vehicle" class="form-control " placeholder="Search By Vehicle Number">
                         </div><!-- /.form-group -->
                     </div><!-- /.col -->
                     <div class="col-md-3">
                         <div class="form-group">
-                            <label>Driver Name</label>
+                            <label>Transport Supplier</label>
                             <!-- <select class="form-control drivers-list select2" style="width: 100%;" tabindex="-1" aria-hidden="true">
                             </select> -->
-                            <input type="text" id="search_by_driver" class="form-control " placeholder="Search By Name">
+                            <input type="text" id="search_by_driver" class="form-control " placeholder="Search By Transport Supplier">
                         </div><!-- /.form-group -->
                     </div><!-- /.col -->
                 </div>
@@ -58,8 +58,8 @@
                 <tr>
                   <th>S.No</th>
                   <th></th>
-                  <th>Name</th>
-                  <th>Driver</th>
+                  <th>Vehicle</th>
+                  <th>Transport Supplier</th>
                   <th class="text-center">Edit</th>
                   <th class="text-center">Delete</th>
                 </tr>
@@ -102,9 +102,9 @@
       </div>
       <div class="modal-body col-md-12">
           <div class="col-md-12">
-            <label>Vehicle Name:</label>
+            <label>Vehicle Number:</label>
             <input type="text" class="form-control vehicle_name" value="" />
-            <label>Select Driver:</label>
+            <label>Select Transport Supplier:</label>
             <select class="form-control select2 transporter" style="width: 100%;">
                 <?php 
                   foreach($transporters as $transporter) {

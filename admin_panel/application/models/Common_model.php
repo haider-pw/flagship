@@ -47,7 +47,7 @@ class Common_model extends CI_Model
                 $this->db->order_by($order_by);
             }
         }
-        $query = $this->db->get($tbl);print_r($this->db->last_query());
+        $query = $this->db->get($tbl);
         //return $this->db->last_query();
         if ($query) {
             if ($single == TRUE) {
@@ -503,6 +503,7 @@ class Common_model extends CI_Model
         if($group_by != ''){
             $this->datatables->group_by($group_by);
         }
+        
         if ($addColumn != '') {
             foreach($addColumn as $columnKey=>$columnValue ) {
                 if(!is_array($columnValue) && is_string($columnValue)){
@@ -653,11 +654,13 @@ class Common_model extends CI_Model
     }
     //End of Common DataTables Queries
 
-    public function count_all_rows($tbl, $where=null){
+    public function count_all_rows($tbl, $where=null, $group_by=null){
         $this->db->select('*');
         $this->db->from($tbl);
         if(!empty($where))
             $this->db->where($where);
+        if(!empty($group_by))
+            $this->db->group_by($group_by);
         return $this->db->count_all_results();
     }
 

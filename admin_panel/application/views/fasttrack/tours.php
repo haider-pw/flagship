@@ -56,7 +56,9 @@
           <div class="col-md-12">
             <label>Operator Name:</label>
             <input type="text" class="form-control op_name" value="" />
-            <input type="hidden" value="" class="op_id">
+            <input type="hidden" value="" class="op_id"><br>
+            <label>Amount in Dollar:</label>
+            <input type="text" class="form-control amount" value="" />
           </div>
       </div>
       <div class="modal-footer col-md-12">

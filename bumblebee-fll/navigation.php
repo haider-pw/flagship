@@ -63,13 +63,26 @@ if ($ft_count > 0){
 <li class="xn-openable"><!-- Reports dropdown -->
             <a href="#"><span class="fa fa-bar-chart-o"></span> <span class="xn-text">Reports</span></a>
             <ul>
-                <li><a href="transport-queue.php"><span class="fa fa-truck"></span> View Transport Queue</a></li>
-				<li><a href="transport-report.php"><span class="fa fa-truck"></span> Transport Report</a></li>
+                <li class="xn-openable"><!-- Reports dropdown -->
+                    <a href="#"><span class="fa fa-bar-chart-o"></span> <span class="xn-text"> Ground Handling</span></a>
+                    <ul>
+                        <li><a href="#"><span class="fa fa-truck"></span> All Reports (ad hocs)</a></li>
+                        <li><a href="#"><span class="fa fa-truck"></span> Cancellations</a></li>
+                    </ul>
+                </li>
+                <li class="xn-openable"><!-- Reports dropdown -->
+                    <a href="#"><span class="fa fa-bar-chart-o"></span> <span class="xn-text"> FSFT</span></a>
+                    <ul>
+                        <li><a href="#"><span class="fa fa-truck"></span> All Reports (ad hocs)</a></li>
+                        <li><a href="#"><span class="fa fa-truck"></span> Cancellations </a></li>
+                    </ul>
+                </li>
                 <li><a href="arrival-reconfirmation.php"><span class="glyphicon glyphicon-transfer"></span> Hotel Reconfirmation</a></li>
-				<li><a href="view-cancellations.php"><span class="fa fa-calendar"></span> View Cancellations</a></li>
-                <li><a href="bug-report.php"><span class="fa fa-bug"></span> Report a Bug</a></li>
+				<li><a href="view-cancellations.php"><span class="fa fa-calendar"></span>Cancellations</a></li>
             </ul>
         </li>
+
+ <li><a href="bug-report.php"><span class="fa fa-bug"></span> Report a Bug</a></li>
 <?php else: ?>
 <li hidden></li>
 <?php endif; ?>

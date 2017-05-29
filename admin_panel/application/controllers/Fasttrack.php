@@ -53,9 +53,10 @@ class Fasttrack extends MY_Controller {
 
 	// edit tour operator record -- call by ajax
 	public function saveOperator(){ 
-		if($this->input->post('op_name') and !empty($this->input->post('op_name'))){
+		if($this->input->post('op_name') and $this->input->post('amount') and !empty($this->input->post('op_name')) and !empty($this->input->post('amount'))){
 			$data=array(
-					'tour_operator'=>$this->input->post('op_name')
+					'tour_operator'=>$this->input->post('op_name'),
+					'amount'=>$this->input->post('amount')
 				);
 			$tbl=$this->session->userdata('prefix').'fsft_touroperator';
 			// update row where opId exist

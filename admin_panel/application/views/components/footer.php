@@ -28,7 +28,7 @@
 <!-- show bar chart -->
 <script>
 var areaChartData = {
-    labels: ["Transport", "Modes", "Flights", "Classes", "Times", "Suppliers" ],
+    labels: ["Transport", "Modes", "Flights", "Classes", "Locations", "Room Types" ],
     datasets: [
         {
             label: "My First dataset",
@@ -49,7 +49,7 @@ var areaChartData = {
                 'rgba(255, 159, 64, 1)'
             ],
             borderWidth: 1,
-            data: ['<?=$this->counter["transport"]?>','<?=$this->counter["modes"]?>','<?=$this->counter["flights"]?>','<?=$this->counter["fl_class"]?>','<?=$this->counter["users"]?>','<?=$this->counter["suppliers"]?>']
+            data: ['<?=$this->counter["transport"]?>','<?=$this->counter["modes"]?>','<?=$this->counter["flights"]?>','<?=$this->counter["fl_class"]?>','<?=$this->counter["locations"]?>','<?=$this->counter["roomtypes"]?>']
         }
     ]
 };
@@ -118,7 +118,7 @@ var barChartCanvas = $("#barChart").get(0).getContext("2d");
     data: [
       {label: "Users", value: <?=$this->counter['users']? $this->counter['users']:0?>},
       {label: "Operators", value: <?=$this->counter['operators']? $this->counter['operators']:0?>},
-      {label: "Drivers", value: <?=$this->counter['transport']? $this->counter['transport']:0?>},
+      {label: "Transport Suppliers", value: <?=$this->counter['transport']? $this->counter['transport']:0?>},
       {label: "Vehicles", value: <?=$this->counter['vehicles']? $this->counter['vehicles']:0?>},
       {label: "Locations", value: <?=$this->counter['locations']? $this->counter['locations']:0?>},
       {label: "Flights", value: <?=$this->counter['flights']? $this->counter['flights']:0?>}
@@ -171,6 +171,10 @@ if(strtolower($this->router->fetch_class().'/'.$this->router->fetch_method())=='
 if(strtolower($this->router->fetch_class().'/'.$this->router->fetch_method())=='fasttrack/tourop' ) { 
   // php file containing js
   $this->load->view('fasttrack/tour_js');
+ }
+if(strtolower($this->router->fetch_class().'/'.$this->router->fetch_method())=='roomtype/index' ) { 
+  // php file containing js
+  $this->load->view('roomtype/roomtype_js');
  }  ?>
 <!-- Slimscroll -->
 <script src="<?=base_url('assets')?>/plugins/slimScroll/jquery.slimscroll.min.js"></script>

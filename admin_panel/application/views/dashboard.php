@@ -137,7 +137,7 @@
                 <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
                   <input type="text" class="knob" data-readonly="true" value="<?=$this->counter['transport']? $this->counter['transport']:0?>" data-width="60" data-height="60" data-fgColor="#39CCCC">
 
-                  <div class="knob-label">Drivers</div>
+                  <div class="knob-label">Transport Supplier</div>
                 </div>
                 <!-- ./col -->
                 <div class="col-xs-4 text-center" style="border-right: 1px solid #f4f4f4">
