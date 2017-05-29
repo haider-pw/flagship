@@ -193,7 +193,7 @@
 	   */
       public function checkStatus($username, $pass)
       {
-
+          
           $username = sanitize($username);
           $username = self::$db->escape($username);
           $pass = sanitize($pass);
@@ -207,7 +207,6 @@
 
           $row = self::$db->fetch($result);
           $entered_pass = md5($pass);
-
           switch ($row->active) {
               case "b":
                   return 1;
