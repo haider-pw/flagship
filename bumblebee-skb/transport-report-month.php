@@ -6,7 +6,8 @@
       redirect_to("index.php");
       
   $row = $user->getUserData();
-?> 
+?>
+
 <?php
 /**
  * @author Alvin Herbert

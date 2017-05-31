@@ -58,7 +58,7 @@ site_header('Add Reservations');
     <div class="page-content-wrap">
         <div class="row">
             <div class="col-md-12">
-                <form id="add-reservations" class="form-horizontal" method="post" action="<?php $_PHP_SELF ?>">
+                <form id="adhocReportForm" class="form-horizontal" method="post" action="<?php $_PHP_SELF ?>">
                     <div class="panel panel-default">
                         <div class="panel-heading">
                             <h3 class="panel-title"><strong>Create Ad-hoc Report</strong></h3>
@@ -77,169 +77,149 @@ site_header('Add Reservations');
                                 <div class="col-md-8">
                                     <div class="row">
                                         <div class="col-sm-6 col-xs-12 marginBotBox" >
-                                            <h4><strong>Personal Information</strong></h4>
+                                            <h4><strong>Passenger Information</strong></h4>
                                             <label for="selectAllPersonalInformation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllPersonalInformationCheckbox">Select All</label>
                                             <ul class="list-group">
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="title"/>
-                                                    <strong>Title</strong>
+                                                    <label for="title"><input type="checkbox" value="1" id="title" name="R.title_name"/> Title</label>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="fname"/>
-                                                    <strong>First Name</strong>
+                                                    <label for="firstName"><input type="checkbox" value="1" id="firstName" name="R.first_name"/> First Name</label>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="lname"/>
-                                                    <strong>Last Name</strong>
+                                                    <label for="lastName"><input type="checkbox" value="1" id="lastName" name="R.last_name"/>Last Name</label>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="dob"/>
-                                                    <strong>DOB</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="badge_fname"/>
-                                                    <strong>Badge: First Name</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="badge_lname"/>
-                                                    <strong>Badge: Last Name</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="gender"/>
-                                                    <strong>Gender</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="shirt_size"/>
-                                                    <strong>TShirt size</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="birth_country"/>
-                                                    <strong>Birth Country</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="home_tel"/>
-                                                    <strong>Home Tel</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="work_tel"/>
-                                                    <strong>Work Tel</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="cell"/>
-                                                    <strong>Cell</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="primary_email"/>
-                                                    <strong>Primary Email</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="second_email"/>
-                                                    <strong>2nd Email</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="address_1"/>
-                                                    <strong>Address 1</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="address_2"/>
-                                                    <strong>Address 2</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="city"/>
-                                                    <strong>City</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="citystate"/>
-                                                    <strong>CityState/Parish</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="city_zip"/>
-                                                    <strong>CityZip</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="city_country"/>
-                                                    <strong>CityCountry</strong>
+                                                    <label for="PNR"><input type="checkbox" value="1" id="PNR" name="R.pnr"/>Passenger Name Record (PNR)</label>
                                                 </li>
                                             </ul>
                                         </div>
                                         <div class="col-sm-6 col-xs-12 marginBotBox" >
-                                            <h4><strong>Emergency, Medical, Dietary</strong></h4>
-                                            <label for="selectAllMed"><input type="checkbox" class="selectAllCheckboxes" id="selectAllMed">Select All</label>
+                                            <h4><strong>Arrivals Information</strong></h4>
+                                            <label for="selectAllArrivalsInformation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllArrivalsInformation">Select All</label>
                                             <ul class="list-group">
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="emer_cont_name"/>
-                                                    <strong>Emerg Contact Name</strong>
+                                                    <strong>Date</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="emery_home_tel"/>
-                                                    <strong>Emerg Contact Home Tel</strong>
+                                                    <strong>Time</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="emerg_work_tel"/>
-                                                    <strong>Emerg Contact Work Tel</strong>
+                                                    <strong>Flight No</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="emerg_cell"/>
-                                                    <strong>Emerg Contact Cell</strong>
+                                                    <strong>Flight Class</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="dr_name"/>
-                                                    <strong>Dr Name</strong>
+                                                    <strong>Transport</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="dr_tel"/>
-                                                    <strong>Dr Tel</strong>
+                                                    <strong>Driver</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="medical"/>
-                                                    <strong>Medical Conditions</strong>
+                                                    <strong>Vehicle</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="rx_medication"/>
-                                                    <strong>RX Medication</strong>
+                                                    <strong>Pickup</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="food_not_allow"/>
-                                                    <strong>Cannot Eat Following Food</strong>
+                                                    <strong>Dropoff</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="food_not_prefer"/>
-                                                    <strong>Prefer Not To Eat</strong>
+                                                    <strong>Room Type</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="diabetic"/>
-                                                    <strong>Diabetic</strong>
+                                                    <strong>Rep Type</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="hypertension"/>
-                                                    <strong>Hypertension</strong>
+                                                    <strong>Client Reqs</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="vegetarian"/>
-                                                    <strong>Vegetarian</strong>
+                                                    <strong>TransPort Notes</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="veg_and_fish"/>
-                                                    <strong>Veg but eat Fish/Chick</strong>
+                                                    <strong>Hotel Notes</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="lactose_intollerant"/>
-                                                    <strong>Lactose Intollerant</strong>
+                                                    <strong>Infant Seats</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="glueten_intollerant"/>
-                                                    <strong>Glueten Intollerant</strong>
+                                                    <strong>Child Seats</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="special_occasion"/>
-                                                    <strong>Special Occasion</strong>
+                                                    <strong>Booster Seats</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Vouchers</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Cold Towel</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Water Bottles</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Rooms</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Room No</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Main</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Luggage Vehicle</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Excursion Name</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Excursion Date</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Excursion Confirm By</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Excursion Confirm Date</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="special_occasion"/>
+                                                    <strong>Room Last Name</strong>
                                                 </li>
                                             </ul>
                                         </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-sm-6 col-xs-12 marginBotBox">
-                                            <h4><strong>Flight Accommodation</strong></h4>
+                                            <h4><strong>Arrivals Information</strong></h4>
                                             <label for="selectAllFlightAccomodation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllFlightAccomodation">Select All</label>
                                             <ul class="list-group">
                                                 <li class="list-group-item">
@@ -289,7 +269,7 @@ site_header('Add Reservations');
                                             </ul>
                                         </div>
                                         <div class="col-sm-6 col-xs-12 marginBotBox">
-                                            <h4><strong>Passport Information</strong></h4>
+                                            <h4><strong>Reservation Information</strong></h4>
                                             <label for="selectAllPassportInformation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllPassportInformation">Select All</label>
                                             <ul class="list-group">
                                                 <li class="list-group-item">
@@ -327,7 +307,7 @@ site_header('Add Reservations');
                                             </ul>
                                         </div>
                                         <div class="col-sm-6 col-xs-12 marginBotBox">
-                                            <h4><strong>Activities</strong></h4>
+                                            <h4><strong>Guests Information</strong></h4>
                                             <label for="selectAllActivities"><input type="checkbox" class="selectAllCheckboxes" id="selectAllActivities">Select All</label>
                                             <ul class="list-group">
                                                 <li class="list-group-item">
@@ -613,6 +593,7 @@ site_header('Add Reservations');
 <!--Select2-->
 <script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
 <!-- END TEMPLATE -->
+<script type="text/javascript" src="js/jquery.redirect.js"></script>
 
 <script type="text/javascript">
     $(function(){
@@ -629,7 +610,12 @@ site_header('Add Reservations');
         });
 
         $('#generateReportBtn').on('click',function(){
-            console.log('generate Button Has Been Clicked.');
+            //Getting All Inputs.
+        var formData =   $('#adhocReportForm').serializeArray();
+        var postURL = '<?=$url?>/reports/adhoc-generate.php';
+        //Just Redirect it.
+        $.redirect(postURL,formData,'POST','_blank');
+
         });
     });
 </script>
