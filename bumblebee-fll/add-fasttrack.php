@@ -1874,11 +1874,11 @@ if (isset($_POST['addreservation'])) {
                                     <!-- changes -->
                                     <br><br>
                                          <span class="adult_count">0</span> Adults @ 
-                                        <input type="number" min=0 max=23 class="left20 form-control" id="price"
+                                        <input type="number" min=0 class="left20 form-control" id="price"
                                                name="supplier_price" placeholder="Price">&nbsp;  &nbsp;
                                                =
                                         <input type="text" class="left20 form-control" id="total_amount"
-                                               name="total_amount"  placeholder="Total Amount" readonly> 
+                                               name="total_amount"  placeholder="Total Amount" readonly style="background-color:white"> 
                                     </div>
                                 </div>
                                 <div>
@@ -2353,6 +2353,16 @@ $('.clientReqs').select2();
             var total_amount = adultCount * price;
             $('#total_amount').val(total_amount);
        }
+     })
+
+     // on price change by user , calculate result again
+     $('#price').on('change',function(e){
+        var price = $(this).val();
+        var adultCount =  $('.adult_count').html();
+        if (price>=0 && adultCount>=0) {
+            var total_amount = adultCount * price;
+            $('#total_amount').val(total_amount);
+        } // end of if
      })
 </script>
         <?php // to add supplier 
