@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e74e979a-2550-47f3-9dda-c52c72df005e" name="Default" comment="" />
+    <list default="true" id="e74e979a-2550-47f3-9dda-c52c72df005e" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+    </list>
     <ignored path="flights_project.iws" />
     <ignored path=".idea/workspace.xml" />
     <ignored path=".idea/dataSources.local.xml" />
@@ -27,51 +29,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="33337">
               <caret line="1961" column="34" selection-start-line="1961" selection-start-column="34" selection-end-line="1961" selection-end-column="34" />
-              <folding>
-                <element signature="n#style#0;n#a#0;n#div#2;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-                <marker date="1494848199846" expanded="true" signature="23309:23727" placeholder="INSERT INTO fll_guest... " />
-                <marker date="1494848199846" expanded="true" signature="23939:24748" placeholder="INSERT INTO fll_arrivals... " />
-                <marker date="1494848199846" expanded="true" signature="25796:25995" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="26387:26597" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="27035:27245" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="27679:27889" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="28056:28266" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="28432:28641" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="28877:29656" placeholder="INSERT INTO fll_arrivals... " />
-                <marker date="1494848199846" expanded="true" signature="30900:31107" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="31636:31854" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="32378:32596" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="33042:33260" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="33706:33924" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="34370:34588" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="35080:35860" placeholder="INSERT INTO fll_arrivals... " />
-                <marker date="1494848199846" expanded="true" signature="36994:37201" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="37575:37793" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="38238:38456" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="38901:39119" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="39564:39782" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="40227:40445" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="40937:41716" placeholder="INSERT INTO fll_arrivals... " />
-                <marker date="1494848199846" expanded="true" signature="42864:43071" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="43445:43663" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="44108:44326" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="44771:44989" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="45434:45652" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="46097:46315" placeholder="INSERT INTO fll_arrivals_rooms... " />
-                <marker date="1494848199846" expanded="true" signature="46856:47339" placeholder="INSERT INTO fll_departures... " />
-                <marker date="1494848199846" expanded="true" signature="47518:48021" placeholder="INSERT INTO fll_departures... " />
-                <marker date="1494848199846" expanded="true" signature="48216:48680" placeholder="INSERT INTO fll_departures... " />
-                <marker date="1494848199846" expanded="true" signature="48875:49339" placeholder="INSERT INTO fll_departures... " />
-                <marker date="1494848199846" expanded="true" signature="49535:49880" placeholder="INSERT INTO fll_transfer... " />
-                <marker date="1494848199846" expanded="true" signature="50052:50405" placeholder="INSERT INTO fll_transfer... " />
-                <marker date="1494848199846" expanded="true" signature="50577:50930" placeholder="INSERT INTO fll_transfer... " />
-                <marker date="1494848199846" expanded="true" signature="51102:51455" placeholder="INSERT INTO fll_transfer... " />
-                <marker date="1494848199846" expanded="true" signature="51621:52222" placeholder="INSERT INTO fll_resdrivers... " />
-                <marker date="1494848199846" expanded="true" signature="52353:52957" placeholder="INSERT INTO fll_resdrivers... " />
-                <marker date="1494848199846" expanded="true" signature="53070:54671" placeholder="INSERT INTO fll_reservations... " />
-                <marker date="1494848199846" expanded="true" signature="54751:54881" placeholder="INSERT INTO fll_activity... " />
-                <marker date="1494848199846" expanded="true" signature="80211:83338" placeholder="..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -92,8 +50,8 @@
       <file leaf-file-name="Fasttrack.php" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/admin_panel/application/controllers/Fasttrack.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="0">
-              <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+            <state relative-caret-position="289">
+              <caret line="17" column="46" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
               <folding />
             </state>
           </provider>
@@ -104,10 +62,7 @@
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="170">
               <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="40" />
-              <folding>
-                <marker date="1493356478181" expanded="true" signature="149:211" placeholder="SELECT * FRO... fll_fsft_touroperator" />
-                <marker date="1493356478181" expanded="true" signature="317:356" placeholder="..." />
-              </folding>
+              <folding />
             </state>
           </provider>
         </entry>
@@ -133,6 +88,9 @@
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
@@ -205,134 +163,22 @@
     </navigator>
     <panes>
       <pane id="Scratches" />
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
             <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
+              <option name="myItemId" value="flagship_project" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin_panel" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin_panel" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin_panel" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin_panel" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="views" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="fasttrack" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="flights_project" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="admin_panel" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="application" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="controllers" />
-              <option name="myItemType" value="com.jetbrains.php.projectView.PhpTreeStructureProvider$1" />
             </PATH_ELEMENT>
           </PATH>
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../pos" />
+    <property name="last_opened_file_path" value="D:/pos" />
     <property name="js-jscs-nodeInterpreter" value="D:\nodejs\node.exe" />
   </component>
   <component name="RecentsManager">
@@ -394,17 +240,18 @@
       <workItem from="1494307437045" duration="87000" />
       <workItem from="1494843203847" duration="1902000" />
       <workItem from="1495016630147" duration="143000" />
+      <workItem from="1496343329743" duration="194000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="18836000" />
+    <option name="totallyTimeSpent" value="19030000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="0" />
-    <editor active="false" />
+    <editor active="true" />
     <layout>
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24963397" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.24963397" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
@@ -771,10 +618,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="170">
           <caret line="13" column="33" selection-start-line="13" selection-start-column="33" selection-end-line="13" selection-end-column="40" />
-          <folding>
-            <marker date="1493356478181" expanded="true" signature="149:211" placeholder="SELECT * FRO... fll_fsft_touroperator" />
-            <marker date="1493356478181" expanded="true" signature="317:356" placeholder="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -782,51 +626,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="33337">
           <caret line="1961" column="34" selection-start-line="1961" selection-start-column="34" selection-end-line="1961" selection-end-column="34" />
-          <folding>
-            <element signature="n#style#0;n#a#0;n#div#2;n#div#0;n#form#0;n#div#0;n#div#0;n#div#0;n#div#0;n#!!top" expanded="true" />
-            <marker date="1494848199846" expanded="true" signature="23309:23727" placeholder="INSERT INTO fll_guest... " />
-            <marker date="1494848199846" expanded="true" signature="23939:24748" placeholder="INSERT INTO fll_arrivals... " />
-            <marker date="1494848199846" expanded="true" signature="25796:25995" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="26387:26597" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="27035:27245" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="27679:27889" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="28056:28266" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="28432:28641" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="28877:29656" placeholder="INSERT INTO fll_arrivals... " />
-            <marker date="1494848199846" expanded="true" signature="30900:31107" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="31636:31854" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="32378:32596" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="33042:33260" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="33706:33924" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="34370:34588" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="35080:35860" placeholder="INSERT INTO fll_arrivals... " />
-            <marker date="1494848199846" expanded="true" signature="36994:37201" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="37575:37793" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="38238:38456" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="38901:39119" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="39564:39782" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="40227:40445" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="40937:41716" placeholder="INSERT INTO fll_arrivals... " />
-            <marker date="1494848199846" expanded="true" signature="42864:43071" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="43445:43663" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="44108:44326" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="44771:44989" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="45434:45652" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="46097:46315" placeholder="INSERT INTO fll_arrivals_rooms... " />
-            <marker date="1494848199846" expanded="true" signature="46856:47339" placeholder="INSERT INTO fll_departures... " />
-            <marker date="1494848199846" expanded="true" signature="47518:48021" placeholder="INSERT INTO fll_departures... " />
-            <marker date="1494848199846" expanded="true" signature="48216:48680" placeholder="INSERT INTO fll_departures... " />
-            <marker date="1494848199846" expanded="true" signature="48875:49339" placeholder="INSERT INTO fll_departures... " />
-            <marker date="1494848199846" expanded="true" signature="49535:49880" placeholder="INSERT INTO fll_transfer... " />
-            <marker date="1494848199846" expanded="true" signature="50052:50405" placeholder="INSERT INTO fll_transfer... " />
-            <marker date="1494848199846" expanded="true" signature="50577:50930" placeholder="INSERT INTO fll_transfer... " />
-            <marker date="1494848199846" expanded="true" signature="51102:51455" placeholder="INSERT INTO fll_transfer... " />
-            <marker date="1494848199846" expanded="true" signature="51621:52222" placeholder="INSERT INTO fll_resdrivers... " />
-            <marker date="1494848199846" expanded="true" signature="52353:52957" placeholder="INSERT INTO fll_resdrivers... " />
-            <marker date="1494848199846" expanded="true" signature="53070:54671" placeholder="INSERT INTO fll_reservations... " />
-            <marker date="1494848199846" expanded="true" signature="54751:54881" placeholder="INSERT INTO fll_activity... " />
-            <marker date="1494848199846" expanded="true" signature="80211:83338" placeholder="..." />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -843,8 +643,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/admin_panel/application/controllers/Fasttrack.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+        <state relative-caret-position="289">
+          <caret line="17" column="46" selection-start-line="17" selection-start-column="46" selection-end-line="17" selection-end-column="46" />
           <folding />
         </state>
       </provider>
