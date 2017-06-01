@@ -1,6 +1,6 @@
 <?php
 //Pre Defined Settings.
-
+session_start();
 
 
 $start=0;
@@ -8,51 +8,37 @@ $limit=25;
 
 if(isset($_GET['id']))
 {
-$id=$_GET['id'];
-$start=($id-1)*$limit;
+    $id=$_GET['id'];
+    $start=($id-1)*$limit;
 }
 else {
     $id=1;
 }
 
-  
+
 if(empty($_POST)){
     //Just Return him back to his previous page. with some message.
-    $_POST = $_SESSION['adhoc_report'];
+    if(isset($_SESSION['adhoc_report']))
+        $_POST = $_SESSION['adhoc_report'];
 } else {
     $_SESSION['adhoc_report'] = $_POST;
 }
-<<<<<<< HEAD
 /*echo '<pre>';
 var_dump($_POST);
 echo '</pre>';*/
 ini_set('memory_limit', '934217759');
 
-    $postItems = [];
-    foreach($_POST as $postedItem){
-        if(!empty($postedItem['value'])){
-            $explodeAlias = explode('::', $postedItem['name']);
-            $postedItemArray = explode('.',$explodeAlias[0]);
-            //$postedItemArray = explode('.',$postedItem['name']);
-            $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`'.' as '. $explodeAlias[1];
-            $postItems[] = $postedItemBackTicks;
-=======
+$postItems = [];
+foreach($_POST as $postedItem){
+    if(!empty($postedItem['value'])){
+        $explodeAlias = explode('::', $postedItem['name']);
+        $postedItemArray = explode('.',$explodeAlias[0]);
+        //$postedItemArray = explode('.',$postedItem['name']);
+        $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`'.' as '. $explodeAlias[1];
+        $postItems[] = $postedItemBackTicks;
+    }//End of If Statement
+}//End of Foreach Statement.
 
-$reportName = '';
-    $postItems = [];
-    foreach($_POST as $postedItem){
-        if(!empty($postedItem['value'])){
-            if($postedItem['name'] === 'reportName'){
-                $reportName = $postedItem['value'];
-            }else{
-                $postedItemArray = explode('.',$postedItem['name']);
-                $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`';
-                $postItems[] = $postedItemBackTicks;
-            }
->>>>>>> 5e9e93524bd9ca0c2bb3a3a40dc601c79d387077
-        }//End of If Statement
-    }//End of Foreach Statement.
-  
 function selectData($postItems){
     if(empty($postItems)){
         return false;
@@ -68,7 +54,6 @@ function selectData($postItems){
     }
     return implode(',', $selectData);
 }
-
 
 $query = 'SELECT ';
 
@@ -109,12 +94,9 @@ if(!empty($queryResource)){
 if(isset($TotalRows) and $TotalRows > 0){
     // output data of each row
     $resultData = [];
-    
+
     while($row = mysqli_fetch_assoc($queryResource)) {
-<<<<<<< HEAD
-      
-=======
->>>>>>> 5e9e93524bd9ca0c2bb3a3a40dc601c79d387077
+
         $resultData[] = $row;
     }
     if(!empty($resultData)){
@@ -126,23 +108,6 @@ if(isset($TotalRows) and $TotalRows > 0){
         },$columns);
     }
 }else{
-    echo $query;
-    echo '<br />';
     echo 'No Record Found';
 }
 mysqli_close($conn);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
