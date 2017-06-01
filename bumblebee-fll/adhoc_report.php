@@ -66,8 +66,8 @@ echo '</pre>'; exit;*/
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Arrival & Departure Schedules</h3>
-                                    <a href="reports/adhoc_pdf.php?excel" class="pull-right btn btn-success export_pdf">Export Excel</a>
-                                    <a href="reports/adhoc_pdf.php?pdf" style="margin-right: 5px;" class="pull-right btn btn-success export_pdf">Export Pdf</a>
+                                    <a href="reports/adhoc_excel.php?all" class="pull-right btn btn-success export_pdf">Export Excel</a>
+                                    <a href="reports/adhoc_pdf.php?all" style="margin-right: 5px;" class="pull-right btn btn-success export_pdf">Export Pdf</a>
 
                                 </div>
                                 <div class="panel-body table-responsive">

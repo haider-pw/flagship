@@ -9,14 +9,14 @@ $limit=25;
 
 if(isset($_GET['id']))
 {
-    $id=$_GET['id'];
-    $start=($id-1)*$limit;
+$id=$_GET['id'];
+$start=($id-1)*$limit;
 }
 else {
     $id=1;
 }
 
-
+  
 if(empty($_POST)){
     //Just Return him back to his previous page. with some message.
     if(isset($_SESSION['adhoc_report']))
@@ -27,8 +27,8 @@ if(empty($_POST)){
 /*echo '<pre>';
 var_dump($_POST);
 echo '</pre>';*/
-ini_set('memory_limit', '934217759');
-
+ini_set('memory_limit', '-1');
+ini_set('max_execution_time', 0);
     $postItems = [];
     foreach($_POST as $postedItem){
         if(!empty($postedItem['value'])){
@@ -81,7 +81,7 @@ $conn = mysqli_connect('localhost','root','chocolate','cocoa_fll');
 
 $sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
 
-if(!isset($_REQUEST['pdf']))
+if(!isset($_REQUEST['all']))
     $query .= ' LIMIT  '.$start.', '.$limit;
 
 
@@ -98,7 +98,7 @@ if(!empty($queryResource)){
 if(isset($TotalRows) and $TotalRows > 0){
     // output data of each row
     $resultData = [];
-
+    
     while($row = mysqli_fetch_assoc($queryResource)) {
       
         $resultData[] = $row;
@@ -115,3 +115,18 @@ if(isset($TotalRows) and $TotalRows > 0){
     echo 'No Record Found';
 }
 mysqli_close($conn);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
