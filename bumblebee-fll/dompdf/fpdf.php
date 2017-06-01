@@ -72,7 +72,7 @@ protected $PDFVersion;         // PDF version number
 *******************************************************************************/
 
 function __construct($orientation='P', $unit='mm', $size='A4')
-{
+{ 
 	// Some checks
 	$this->_dochecks();
 	// Initialization of properties
@@ -130,7 +130,6 @@ function __construct($orientation='P', $unit='mm', $size='A4')
 		'letter'=>array(612,792), 'legal'=>array(612,1008), 'custom'=>array(6800, 1008));
 
 	$size = $this->_getpagesize($size);
-	
 	$this->DefPageSize = $size;
 	$this->CurPageSize = $size;
 	// Page orientation
@@ -291,7 +290,7 @@ function Close()
 }
 
 function AddPage($orientation='', $size='', $rotation=0)
-{ $size = 'custom';
+{ // $size = 'custom';
 	// Start a new page
 	if($this->state==3)
 		$this->Error('The document is closed');
@@ -1083,7 +1082,8 @@ protected function _getpagesize($size)
 	else
 	{
 		if($size[0]>$size[1])
-			return array($size[1], $size[0]);
+			//return array($size[1], $size[0]);
+			return $size;
 		else
 			return $size;
 	}

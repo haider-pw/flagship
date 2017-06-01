@@ -1,7 +1,8 @@
 <?php
 //Pre Defined Settings.
-session_start();
-
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 $start=0;
 $limit=25;
@@ -28,17 +29,17 @@ var_dump($_POST);
 echo '</pre>';*/
 ini_set('memory_limit', '934217759');
 
-$postItems = [];
-foreach($_POST as $postedItem){
-    if(!empty($postedItem['value'])){
-        $explodeAlias = explode('::', $postedItem['name']);
-        $postedItemArray = explode('.',$explodeAlias[0]);
-        //$postedItemArray = explode('.',$postedItem['name']);
-        $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`'.' as '. $explodeAlias[1];
-        $postItems[] = $postedItemBackTicks;
-    }//End of If Statement
-}//End of Foreach Statement.
-
+    $postItems = [];
+    foreach($_POST as $postedItem){
+        if(!empty($postedItem['value'])){
+            $explodeAlias = explode('::', $postedItem['name']);
+            $postedItemArray = explode('.',$explodeAlias[0]);
+            //$postedItemArray = explode('.',$postedItem['name']);
+            $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`'.' as '. $explodeAlias[1];
+            $postItems[] = $postedItemBackTicks;
+        }//End of If Statement
+    }//End of Foreach Statement.
+  
 function selectData($postItems){
     if(empty($postItems)){
         return false;
@@ -80,7 +81,10 @@ $conn = mysqli_connect('localhost','root','chocolate','cocoa_fll');
 
 $sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
 
-$query .= ' LIMIT  '.$start.', '.$limit;
+if(!isset($_REQUEST['pdf']))
+    $query .= ' LIMIT  '.$start.', '.$limit;
+
+
 $queryResource = mysqli_query($conn,$query);
 /*$conn = mysql_connect('localhost','root','chocolate','cocoa_fll');
 $queryResource = mysql_query($query);*/
@@ -96,7 +100,7 @@ if(isset($TotalRows) and $TotalRows > 0){
     $resultData = [];
 
     while($row = mysqli_fetch_assoc($queryResource)) {
-
+      
         $resultData[] = $row;
     }
     if(!empty($resultData)){

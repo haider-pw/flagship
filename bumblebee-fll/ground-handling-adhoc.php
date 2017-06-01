@@ -70,8 +70,7 @@ site_header('Add Reservations');
                                     <label for="reportName">Report Name</label>
                                     <input type="text" class="form-control" id="reportName" name="reportName" />
                                 </div>
-                            </div>
-
+                            </div> 
                             <div class="row">
                                 <h4>Select Options</h4>
                                 <div class="col-md-8">
