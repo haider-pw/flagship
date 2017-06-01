@@ -7,15 +7,20 @@ if(empty($_POST)){
     //Just Return him back to his previous page. with some message.
 }
 
-
+$reportName = '';
     $postItems = [];
     foreach($_POST as $postedItem){
         if(!empty($postedItem['value'])){
-            $postedItemArray = explode('.',$postedItem['name']);
-            $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`';
-            $postItems[] = $postedItemBackTicks;
+            if($postedItem['name'] === 'reportName'){
+                $reportName = $postedItem['value'];
+            }else{
+                $postedItemArray = explode('.',$postedItem['name']);
+                $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`';
+                $postItems[] = $postedItemBackTicks;
+            }
         }//End of If Statement
     }//End of Foreach Statement.
+
 
 
 $query = 'SELECT ';
@@ -35,7 +40,6 @@ if(isset($TotalRows) and $TotalRows > 0){
     // output data of each row
     $resultData = [];
     while($row = mysqli_fetch_assoc($queryResource)) {
-
         $resultData[] = $row;
     }
     if(!empty($resultData)){
@@ -47,6 +51,8 @@ if(isset($TotalRows) and $TotalRows > 0){
         },$columns);
     }
 }else{
+    echo $query;
+    echo '<br />';
     echo 'No Record Found';
 }
 mysqli_close($conn);
