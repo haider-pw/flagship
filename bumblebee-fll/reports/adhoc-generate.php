@@ -22,6 +22,7 @@ if(empty($_POST)){
 } else {
     $_SESSION['adhoc_report'] = $_POST;
 }
+<<<<<<< HEAD
 /*echo '<pre>';
 var_dump($_POST);
 echo '</pre>';*/
@@ -35,6 +36,20 @@ ini_set('memory_limit', '934217759');
             //$postedItemArray = explode('.',$postedItem['name']);
             $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`'.' as '. $explodeAlias[1];
             $postItems[] = $postedItemBackTicks;
+=======
+
+$reportName = '';
+    $postItems = [];
+    foreach($_POST as $postedItem){
+        if(!empty($postedItem['value'])){
+            if($postedItem['name'] === 'reportName'){
+                $reportName = $postedItem['value'];
+            }else{
+                $postedItemArray = explode('.',$postedItem['name']);
+                $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`';
+                $postItems[] = $postedItemBackTicks;
+            }
+>>>>>>> 5e9e93524bd9ca0c2bb3a3a40dc601c79d387077
         }//End of If Statement
     }//End of Foreach Statement.
   
@@ -53,6 +68,7 @@ function selectData($postItems){
     }
     return implode(',', $selectData);
 }
+
 
 $query = 'SELECT ';
 
@@ -95,7 +111,10 @@ if(isset($TotalRows) and $TotalRows > 0){
     $resultData = [];
     
     while($row = mysqli_fetch_assoc($queryResource)) {
+<<<<<<< HEAD
       
+=======
+>>>>>>> 5e9e93524bd9ca0c2bb3a3a40dc601c79d387077
         $resultData[] = $row;
     }
     if(!empty($resultData)){
@@ -107,6 +126,8 @@ if(isset($TotalRows) and $TotalRows > 0){
         },$columns);
     }
 }else{
+    echo $query;
+    echo '<br />';
     echo 'No Record Found';
 }
 mysqli_close($conn);
