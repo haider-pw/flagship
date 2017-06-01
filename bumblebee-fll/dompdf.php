@@ -105,7 +105,7 @@ include('header.php');
 	                                                'excursion_conf_by_whom' => $row[95],
 	                                                'excursion_dt_conf' => $row[96],
 	                                                'excursion_num_of_guest' => $row[97],
-	                                                'arr_trans_notes' => $row[92],
+	                                                'arr_trans_notes' => $row[44],
 	                                                'dept_trans' => $row[29],
 	                                                'dept_supp' => $dep_driver[1],
 	                                                'dept_vehicle' => $dep_vehicle[2],
@@ -123,9 +123,9 @@ include('header.php');
 			$reservations = $data_array;
    
 	require('dompdf/fpdf.php');
-
-	$pdf = new FPDF('P', 'mm', 'custom');
-	$pdf->AddPage('P', 'custom', 0); 
+$size = array(2400, 1008);
+	$pdf = new FPDF('P', 'mm', $size);
+	$pdf->AddPage('P', $size, 0); 
 	$pdf->SetFont('Arial','B',12);	
 	//$pdf->SetDisplayMode('fullpage', 'two');	
 	foreach($headings as $heading) {
@@ -135,42 +135,10 @@ include('header.php');
 	foreach($reservations as $row) {
 		$pdf->SetFont('Arial','',12);	
 		$pdf->Ln();
-		foreach($row as $column)
+		foreach($row as $column){
 			$pdf->Cell(70,12,$column,1);
+		}
 	}
 	$pdf->Output();
 
-
-
-/*include('header.php');
-     $reservations = mysql_query("SELECT * FROM fll_reservations as res
-    left join fll_arrivals as arr on res.arr_flight_no = arr.id
-    left join fll_departures as dep on res.arr_flight_no = dep.id
-    WHERE res.fast_track = 1 && res.status=1");
-
-     $html = '<tr>';
-while($row=mysql_fetch_assoc($reservations)) {
-			$html.='<td>data</td>';
-		}		
-		$html.='</tr>';
-		
-
-	require 'dompdf/vendor/autoload.php';
-	//require'dompdf/vendor/dompdf/dompdf/autoload.inc.php';
-
-	use Dompdf\Dompdf;
-	//use Dompdf\Options;
-
-	$dompdf = new Dompdf();
-	
-	$dompdf->loadHtml($html);
-
-	// (Optional) Setup the paper size and orientation
-	$dompdf->setPaper('A4', 'landscape');
-
-	// Render the HTML as PDF
-	$dompdf->render();
-
-	// Output the generated PDF to Browser
-	$dompdf->stream();*/
  ?>

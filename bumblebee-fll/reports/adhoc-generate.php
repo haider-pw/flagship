@@ -1,7 +1,8 @@
 <?php
 //Pre Defined Settings.
-
-
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
 
 $start=0;
 $limit=25;
@@ -18,11 +19,11 @@ else {
   
 if(empty($_POST)){
     //Just Return him back to his previous page. with some message.
-    $_POST = $_SESSION['adhoc_report'];
+    if(isset($_SESSION['adhoc_report']))
+        $_POST = $_SESSION['adhoc_report'];
 } else {
     $_SESSION['adhoc_report'] = $_POST;
 }
-<<<<<<< HEAD
 /*echo '<pre>';
 var_dump($_POST);
 echo '</pre>';*/
@@ -36,20 +37,6 @@ ini_set('memory_limit', '934217759');
             //$postedItemArray = explode('.',$postedItem['name']);
             $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`'.' as '. $explodeAlias[1];
             $postItems[] = $postedItemBackTicks;
-=======
-
-$reportName = '';
-    $postItems = [];
-    foreach($_POST as $postedItem){
-        if(!empty($postedItem['value'])){
-            if($postedItem['name'] === 'reportName'){
-                $reportName = $postedItem['value'];
-            }else{
-                $postedItemArray = explode('.',$postedItem['name']);
-                $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`';
-                $postItems[] = $postedItemBackTicks;
-            }
->>>>>>> 5e9e93524bd9ca0c2bb3a3a40dc601c79d387077
         }//End of If Statement
     }//End of Foreach Statement.
   
@@ -68,7 +55,6 @@ function selectData($postItems){
     }
     return implode(',', $selectData);
 }
-
 
 $query = 'SELECT ';
 
@@ -95,7 +81,10 @@ $conn = mysqli_connect('localhost','root','chocolate','cocoa_fll');
 
 $sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
 
-$query .= ' LIMIT  '.$start.', '.$limit;
+if(!isset($_REQUEST['pdf']))
+    $query .= ' LIMIT  '.$start.', '.$limit;
+
+
 $queryResource = mysqli_query($conn,$query);
 /*$conn = mysql_connect('localhost','root','chocolate','cocoa_fll');
 $queryResource = mysql_query($query);*/
@@ -111,10 +100,7 @@ if(isset($TotalRows) and $TotalRows > 0){
     $resultData = [];
     
     while($row = mysqli_fetch_assoc($queryResource)) {
-<<<<<<< HEAD
       
-=======
->>>>>>> 5e9e93524bd9ca0c2bb3a3a40dc601c79d387077
         $resultData[] = $row;
     }
     if(!empty($resultData)){
@@ -126,8 +112,6 @@ if(isset($TotalRows) and $TotalRows > 0){
         },$columns);
     }
 }else{
-    echo $query;
-    echo '<br />';
     echo 'No Record Found';
 }
 mysqli_close($conn);

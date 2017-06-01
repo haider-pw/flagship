@@ -105,7 +105,6 @@ echo '<pre>'; print_r($data); exit;*/
                                                 <th>Excursion Confirmed By Whom</th>
                                                 <th>Excursion Date of Confirmation</th>
                                                 <th>Excursion Number of Guests</th>
-                                                <th>Departure Date </th>
                                                 <th>Arrival &amp; Transportation Notes</th>
                                                 <th>Dept Trans</th>
                                                 <th>Dept Supplier</th>
@@ -166,8 +165,7 @@ echo '<pre>'; print_r($data); exit;*/
                                                 $excursion_conf_by_whom = $row[95];
                                                 $excursion_dt_conf= $row[96];
                                                 $excursion_num_of_guest = $row[97];
-                                                $dep_date = $row[92];
-                                                $arr_trans_note = $row[92];
+                                                $arr_trans_note = $row[44];
                                                 $rep_notes = $row[11];
 
                                                 $dpt_transport = $row[29];
@@ -178,7 +176,6 @@ echo '<pre>'; print_r($data); exit;*/
                                                 $dpt_time = $row[27];
                                                 $dpt_pick_loc = $row[32];
                                                 $dpt_pick_time = $row[34];
-                                                $dpt_time = $row[27];
                                                 $dpt_notes = $row[45];
                                                 
                                                 
@@ -233,7 +230,6 @@ echo '<pre>'; print_r($data); exit;*/
                                                         <td>' . $excursion_conf_by_whom . '</td>
                                                         <td>' . $excursion_dt_conf . '</td>
                                                         <td>' . $excursion_num_of_guest . '</td>
-                                                        <td>' . $dep_date . '</td>
                                                         <td>' . $arr_trans_note . '</td>
                                                         <td>' . $dpt_transport . '</td>
                                                         <td>' . $dpt_supp . '</td>
@@ -563,15 +559,6 @@ echo '<pre>'; print_r($data); exit;*/
             "dom": 'T<"clear">lBfrtip',
             "order": [[ 1, "asc" ]],
             "buttons": [
-                {
-                    extend: 'pdf',
-                    text: 'Export To Pdf',
-                    exportOptions: {
-                        modifier: {
-                            page: 'current'
-                        }
-                    }
-                },
                 {
                     extend: 'excel',
                     text: 'Export current page',

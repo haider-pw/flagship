@@ -21,91 +21,9 @@ header("Expires: 0");
  * On the REPORT for Five Star Fast Track, they need 3 additional fields when they print that report from excel: 1- Rep  Assinged  2. An area for a Signature, 3 Reps Comments
  */
 
-$conn = mysqli_connect('localhost','root','chocolate','cocoa_fll');
+require('adhoc-generate.php');
 
 
-/*******Start of Formatting for Excel*******/
-$reservations = mysqli_query($conn , "SELECT 
-  R.id AS ReservationID,
-  R.title_name AS Title,
-  R.first_name AS First_Name,
-  R.last_name AS Last_Name,
-  CONCAT(fll_guest.title_name, ' ' ,fll_guest.first_name, ' ', fll_guest.last_name) AS Guest,
-  fll_guest.adult AS Guest_Adult,
-  fll_guest.child_age AS Guest_Child_Age,
-  fll_guest.infant_age AS Guest_Infant_Age,
-  fll_guest.pnr AS Guest_PNR,
-  tour_operator AS Tour_Operator,
-  tour_ref_no AS Ref_No,
-  CASE WHEN rep = '' THEN 'Not Assigned' ELSE fll_reps.name END AS Rep,
-  fll_reptype.rep_type AS RepType,
-  fll_location.name AS `Name`,
-  R.arr_transport AS Trans_Type,
-  CASE WHEN R.fast_track = 0 THEN 'N' ELSE 'Y' END AS FSFT,
-  R.infant_seats AS Inf_Seat,
-  R.child_seats AS Car_Seat,
-  R.booster_seats AS Boost_Seat,
-  R.client_reqs AS Client_Reqs,
-  R.adult AS `A`,
-  R.child AS `C`,
-  R.infant AS `I`,
-  R.arr_date AS Arr_Date,
-  fll_flights.flight_number AS Arr_Flight,
-  fll_flighttime.flight_time AS Arr_Time,
-  fll_flightclass.class AS Class,
-  R.dpt_date AS R_Dpt_Date,
-  R.arr_transport_notes AS Arr_Trans_Notes,
-  R.tour_notes AS Rep_Notes,
-  R.dpt_notes AS Acct_Notes,
-  R.ref_no_sys AS RefNoSys,
-  fll_guest.id AS GuestID,
-  FA.id AS FlightArrivalID,
-  FA.arr_date AS ArrDate,
-  FA.arr_time AS ArrTime,
-  FA.arr_flight_no AS ArrFlightNo,
-  FA.arr_transport AS ArrTransport,
-  FC.class AS FlightClass,
-  FAD.name AS ArrDriver,
-  FAV.name AS ArrVehicle,
-  FD.id AS DepartureID,
-  FD.dpt_date AS DepartureDate,
-  FD.dpt_time AS DepartureTime,
-  DFN.flight_number AS DepartureFlightNo,
-  FDC.class AS DepartureFlightClass,
-  FDD.name as DptDriver,
-  FDV.name AS DptVehicle
-  
-   
-   FROM fll_reservations R
-   LEFT JOIN fll_reps ON fll_reps.id_rep = R.rep
-   LEFT JOIN fll_reptype ON fll_reptype.id = R.rep_type
-   LEFT JOIN fll_location ON fll_location.id_location = R.arr_dropoff
-   LEFT JOIN fll_flights ON fll_flights.id_flight = R.arr_flight_no
-   LEFT JOIN fll_flighttime ON fll_flighttime.id_fltime = R.arr_time
-   LEFT JOIN fll_flightclass ON fll_flightclass.id = R.flight_class
-   LEFT JOIN fll_guest ON fll_guest.ref_no_sys = R.ref_no_sys
-   LEFT JOIN fll_arrivals FA ON FA.ref_no_sys = R.ref_no_sys
-   LEFT JOIN fll_flightclass FC ON FA.flight_class = FC.id
-   LEFT JOIN fll_transport FAD ON FAD.id_transport = FA.arr_driver
-   LEFT JOIN fll_vehicles FAV ON FAV.id_vehicle = FA.arr_vehicle
-   LEFT JOIN fll_departures FD ON FD.ref_no_sys = R.ref_no_sys
-   LEFT JOIN fll_flightclass FDC ON FDC.id = FD.flight_class
-   LEFT JOIN fll_transport FDD ON FDD.id_transport = FD.dpt_transport
-   LEFT JOIN fll_vehicles FDV ON FDV.id_vehicle = FD.dpt_vehicle
-   LEFT JOIN fll_flights DFN ON DFN.id_flight = FD.dpt_flight_no
-    WHERE R.status = 1
-   ");
-
-
-if(mysqli_errno($conn)){
-    echo mysqli_error($conn);
-}
-
-$reservations_assoc = array();
-
-while($row = mysqli_fetch_assoc($reservations)){
-    array_push($reservations_assoc,$row);
-}
 
 //print_r($reservations_assoc);
 
