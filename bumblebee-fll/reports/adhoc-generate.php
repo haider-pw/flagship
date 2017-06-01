@@ -9,14 +9,14 @@ $limit=25;
 
 if(isset($_GET['id']))
 {
-$id=$_GET['id'];
-$start=($id-1)*$limit;
+    $id=$_GET['id'];
+    $start=($id-1)*$limit;
 }
 else {
     $id=1;
 }
 
-  
+
 if(empty($_POST)){
     //Just Return him back to his previous page. with some message.
     if(isset($_SESSION['adhoc_report']))
@@ -98,7 +98,7 @@ if(!empty($queryResource)){
 if(isset($TotalRows) and $TotalRows > 0){
     // output data of each row
     $resultData = [];
-    
+
     while($row = mysqli_fetch_assoc($queryResource)) {
       
         $resultData[] = $row;
@@ -115,18 +115,3 @@ if(isset($TotalRows) and $TotalRows > 0){
     echo 'No Record Found';
 }
 mysqli_close($conn);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
