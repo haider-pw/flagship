@@ -66,7 +66,7 @@ if ($ft_count > 0){
                 <li class="xn-openable"><!-- Reports dropdown -->
                     <a href="#"><span class="fa fa-bar-chart-o"></span> <span class="xn-text"> Ground Handling</span></a>
                     <ul>
-                        <li><a href="#"><span class="fa fa-truck"></span> All Reports (ad hocs)</a></li>
+                        <li><a href="ground-handling-adhoc.php"><span class="fa fa-truck"></span> All Reports (ad hocs)</a></li>
                         <li><a href="cancellations.php?sect=gh"><span class="fa fa-truck"></span> Cancellations</a></li>
                     </ul>
                 </li>
