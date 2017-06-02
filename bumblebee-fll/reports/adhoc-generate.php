@@ -4,6 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
     session_start();
 }
 
+$conn = mysqli_connect('localhost','root','chocolate','cocoa_fll');
+
 $start=0;
 $limit=25;
 
@@ -16,30 +18,52 @@ else {
     $id=1;
 }
 
+/*echo '<pre>';
+print_r($_POST);
+echo '</pre>'; exit;*/
   
 if(empty($_POST)){
     //Just Return him back to his previous page. with some message.
+
     if(isset($_SESSION['adhoc_report']))
         $_POST = $_SESSION['adhoc_report'];
-} else {
-    $_SESSION['adhoc_report'] = $_POST;
-}
-/*echo '<pre>';
-var_dump($_POST);
-echo '</pre>';*/
+    if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])) { // get report setting from database
+        $result = mysqli_query($conn, "SELECT `setting` FROM fll_reports WHERE id=".$_REQUEST['report_id']);
+        if(!empty($result)){
+            $TotalRows = mysqli_num_rows($result);
+        }
+        if(isset($TotalRows) and $TotalRows > 0){
+            $row = mysqli_fetch_row($result);
+                $_POST = $_SESSION['adhoc_report'] = json_decode($row[0], true);
+        } // end of if
+    }
+    } else {
+        $_SESSION['adhoc_report'] = $_POST;
+    }
+
 ini_set('memory_limit', '-1');
 ini_set('max_execution_time', 0);
     $postItems = [];
+   // $reportSettings = [];
     foreach($_POST as $postedItem){
         if(!empty($postedItem['value'])){
-            $explodeAlias = explode('::', $postedItem['name']);
-            $postedItemArray = explode('.',$explodeAlias[0]);
-            //$postedItemArray = explode('.',$postedItem['name']);
-            $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`'.' as '. $explodeAlias[1];
-            $postItems[] = $postedItemBackTicks;
+            if($postedItem['name']=='reportName') {
+                $_SESSION['reportName'] = $postedItem['value'];
+            }
+            else if($postedItem['name']=='reportId'){
+                 $reportId = $postedItem['value'];
+            }
+            else {
+               // array_push($reportSettings, $postedItem['name']);
+                $explodeAlias = explode('::', $postedItem['name']);
+                $postedItemArray = explode('.',$explodeAlias[0]);
+                //$postedItemArray = explode('.',$postedItem['name']);
+                $postedItemBackTicks = '`'.implode('`.`',$postedItemArray).'`'.' as '. $explodeAlias[1];
+                $postItems[] = $postedItemBackTicks;
+            }
         }//End of If Statement
     }//End of Foreach Statement.
-  
+//$_SESSION['report_settings'] = json_encode($reportSettings);
 function selectData($postItems){
     if(empty($postItems)){
         return false;
@@ -72,16 +96,18 @@ if(strpos($selectData,'`A`')){
     $query .= ' LEFT JOIN fll_arrivals A on R.arr_flight_no = A.arr_flight_no';
 }
 
+if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){ 
+    $query .= ' WHERE R.fast_track=1 && R.status!=2';
+} else 
 $query .= ' WHERE R.fast_track=0 && R.status!=2';
 
 
 
-$conn = mysqli_connect('localhost','root','chocolate','cocoa_fll');
 
 
 $sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
 
-if(!isset($_REQUEST['all']))
+if(!isset($_REQUEST['all'])) 
     $query .= ' LIMIT  '.$start.', '.$limit;
 
 

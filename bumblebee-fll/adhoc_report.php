@@ -1,7 +1,7 @@
 <?php
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
-  
+  $url = '//' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
   if (!$user->levelCheck("2,3,5,6,7,9"))
       redirect_to("index.php");
       
@@ -14,7 +14,7 @@
 
 include('header.php');
 site_header('Ad Hoc Report');
-
+$reportId = '';
 require('reports/adhoc-generate.php');
 /*echo '<pre>';
 var_dump($resultData);
@@ -23,7 +23,13 @@ echo '</pre>'; exit;*/
 
   $row = $user->getUserData();
 
-
+// save report title in session , default title 'adhoc report'
+if(isset($_SESSION['reportName'])){
+    $reportTitle = $_SESSION['reportName'];
+}
+else {
+    $reportTitle = 'AdHoc Report';
+}
 
 ?>
 <style>
@@ -53,7 +59,7 @@ echo '</pre>'; exit;*/
                 
                 <!-- PAGE TITLE -->
                 <div class="page-title">                    
-                    <h2><span class="fa fa-arrow-circle-o-left"></span>AdHoc Report</h2>
+                    <h2><span class="fa fa-arrow-circle-o-left"></span> <?=$reportTitle?></h2>
                 </div>
                 <!-- END PAGE TITLE -->                
                 
@@ -68,6 +74,14 @@ echo '</pre>'; exit;*/
                                     <h3 class="panel-title">Arrival & Departure Schedules</h3>
                                     <a href="reports/adhoc_excel.php?all" class="pull-right btn btn-success export_pdf">Export Excel</a>
                                     <a href="reports/adhoc_pdf.php?all" style="margin-right: 5px;" class="pull-right btn btn-success export_pdf">Export Pdf</a>
+                                    <?php 
+                                        if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])){ ?>
+                                        <a href="ground-handling-adhoc.php?report_id=<?=$_REQUEST['report_id']?>" style="margin-right: 5px;" class="pull-right btn btn-info">Edit Report</a>
+                                        <a data-id="<?=$_REQUEST['report_id']?>" style="margin-right: 5px;" class="pull-right btn btn-danger del_report">Delete Report</a>
+                                        <?php } else {
+                                    ?>
+                                    <a data-id="<?=$reportId?>" style="margin-right: 5px;" class="pull-right btn btn-info save_report">Save Report</a>
+                                    <?php } ?>
 
                                 </div>
                                 <div class="panel-body table-responsive">
@@ -386,42 +400,7 @@ echo '</pre>'; exit;*/
         });
         //End of Custom Code Syed Haider Hassan
         
-        /*function simpleTemplating(data) {
-            var html = '<ul>';
-            $.each(data, function(index, item){
-                html += '<li class="pagelist">'+ item +'</li>';
-            });
-            html += '</ul>';
-            return html;
-        }
-
-        var total = <?=$total?>;
-        console.log(total);
-        var data = [];
-        for(var i=1; i<=total; i++){
-            data.push(i);
-        }
-        console.log(data);
-        $('#pagination-container').pagination({
-            dataSource: data,
-            callback: function(data, pagination) {
-                var html = simpleTemplating(data);
-                $('#data-container').html(html);
-            }
-        })
-
-        // send ajax req to get record against pagination
-        $(document).on('click', '.pagelist', function(e){
-            var page = $(this).attr('data-num');
-            console.log(page);
-            $.ajax({
-                data:{page:page},
-                type:"GET",
-                success:function(data){
-
-                }
-            })
-        })*/
+       
 
         $(function() {
             $('#pagination-container').pagination({
@@ -442,6 +421,40 @@ echo '</pre>'; exit;*/
                 }
             });
         });
+
+        // save report 
+
+        $('.save_report').on('click', function(e){
+            var reportId = $(this).attr('data-id');
+            $.ajax({
+                url:"reports/save_report.php",
+                type:"POST",
+                data:{reportId:reportId},
+                success:function(data){
+                    var data = data.split('::');
+                    alert(data[1]);
+                    window.location.assign('<?=$url?>/ground-handling-adhoc.php');
+                }
+            })
+        })
+
+        // delete report
+        $(".del_report").on('click', function(e){
+            var reportId = $(this).attr('data-id');
+            if(reportId!=""){
+                $.ajax({
+                    url:"reports/save_report.php",
+                    type:"POST",
+                    data:{action:'delete',reportId:reportId },
+                    success:function(data){
+                        var data = data.split('::');
+                        alert(data[1]);
+                        window.location.assign('<?=$url?>/ground-handling-adhoc.php');
+                    }
+                })
+            }
+            
+        })
     });
 </script>
 </body>

@@ -1,0 +1,45 @@
+<?php 
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+$conn = mysqli_connect('localhost','root','chocolate','cocoa_fll');
+
+if(isset($_POST['action']) && $_POST['action']=='delete' && isset($_POST['reportId'])){
+	$response = mysqli_query($conn, "DELETE FROM fll_reports WHERE id=".$_POST['reportId']);
+	if($response){
+		unset($_SESSION['adhoc_report']);
+		echo 'success::Report has been Deleted Successfully';
+	} else {
+		echo 'error::Report not deleted. Try Again';
+	}
+} 
+else  {
+// get report name and setting from session
+$reportName = $_SESSION['reportName'];
+$reportSettings = json_encode($_SESSION['adhoc_report']);
+// get current user id and save with report setting, to provide report access to authorized person
+$userid = $_SESSION['userid'];
+
+if(isset($_POST['reportId']) && !empty($_POST['reportId'])){
+	$rep_id = $_POST['reportId'];
+	$response = mysqli_query($conn, "UPDATE fll_reports SET `name`='$reportName', `setting`='$reportSettings',`user_id`='$userid' WHERE `id`='$rep_id'");
+
+	if($response){
+		echo 'success::Report has been Edited Successfully';
+	} else {
+		echo 'error::Report not Edited';
+	}
+} else {
+	$response = mysqli_query($conn, "INSERT INTO fll_reports (`name`, `setting`, `user_id`) VALUE ('$reportName', '$reportSettings', '$userid')");
+
+	if($response){
+		echo 'success::Report has been Saved Successfully';
+	} else {
+		echo 'error::Report not saved';
+	}
+}
+
+
+}
+?>
