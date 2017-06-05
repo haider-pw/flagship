@@ -1878,7 +1878,7 @@ if (isset($_POST['addreservation'])) {
                                                name="supplier_price" placeholder="Price">&nbsp;  &nbsp;
                                                =
                                         <input type="text" class="left20 form-control" id="total_amount"
-                                               name="total_amount"  placeholder="Total Amount" readonly style="background-color:white"> 
+                                               name="total_amount"  placeholder="Total Amount" readonly style="background-color:white;color: black;"> 
                                     </div>
                                 </div>
                                 <div>

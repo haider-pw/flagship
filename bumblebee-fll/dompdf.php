@@ -128,6 +128,8 @@ $size = array(2400, 1008);
 	$pdf->AddPage('P', $size, 0); 
 	$pdf->SetFont('Arial','B',12);	
 	//$pdf->SetDisplayMode('fullpage', 'two');	
+	$pdf->Cell(2400,12, 'Cancellation Report', 0, 0, 'C');
+	$pdf->Ln();
 	foreach($headings as $heading) {
 			$pdf->Cell(70,12,$heading,1);
 	}

@@ -16,27 +16,26 @@
 include('header.php');
 site_header('Reservation Cancellations List');
 
+
+
 //Grab all reservation info
-if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){
-    $reservations = mysql_query("SELECT * FROM fll_reservations as res
+$query = "SELECT * FROM fll_reservations as res
     left join fll_arrivals as arr on res.arr_flight_no = arr.id
-    left join fll_departures as dep on res.arr_flight_no = dep.id
-    WHERE res.fast_track = 1 && res.status=1");
+    left join fll_departures as dep on res.arr_flight_no = dep.id WHERE res.status=2";
+
+
+if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){
+    $query .= ' && res.fast_track = 1';
+    $title = 'Fast Track Cancelled Reservations';
 }
 else {
     $_REQUEST['sect'] = 'gh';
-    $reservations = mysql_query("SELECT * FROM fll_reservations as res
-    left join fll_arrivals as arr on res.arr_flight_no = arr.id
-    left join fll_departures as dep on res.arr_flight_no = dep.id
-    WHERE res.fast_track = 0 && res.status=1");
+    $query .= ' && res.fast_track = 0';
+    $title = 'Ground Handling Cancelled Reservations';
 }
 
-/*$data = array();
-while($row = mysql_fetch_array($reservations)){
-    array_push($data, $row);
-}
+$reservations = mysql_query($query);
 
-echo '<pre>'; print_r($data); exit;*/
 
 ?>
 <style>
@@ -62,7 +61,9 @@ echo '<pre>'; print_r($data); exit;*/
                 
                 <!-- PAGE TITLE -->
                 <div class="page-title">                    
-                    <h2><span class="fa fa-arrow-circle-o-left"></span> Cancelled Reservations</h2>
+                    <h2><span class="fa fa-arrow-circle-o-left"></span> <?=$title?></h2>
+                     <!-- Date picker -->
+                                             
                 </div>
                 <!-- END PAGE TITLE -->                
                 
@@ -74,8 +75,17 @@ echo '<pre>'; print_r($data); exit;*/
                             <!-- START DATATABLE EXPORT -->
                             <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Arrival & Departure Schedules</h3>
-                                    <a href="dompdf.php?sect=<?=$_REQUEST['sect']?>" class="pull-right btn btn-success export_pdf">Export Pdf</a>
+                                    <h3 class="panel-title">Arrival & Departure Schedules</h3> 
+                                      <ul class="panel-controls panel-controls-title text-right">                       
+                                        <li class="pull-right" style="width:100%">
+                                            <label for="reportrange" style="display: block;">Created Date Filter</label>
+                                            <div id="reportrange" class="dtrange pull-right" >
+                                                <span></span><b class="caret"></b>
+                                            </div>                                     
+                                        </li>              
+                                    <a href="dompdf.php?sect=<?=$_REQUEST['sect']?>" class="pull-right btn btn-success export_pdf" style="margin-top: 10px;">Export Pdf</a>   
+                                    </ul>  
+
                                 </div>
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover">
@@ -88,7 +98,7 @@ echo '<pre>'; print_r($data); exit;*/
                                                 <th>Last Name</th>
                                                 <th>Ref #</th>
                                                 <th>Rep</th>
-                                                <th>Rep Service(Meet &amp; Greet</th>
+                                                <th>Rep Service(Meet &amp; Greet)</th>
                                                 <th>Hotel</th>
                                                 <th>Arr Trans Type</th>
                                                 <th>Arr Trans Supplier</th>
@@ -120,8 +130,27 @@ echo '<pre>'; print_r($data); exit;*/
                                         </thead>
                                         <tbody>
                                         <?php
+                                        $value = 1;
+                                        if(isset($_POST['fromDate']) && isset($_POST['toDate'])){
+                                            $value = 0;
+                                            $fromDate = strtotime($_POST['fromDate']);
+                                            $toDate = strtotime($_POST['toDate']);
+                                                $dateRangeText = date('M d, Y',$fromDate). ' - ' .date('M d, Y',$toDate);
+
+                                        }
+                                        if(isset($reservations) && !empty($reservations)){
                                             while($row = mysql_fetch_array($reservations)) {
-                                                
+
+                                                if($value==0){
+                                                    if(!empty($row['creation_date'])){
+                                                        $date = strtotime($row['creation_date']);
+                                                        if($date > $fromDate && $date < $toDate){
+                                                            $value=1;
+                                                        }
+                                                    } // end of if
+                                                }
+                                                if($value==1){
+
                                                 $arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[16] . "'"));
                                                 $arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[15] . "'"));                                                   
                                                 $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[28] . "'"));
@@ -242,7 +271,10 @@ echo '<pre>'; print_r($data); exit;*/
                                                         <td><span class="dptNotes" data-placement="top" data-toggle="tooltip" data-original-title="Edit \'Click to See All \'" style="display: block;overflow: hidden;text-overflow: ellipsis;width: 400px;word-break: break-all;word-wrap: break-word;cursor:pointer;">' . $dpt_notes . '</span></td>
                                                         <td><span class="repNotes" data-placement="top" data-toggle="tooltip" data-original-title="Edit \'Click to See All \'" style="display: block;overflow: hidden;text-overflow: ellipsis;width: 400px;word-break: break-all;word-wrap: break-word;cursor:pointer;">' . $rep_notes . '</span></td>
                                                 </tr>';
+                                                }
                                             }
+                                        }
+                                            
                                         ?>
                                         </tbody>
                                         <?php else: ?>
@@ -538,7 +570,9 @@ echo '<pre>'; print_r($data); exit;*/
 	<script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
 	<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/sprintf.js"></script>
 	<script type="text/javascript" src="js/plugins/tableexport/jspdf/jspdf.js"></script>
-	<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>        
+	<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>    
+        <script type="text/javascript" src="js/plugins/moment.min.js"></script>
+        <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>        
         <!-- END THIS PAGE PLUGINS-->  
         
         <!-- START TEMPLATE -->      
@@ -549,6 +583,7 @@ echo '<pre>'; print_r($data); exit;*/
 <script type="text/javascript" src="assets/store.js/store.min.js"></script>
 <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
 <script type="text/javascript" src="js/customScripting.js"></script>
+        <script type="text/javascript" src="js/jquery.redirect.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
 
@@ -632,6 +667,57 @@ echo '<pre>'; print_r($data); exit;*/
         });
         //End of Custom Code Syed Haider Hassan
       
+        //Code for DatePicker Submit
+        $("body").on("click",".range_inputs > button.applyBtn",function(e){
+            var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
+            var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
+            var postFilterData = {
+                fromDate:fromDate,
+                toDate:toDate,
+            };
+            var postURL = window.location.href; 
+            $.redirect(postURL,postFilterData,'POST','_SELF');
+        });
+    });
+
+    $(function(){
+
+        /* reportrange */
+        if($("#reportrange").length > 0){
+            $("#reportrange").daterangepicker({
+                ranges: {
+                    'Today': [moment(), moment()],
+                    //'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    //'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    //'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    //'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    //'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                buttonClasses: ['btn btn-default'],
+                applyClass: 'btn-small btn-primary',
+                cancelClass: 'btn-small',
+                format: 'YYYY-MM-DD',
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment()
+            },function(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            });
+
+            <?php
+
+            if(isset($dateRangeText) and !empty($dateRangeText)){
+                echo "$(\"#reportrange span\").html('".$dateRangeText."');";
+                echo "console.log('".$dateRangeText."')";
+            }else{
+                echo "$(\"#reportrange span\").html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));";
+            }
+            ?>
+        }
+
+        /* end reportrange */
+
     });
 </script>
 </body>

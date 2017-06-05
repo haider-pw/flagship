@@ -11,7 +11,7 @@
         margin-bottom: 25px;
     }
 
-    .report_btns a{ margin-left:4px;    margin-bottom: 2px; }
+    .report_btns a{ margin-left:4px;     margin-top: 4px;}
 </style>
 <?php
 $url = '//' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
@@ -57,7 +57,12 @@ if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])){
 
 }
 else {
-    $query = 'SELECT `id`, `name` FROM fll_reports ';
+    if($_REQUEST['sect']=='fsft'){
+        $fsft = 1;
+    } else {
+        $fsft = 0;
+    }
+    $query = 'SELECT `id`, `name` FROM fll_reports WHERE fsft = '.$fsft;
      if($row->userlevel!=9)
         $query .= ' WHERE user_id ='.$_SESSION['userid'];
     $result = mysql_query($query);
@@ -92,19 +97,20 @@ else {
             <div class="col-md-12">
                 <form id="adhocReportForm" class="form-horizontal" method="post" action="<?php $_PHP_SELF ?>">
                     <div class="panel panel-default">
-                        <div class="col-md-12 report_btns">
-                            <?php
-                                if(isset($result)){
-                                        while($row = mysql_fetch_assoc($result)){
-                                            echo '<a class="btn btn-danger btn-sm" href="adhoc_report.php?report_id='.$row['id'].'">'.$row['name'].'</a>';
-                                        }
-                                    }
-                             ?>
-                        </div>
                         <div class="panel-heading">
 
                             <h3 class="panel-title"><strong><?=$reportheading?></strong></h3>
                             <span class="pull-right"><buton class="btn btn-default" type="button" id="generateReportBtn">Generate Report</buton></span>
+                        </div>
+                        
+                        <div class="col-md-12 report_btns">
+                            <?php
+                                if(isset($result)){
+                                        while($row = mysql_fetch_assoc($result)){
+                                            echo '<a class="btn btn-danger btn-sm" href="adhoc_report.php?report_id='.$row['id'].'&sect='.$_REQUEST['sect'].'">'.$row['name'].'</a>';
+                                        }
+                                    }
+                             ?>
                         </div>
                         <div class="panel-body">
                             <div class="row col-md-12 marginBotBox">
@@ -120,9 +126,10 @@ else {
                                     <div class="row">
                                         <div class="col-sm-6 col-xs-12 marginBotBox" >
                                             <div class="col-xs-12 marginBotBox">
-                                                <h4><strong>Passenger Information</strong></h4>
+                                                <h4><strong>Reservation Information</strong></h4>
                                                 <label for="selectAllPersonalInformation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllPersonalInformationCheckbox">Select All</label>
                                                 <ul class="list-group">
+                                                <input type="hidden" name="R.id::Id" value="1" />
                                                     <li class="list-group-item">
                                                         <label for="title"><input type="checkbox" value="1" id="title" name="R.title_name::Title_Name" <?=in_array('R.title_name::Title_Name', $selectedCheckBoxesNames)?'checked':''?>/> Title</label>
                                                     </li>
@@ -443,6 +450,13 @@ else {
         });
 
         $('#generateReportBtn').on('click',function(){
+            var field = $('#reportName');
+         var reportName = field.val();
+         if(reportName == ''){
+            field.css('border-color','#b64645');
+            alert('Please Enter Report Name');
+            return false;
+         }
             //Getting All Inputs.
         var formData =   $('#adhocReportForm').serializeArray();
         var postURL = '<?=$url?>/adhoc_report.php?sect=<?=$_REQUEST["sect"]?>';

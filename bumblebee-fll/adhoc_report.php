@@ -70,19 +70,29 @@ else {
                             
                             <!-- START DATATABLE EXPORT -->
                             <div class="panel panel-default">
+                                <div id="search_dt" class="dataTables_filter">
+                                <label>Search:<input class="search_dt" type="search" class="" placeholder="" aria-controls="res-arrivals"></label>
+                                </div>
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Arrival & Departure Schedules</h3>
+                                    <ul class="panel-controls panel-controls-title text-right" style="margin-left: 20px;">                       
+                                        <li class="pull-right" style="width:100%">
+                                            <label for="reportrange" style="display: block;">Arrival Date Filter</label>
+                                            <div id="reportrange" class="dtrange pull-right" >
+                                                <span></span><b class="caret"></b>
+                                            </div>                                     
+                                        </li>              
+                                    </ul>  
                                     <a href="reports/adhoc_excel.php?all" class="pull-right btn btn-success export_pdf">Export Excel</a>
-                                    <a href="reports/adhoc_pdf.php?all" style="margin-right: 5px;" class="pull-right btn btn-success export_pdf">Export Pdf</a>
+                                    <a href="reports/adhoc_pdf.php?all" target="_blank" style="margin-right: 5px;" class="pull-right btn btn-success export_pdf">Export Pdf</a>
                                     <?php 
                                         if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])){ ?>
-                                        <a href="ground-handling-adhoc.php?report_id=<?=$_REQUEST['report_id']?>" style="margin-right: 5px;" class="pull-right btn btn-info">Edit Report</a>
+                                        <a href="ground-handling-adhoc.php?report_id=<?=$_REQUEST['report_id']?>&sect=<?=$_REQUEST['sect']?>" style="margin-right: 5px;" class="pull-right btn btn-info">Edit Report</a>
                                         <a data-id="<?=$_REQUEST['report_id']?>" style="margin-right: 5px;" class="pull-right btn btn-danger del_report">Delete Report</a>
                                         <?php } else {
                                     ?>
                                     <a data-id="<?=$reportId?>" style="margin-right: 5px;" class="pull-right btn btn-info save_report">Save Report</a>
                                     <?php } ?>
-
                                 </div>
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover">
@@ -301,7 +311,9 @@ else {
     <script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
     <script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/sprintf.js"></script>
     <script type="text/javascript" src="js/plugins/tableexport/jspdf/jspdf.js"></script>
-    <script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>   
+    <script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script> 
+    <script type="text/javascript" src="js/plugins/moment.min.js"></script>
+    <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>   
 
 
     <script type="text/javascript" src="js/jquery.simplePagination.js"></script>              
@@ -315,12 +327,13 @@ else {
 <script type="text/javascript" src="assets/store.js/store.min.js"></script>
 <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
 <script type="text/javascript" src="js/customScripting.js"></script>
+<script type="text/javascript" src="js/jquery.redirect.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#res-arrivals').dataTable( {
+        $('#res-arrivals').dataTable( { "searching": false,
             "iDisplayLength": 25, 
             "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
             "dom": 'T<"clear">lBfrtip',
@@ -417,23 +430,23 @@ else {
 
                         }
                     })*/
-                    window.location.assign("http://<?=$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']?>?id="+pageNumber);
+                    window.location.assign("http://<?=$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']?>?id="+pageNumber+'&sect=<?=$_REQUEST["sect"]?>');
                 }
             });
         });
 
-        // save report 
+        // save report or edit report
 
         $('.save_report').on('click', function(e){
             var reportId = $(this).attr('data-id');
             $.ajax({
                 url:"reports/save_report.php",
                 type:"POST",
-                data:{reportId:reportId},
+                data:{reportId:reportId, sect:'<?=$_REQUEST['sect']?>'},
                 success:function(data){
                     var data = data.split('::');
                     alert(data[1]);
-                    window.location.assign('<?=$url?>/ground-handling-adhoc.php');
+                    window.location.assign('<?=$url?>/ground-handling-adhoc.php?sect=<?=$_REQUEST['sect']?>');
                 }
             })
         })
@@ -441,7 +454,7 @@ else {
         // delete report
         $(".del_report").on('click', function(e){
             var reportId = $(this).attr('data-id');
-            if(reportId!=""){
+            if(reportId!="" && confirm('Are you sure to delete report ?')){
                 $.ajax({
                     url:"reports/save_report.php",
                     type:"POST",
@@ -449,12 +462,72 @@ else {
                     success:function(data){
                         var data = data.split('::');
                         alert(data[1]);
-                        window.location.assign('<?=$url?>/ground-handling-adhoc.php');
+                        window.location.assign('<?=$url?>/ground-handling-adhoc.php?sect=<?=$_REQUEST['sect']?>');
                     }
                 })
             }
             
         })
+
+        // search report records 
+        $('.search_dt').on('keypress', function(e){
+            var queryText = $(this).val();
+            if(e.which=='13'){
+                window.location.assign("http://<?=$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']?>?sect=<?=$_REQUEST["sect"]?>&query="+queryText);
+            }
+            
+        })
+
+         //Code for DatePicker Submit
+        $("body").on("click",".range_inputs > button.applyBtn",function(e){
+            var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
+            var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
+            var postFilterData = {
+                fromDate:fromDate,
+                toDate:toDate,
+            };
+            var postURL = window.location.href; 
+            $.redirect(postURL,postFilterData,'GET','_SELF');
+        });
+    });
+ $(function(){
+
+        /* reportrange */
+        if($("#reportrange").length > 0){
+            $("#reportrange").daterangepicker({
+                ranges: {
+                    'Today': [moment(), moment()],
+                    //'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    //'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    //'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    //'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    //'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                buttonClasses: ['btn btn-default'],
+                applyClass: 'btn-small btn-primary',
+                cancelClass: 'btn-small',
+                format: 'YYYY-MM-DD',
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment()
+            },function(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            });
+
+            <?php
+
+            if(isset($dateRangeText) and !empty($dateRangeText)){
+                echo "$(\"#reportrange span\").html('".$dateRangeText."');";
+                echo "console.log('".$dateRangeText."')";
+            }else{
+                echo "$(\"#reportrange span\").html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));";
+            }
+            ?>
+        }
+
+        /* end reportrange */
+
     });
 </script>
 </body>
