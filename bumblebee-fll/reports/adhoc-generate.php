@@ -18,6 +18,7 @@ else {
     $id=1;
 }
 
+
 /*echo '<pre>';
 print_r($_POST);
 echo '</pre>'; exit;*/
@@ -41,7 +42,7 @@ if(empty($_POST)){
         $_SESSION['adhoc_report'] = $_POST;
     }
 
-ini_set('memory_limit', '-1');
+ini_set('memory_limit', '9999999999');
 ini_set('max_execution_time', 0);
     $postItems = [];
    // $reportSettings = [];
@@ -90,21 +91,38 @@ if(strpos($selectData,'`G`')){
     $query .= ' LEFT JOIN fll_guest G on R.ref_no_sys = G.ref_no_sys';
 }
 if(strpos($selectData,'`D`')){
-    $query .= ' LEFT JOIN fll_departures D on R.dpt_flight_no = D.dpt_flight_no';
+    $query .= ' LEFT JOIN fll_departures D on R.ref_no_sys = D.ref_no_sys';
 }
 if(strpos($selectData,'`A`')){
-    $query .= ' LEFT JOIN fll_arrivals A on R.arr_flight_no = A.arr_flight_no';
+    $query .= ' LEFT JOIN fll_arrivals A on R.ref_no_sys = A.ref_no_sys';
 }
 
 if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){ 
     $query .= ' WHERE R.fast_track=1 && R.status!=2';
-} else 
+} else {
+    $_REQUEST['sect'] = 'gh';
 $query .= ' WHERE R.fast_track=0 && R.status!=2';
+}
 
+if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
 
+    $fromDate = strtotime($_REQUEST['fromDate']);
+    $toDate = strtotime($_REQUEST['toDate']);
+    $dateRangeText = date('M d, Y',$fromDate). ' - ' .date('M d, Y',$toDate);
 
+    $fromDate = $_REQUEST['fromDate'];
+    $toDate = $_REQUEST['toDate'];
+    $query .= ' && (R.arr_date between CAST("'.$fromDate.'" AS DATE) AND CAST("'.$toDate.'" AS DATE))';
+}
 
+if(isset($_REQUEST['query'])){
+    $searchText = $_REQUEST['query'];
+    $query .= ' && (R.first_name LIKE "%'.$searchText.'%" || R.last_name LIKE "%'.$searchText.'%" || R.pnr LIKE "%'.$searchText.'%" || R.tour_operator LIKE "%'.$searchText.'%" || R.operator_code LIKE "%'.$searchText.'%" || R.tour_notes LIKE "%'.$searchText.'%" || R.flight_class LIKE "%'.$searchText.'%" || R.arr_transport LIKE "%'.$searchText.'%" || R.rep_type LIKE "%'.$searchText.'%" || R.client_reqs LIKE "%'.$searchText.'%" || R.dpt_transport LIKE "%'.$searchText.'%" || R.dpt_pickup LIKE "%'.$searchText.'%" || dpt_dropoff LIKE "%'.$searchText.'%" || dpt_notes LIKE "%'.$searchText.'%" || R.modified_by LIKE "%'.$searchText.'%" || R.arr_hotel_notes LIKE "%'.$searchText.'%" || R.dpt_transport_notes LIKE "%'.$searchText.'%")' ;
+}
 
+$query .= ' group by R.id, A.id, D.id, G.id';
+
+//print_r($query); exit;
 $sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
 
 if(!isset($_REQUEST['all'])) 

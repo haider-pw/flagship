@@ -31,7 +31,13 @@ if(isset($_POST['reportId']) && !empty($_POST['reportId'])){
 		echo 'error::Report not Edited';
 	}
 } else {
-	$response = mysqli_query($conn, "INSERT INTO fll_reports (`name`, `setting`, `user_id`) VALUE ('$reportName', '$reportSettings', '$userid')");
+	if(isset($_POST['sect']) && $_POST['sect']=='fsft'){
+		$fsft = 1;
+	} else {
+		$fsft = 0;
+	}
+	$date = date('Y-m-d H:i:s');
+	$response = mysqli_query($conn, "INSERT INTO fll_reports (`name`, `setting`, `user_id`, `fsft`, `created_date`) VALUE ('$reportName', '$reportSettings', '$userid', '$fsft', '$date')");
 
 	if($response){
 		echo 'success::Report has been Saved Successfully';

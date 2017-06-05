@@ -26,6 +26,32 @@ header("Expires: 0");
 
 require('adhoc-generate.php');
 
+$dataArray = [];
+$previousRow = [];
+
+foreach($resultData as $key=>$row){
+
+  $previousRow[$key]=$row;
+    foreach($row as $key_in=>$val){
+      if(isset($previousRow[$key-1]) && $previousRow[$key-1]['Id']==$row['Id']){
+       if($previousRow[$key-1][$key_in]==$val){
+          $row[$key_in] = '//';
+       }
+
+  }
+
+       $row[$key_in] = html_entity_decode($row[$key_in]);
+  }
+  
+
+    array_push($dataArray, $row);
+  
+ // print_r($row);
+} // end of foreach
+
+
+ //print_r($previousRow);
+
 $objPHPExcel = new PHPExcel();
 // Auto size columns for each worksheet
 foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
@@ -34,7 +60,7 @@ foreach ($objPHPExcel->getWorksheetIterator() as $worksheet) {
 
     $sheet = $objPHPExcel->getActiveSheet();
     $objPHPExcel->getActiveSheet()->fromArray($columns, null, 'A1');
-    $objPHPExcel->getActiveSheet()->fromArray($resultData, null, 'A2');
+    $objPHPExcel->getActiveSheet()->fromArray($dataArray, null, 'A2');
     $cellIterator = $sheet->getRowIterator()->current()->getCellIterator();
     $cellIterator->setIterateOnlyExistingCells(true);
     /** @var PHPExcel_Cell $cell */
@@ -49,21 +75,21 @@ $doc->getActiveSheet()->fromArray($tempArray, null, 'A1');*/
 $writer = PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
 
 $writer->save('php://output');
-exit;
+
 
 //define separator (defines columns in excel & tabs in word)
 $sep = "\t"; //tabbed character
 //start of printing column names as names of MySQL fields
-for ($i = 0; $i < mysql_num_fields($reservations); $i++) {
-    echo mysql_field_name($reservations,$i) . "\t";
+for ($i = 0; $i < mysql_num_fields($dataArray); $i++) {
+    echo mysql_field_name($dataArray,$i) . "\t";
 }
 print("\n");
 //end of printing column names
 //start while loop to get data
-while($row = mysql_fetch_row($reservations))
+while($row = mysql_fetch_row($dataArray))
 {
     $schema_insert = "";
-    for($j=0; $j<mysql_num_fields($reservations);$j++)
+    for($j=0; $j<mysql_num_fields($dataArray);$j++)
     {
         if(!isset($row[$j]))
             $schema_insert .= "NULL".$sep;
