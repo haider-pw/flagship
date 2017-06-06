@@ -1,4 +1,13 @@
+<?php 
+    if($this->session->flashdata('postData')){
+        $postData = $this->session->flashdata('postData');
+        $status = $postData['status'];
+        $newsletter = $postData['newsletter'];
+        $level = $postData['level'];
 
+    }
+
+?>
 <!-- Content Wrapper. Contains page content -->
 <div class="content-wrapper">
     <!-- Content Header (Page header) -->
@@ -65,7 +74,13 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-user"></i>
                                                 </div>
-                                                <input type="text" name="fname" value="FirstName" class="form-control" required value="">
+                                                <input type="text" name="fname" placeholder="First Name" 
+                                                <?php 
+                                                    if(isset($postData['fname'])){
+                                                        echo 'value="'.$postData['fname'].'"';
+                                                    }
+                                                ?>
+                                                 class="form-control" required value="">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -80,7 +95,12 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-user"></i>
                                                 </div>
-                                                <input type="text" name="lname" value="Lastname" class="form-control" required value="">
+                                                <input type="text" name="lname" placeholder="Last Name" class="form-control" required  
+                                                <?php 
+                                                    if(isset($postData['lname'])){
+                                                        echo 'value="'.$postData['lname'].'"';
+                                                    }
+                                                ?>>
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -94,7 +114,12 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-user"></i>
                                                 </div>
-                                                <input type="text" name="username" value="username" class="form-control" required value="">
+                                                <input type="text" name="username" placeholder="Username" class="form-control" required  
+                                                <?php 
+                                                    if(isset($postData['username'])){
+                                                        echo 'value="'.$postData['username'].'"';
+                                                    }
+                                                ?> >
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -109,7 +134,7 @@
                                                 <div class="input-group-addon">
                                                     <i class="fa fa-key" aria-hidden="true"></i>
                                                 </div>
-                                                <input type="text" name="password" value="password" class="form-control" required value="">
+                                                <input type="text" name="password" placeholder="Password" class="form-control" required value="">
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -121,9 +146,14 @@
 
                                             <div class="input-group">
                                                 <div class="input-group-addon">
-                                                    <i class="fa fa-user"></i>
+                                                    <i class="fa fa-envelope"></i>
                                                 </div>
-                                                <input type="text" name="email" value="email" class="form-control" required value="">
+                                                <input type="text" name="email" placeholder="Email" class="form-control" required
+                                                <?php 
+                                                    if(isset($postData['email'])){
+                                                        echo 'value="'.$postData['email'].'"';
+                                                    }
+                                                ?> >
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -136,9 +166,14 @@
 
                                             <div class="input-group">
                                                 <div class="input-group-addon">
-                                                    <i class="fa fa-user"></i>
+                                                    <i class="fa fa-flag"></i>
                                                 </div>
-                                                <input type="text" name="country" value="country" class="form-control" required value="">
+                                                <input type="text" name="country" placeholder="Country" class="form-control" required
+                                                <?php 
+                                                    if(isset($postData['country'])){
+                                                        echo 'value="'.$postData['country'].'"';
+                                                    }
+                                                ?> >
                                             </div>
                                             <!-- /.input group -->
                                         </div>
@@ -147,10 +182,27 @@
                                         <!-- Date dd/mm/yyyy -->
                                         <div class="form-group">
                                             <label>User Status:</label>&nbsp;&nbsp;&nbsp;&nbsp; <br>
-                                            <label><input type="radio" name="status" required value="y" class="flat-red" checked> Active</label>&nbsp;&nbsp;
-                                            <label><input type="radio" name="status" required value="n" class="flat-red"> Inactive</label>&nbsp;&nbsp;
-                                            <label><input type="radio" name="status" required value="b" class="flat-red"> Banned</label>&nbsp;&nbsp;
-                                            <label><input type="radio" name="status" required value="t" class="flat-red"> Pending</label>
+                                            <label><input type="radio" name="status" required value="y" class="flat-red" 
+                                            <?php 
+                                                if(isset($status)) {
+                                                    if($status=='y') echo 'checked';
+                                                } else {
+                                                    echo 'checked';
+                                                }
+                                            ?>
+                                            > Active</label>&nbsp;&nbsp;
+                                            <label><input type="radio" name="status" required value="n" class="flat-red" 
+                                            <?php if(isset($status) && $status=='n'){
+                                                echo 'checked';
+                                                } ?> > Inactive</label>&nbsp;&nbsp;
+                                            <label><input type="radio" name="status" required value="b" class="flat-red"
+                                            <?php if(isset($status) && $status=='b'){
+                                                echo 'checked';
+                                                } ?> > Banned</label>&nbsp;&nbsp;
+                                            <label><input type="radio" name="status" required value="t" class="flat-red"
+                                            <?php if(isset($status) && $status=='t'){
+                                                echo 'checked';
+                                                } ?> > Pending</label>
                                             <!-- /.input group -->
                                         </div>
                                     </div>
@@ -158,8 +210,18 @@
                                         <!-- Date dd/mm/yyyy -->
                                         <div class="form-group">
                                             <label>Newsletter Subscribe:</label>&nbsp;&nbsp;&nbsp;&nbsp;<br>
-                                            <label><input type="radio" name="newsletter" required value="1" class="flat-red" checked> Yes</label>&nbsp;&nbsp;
-                                            <label><input type="radio" name="newsletter" required value="0" class="flat-red"> No</label>
+                                            <label><input type="radio" name="newsletter" required value="1" class="flat-red" 
+                                            <?php 
+                                                if(isset($newsletter)){
+                                                    if($newsletter=='1') echo 'checked';
+                                                }
+                                                else echo 'checked';
+                                            ?>
+                                            > Yes</label>&nbsp;&nbsp;
+                                            <label><input type="radio" name="newsletter" required value="0" class="flat-red"
+                                            <?php 
+                                                if(isset($newsletter) && $newsletter=='0') echo 'checked';
+                                            ?> > No</label>
                                             <!-- /.input group -->
                                         </div>
                                     </div>
@@ -176,7 +238,12 @@
                                                     <?php
                                                     if(isset($roles) and is_array($roles) and !empty($roles)){
                                                         foreach($roles as $role){?>
-                                                            <option value="<?=$role->level_id?>"><?=$role->role_name?></option>
+                                                            <option
+                                                            <?php 
+                                                                if(isset($level) && $level==$role->level_id)
+                                                                    echo 'selected';
+                                                            ?>
+                                                             value="<?=$role->level_id?>"><?=$role->role_name?></option>
                                                         <?php }
                                                     }
                                                     ?>
@@ -189,7 +256,7 @@
                                 </div>
                                 <div class="col-md-12 col-sm-12 col-xs-12">
                                     <div class="col-md-9">
-                                        <textarea name="notes" class="form-control" rows="4" placeholder="User Notes">This is notes</textarea>
+                                        <textarea name="notes" class="form-control" rows="4" placeholder="User Notes"><?php if(isset($postData['notes'])){ echo $postData['notes']; } ?></textarea>
                                         <hr>
                                     </div>
                                     <div class="col-md-3 col-sm-3 col-xs-12" style="position: absolute;bottom: 0;right: 0;">

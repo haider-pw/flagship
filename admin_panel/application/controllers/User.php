@@ -130,6 +130,7 @@ class User extends MY_Controller {
 
 		if($this->form_validation->run() == FALSE){
 			$this->session->set_flashdata('form_error',validation_errors());
+			$this->session->set_flashdata('postData', $this->input->post());
 			redirect(base_url('user/addUser'));
 		}
 		else {
@@ -146,6 +147,7 @@ class User extends MY_Controller {
 			// check if image uploaded or not
 			if ( ! $this->upload->do_upload('avatar')){
                 $this->session->set_flashdata('form_error', $this->upload->display_errors());
+				$this->session->set_flashdata('postData', $this->input->post());
                 redirect(base_url('user/addUser'));
             }
            else {
@@ -156,6 +158,7 @@ class User extends MY_Controller {
                 $record=$this->Cruise_model->select_fields_where('users', array('COUNT(1) as total'), array('username'=>$data['username']),ture);
                 if($record->total>0){
                 	$this->session->set_flashdata('form_error', 'Username '.$data['username'].' Already Exists');
+	                $this->session->set_flashdata('postData', $this->input->post());
                 	redirect(base_url('user/addUser'));
                 } else {
 					 $this->Cruise_model->insert_record('users', $data);

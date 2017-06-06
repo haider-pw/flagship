@@ -132,7 +132,7 @@
 
                             <div class="input-group">
                               <div class="input-group-addon">
-                                <i class="fa fa-user"></i>
+                                <i class="fa fa-envelope"></i>
                               </div>
                               <input type="text" name="email" class="form-control" required value="<?=$user->email?>">
                             </div>
