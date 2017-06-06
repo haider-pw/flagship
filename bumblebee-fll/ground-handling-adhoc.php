@@ -142,6 +142,11 @@ else {
                                                     <li class="list-group-item">
                                                         <label for="PNR"><input type="checkbox" value="1" id="PNR" name="R.pnr::PNR" <?=in_array('R.pnr::PNR', $selectedCheckBoxesNames)?'checked':''?>/>Passenger Name Record (PNR)</label>
                                                     </li>
+                                                    <?php if($_REQUEST['sect'] == 'fsft'){ ?>
+                                                        <li class="list-group-item">
+                                                            <label for="total_amount"><input type="checkbox" value="1" id="total_amount" name="R.sup_total_amount::Total_Supplier_Amount" <?=in_array('R.sup_total_amount::Total_Supplier_Amount', $selectedCheckBoxesNames)?'checked':''?>/>Total Supplier Amount</label>
+                                                        </li>
+                                                    <?php } ?>
                                                 </ul>
                                             </div>
                                              <div class="col-xs-12 marginBotBox">

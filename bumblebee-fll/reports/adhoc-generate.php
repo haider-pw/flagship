@@ -24,21 +24,23 @@ print_r($_POST);
 echo '</pre>'; exit;*/
   
 if(empty($_POST)){
-    //Just Return him back to his previous page. with some message.
 
-    if(isset($_SESSION['adhoc_report']))
+    if(isset($_SESSION['adhoc_report'])) // check if report setting save in session, than use that
         $_POST = $_SESSION['adhoc_report'];
-    if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])) { // get report setting from database
+    if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])) { 
+    // for edit report , when user click on generated report button
         $result = mysqli_query($conn, "SELECT `setting` FROM fll_reports WHERE id=".$_REQUEST['report_id']);
         if(!empty($result)){
             $TotalRows = mysqli_num_rows($result);
         }
         if(isset($TotalRows) and $TotalRows > 0){
             $row = mysqli_fetch_row($result);
+                // save setting in session, as well as in post variable that's used below
                 $_POST = $_SESSION['adhoc_report'] = json_decode($row[0], true);
         } // end of if
     }
     } else {
+        // save selected report fields(post data) in session, to use when reload
         $_SESSION['adhoc_report'] = $_POST;
     }
 
@@ -49,6 +51,7 @@ ini_set('max_execution_time', 0);
     foreach($_POST as $postedItem){
         if(!empty($postedItem['value'])){
             if($postedItem['name']=='reportName') {
+                // save report name in session, to use later when create pdf or save report
                 $_SESSION['reportName'] = $postedItem['value'];
             }
             else if($postedItem['name']=='reportId'){
@@ -72,7 +75,7 @@ function selectData($postItems){
 
     $selectData = [];
     foreach($postItems as $postItem){
-        $explodedPostedItem = explode('.',$postItem);
+        $explodedPostedItem = explode('.',$postItem); 
         $columnName = end($explodedPostedItem);
         $totalItemsInExplodedArray = count($explodedPostedItem);
         $RelatedTable = $explodedPostedItem[$totalItemsInExplodedArray-2];
@@ -109,7 +112,7 @@ if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
     $fromDate = strtotime($_REQUEST['fromDate']);
     $toDate = strtotime($_REQUEST['toDate']);
     $dateRangeText = date('M d, Y',$fromDate). ' - ' .date('M d, Y',$toDate);
-
+    
     $fromDate = $_REQUEST['fromDate'];
     $toDate = $_REQUEST['toDate'];
     $query .= ' && (R.arr_date between CAST("'.$fromDate.'" AS DATE) AND CAST("'.$toDate.'" AS DATE))';
@@ -120,21 +123,12 @@ if(isset($_REQUEST['query'])){
     $query .= ' && (R.first_name LIKE "%'.$searchText.'%" || R.last_name LIKE "%'.$searchText.'%" || R.pnr LIKE "%'.$searchText.'%" || R.tour_operator LIKE "%'.$searchText.'%" || R.operator_code LIKE "%'.$searchText.'%" || R.tour_notes LIKE "%'.$searchText.'%" || R.flight_class LIKE "%'.$searchText.'%" || R.arr_transport LIKE "%'.$searchText.'%" || R.rep_type LIKE "%'.$searchText.'%" || R.client_reqs LIKE "%'.$searchText.'%" || R.dpt_transport LIKE "%'.$searchText.'%" || R.dpt_pickup LIKE "%'.$searchText.'%" || dpt_dropoff LIKE "%'.$searchText.'%" || dpt_notes LIKE "%'.$searchText.'%" || R.modified_by LIKE "%'.$searchText.'%" || R.arr_hotel_notes LIKE "%'.$searchText.'%" || R.dpt_transport_notes LIKE "%'.$searchText.'%")' ;
 }
 
-$query .= ' group by R.id, A.id, D.id, G.id';
-
-//print_r($query); exit;
 $sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
 
 if(!isset($_REQUEST['all'])) 
     $query .= ' LIMIT  '.$start.', '.$limit;
 
-
 $queryResource = mysqli_query($conn,$query);
-/*$conn = mysql_connect('localhost','root','chocolate','cocoa_fll');
-$queryResource = mysql_query($query);*/
-/*echo '<pre>';
-var_dump($queryResource); print_r(mysqli_error($conn));
-echo '</pre>'; */
 
 if(!empty($queryResource)){
     $TotalRows = mysqli_num_rows($queryResource);

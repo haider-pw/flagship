@@ -83,8 +83,8 @@ else {
                                             </div>                                     
                                         </li>              
                                     </ul>  
-                                    <a href="reports/adhoc_excel.php?all" class="pull-right btn btn-success export_pdf">Export Excel</a>
-                                    <a href="reports/adhoc_pdf.php?all" target="_blank" style="margin-right: 5px;" class="pull-right btn btn-success export_pdf">Export Pdf</a>
+                                    <a href="reports/adhoc_excel.php?all&sect=<?=$_REQUEST['sect']?>" class="pull-right btn btn-success export_pdf">Export Excel</a>
+                                    <a href="reports/adhoc_pdf.php?all&sect=<?=$_REQUEST['sect']?>" target="_blank" style="margin-right: 5px;" class="pull-right btn btn-success export_pdf">Export Pdf</a>
                                     <?php 
                                         if(isset($_REQUEST['report_id']) && !empty($_REQUEST['report_id'])){ ?>
                                         <a href="ground-handling-adhoc.php?report_id=<?=$_REQUEST['report_id']?>&sect=<?=$_REQUEST['sect']?>" style="margin-right: 5px;" class="pull-right btn btn-info">Edit Report</a>
@@ -454,7 +454,7 @@ else {
         // delete report
         $(".del_report").on('click', function(e){
             var reportId = $(this).attr('data-id');
-            if(reportId!="" && confirm('Are you sure to delete report ?')){
+            if(reportId!="" && confirm('Are you sure you want to permanently delete this report ?')){
                 $.ajax({
                     url:"reports/save_report.php",
                     type:"POST",
