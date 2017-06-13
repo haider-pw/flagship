@@ -1778,7 +1778,7 @@ if (isset($_POST['addreservation'])) {
                             </div>
 
                             <div class="form-group col-xs-7"><!-- tour operator selection -->
-                                <label>Supplier</label>
+                                <label>Client</label>
                                 <?php include('fsft_tour_oper_select.php'); ?>
                             </div>
                             <a data-id="supplier" data-toggle="modal" data-target="#add_mdl" class="btn btn-success" style="float:left;margin-top:20px;margin-left:3px;"><i class="fa fa-plus"></i></a>

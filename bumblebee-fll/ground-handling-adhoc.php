@@ -100,6 +100,7 @@ else {
                         <div class="panel-heading">
 
                             <h3 class="panel-title"><strong><?=$reportheading?></strong></h3>
+
                             <span class="pull-right"><buton class="btn btn-default" type="button" id="generateReportBtn">Generate Report</buton></span>
                         </div>
                         
@@ -111,6 +112,15 @@ else {
                                         }
                                     }
                              ?>
+
+                             <ul class="panel-controls panel-controls-title text-right" style="margin-left: 20px;">                       
+                                        <li class="pull-right" style="width:100%">
+                                            <label for="reportrange" style="display: block;">Arrival Date Filter</label>
+                                            <div id="reportrange" class="dtrange pull-right" >
+                                                <span></span><b class="caret"></b>
+                                            </div>                                     
+                                        </li>              
+                                    </ul>  
                         </div>
                         <div class="panel-body">
                             <div class="row col-md-12 marginBotBox">
@@ -122,208 +132,360 @@ else {
                             </div> 
                             <div class="row">
                                 <h4>Select Options</h4>
-                                <div class="col-md-8">
-                                    <div class="row">
-                                        <div class="col-sm-6 col-xs-12 marginBotBox" >
-                                            <div class="col-xs-12 marginBotBox">
-                                                <h4><strong>Reservation Information</strong></h4>
-                                                <label for="selectAllPersonalInformation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllPersonalInformationCheckbox">Select All</label>
-                                                <ul class="list-group">
-                                                <input type="hidden" name="R.id::Id" value="1" />
-                                                    <li class="list-group-item">
-                                                        <label for="title"><input type="checkbox" value="1" id="title" name="R.title_name::Title_Name" <?=in_array('R.title_name::Title_Name', $selectedCheckBoxesNames)?'checked':''?>/> Title</label>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <label for="firstName"><input type="checkbox" value="1" id="firstName" name="R.first_name::First_Name" <?=in_array('R.first_name::First_Name', $selectedCheckBoxesNames)?'checked':''?>/> First Name</label>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <label for="lastName"><input type="checkbox" value="1" id="lastName" name="R.last_name::Last_Name" <?=in_array('R.last_name::Last_Name', $selectedCheckBoxesNames)?'checked':''?>/>Last Name</label>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <label for="PNR"><input type="checkbox" value="1" id="PNR" name="R.pnr::PNR" <?=in_array('R.pnr::PNR', $selectedCheckBoxesNames)?'checked':''?>/>Passenger Name Record (PNR)</label>
-                                                    </li>
-                                                    <?php if($_REQUEST['sect'] == 'fsft'){ ?>
-                                                        <li class="list-group-item">
-                                                            <label for="total_amount"><input type="checkbox" value="1" id="total_amount" name="R.sup_total_amount::Total_Supplier_Amount" <?=in_array('R.sup_total_amount::Total_Supplier_Amount', $selectedCheckBoxesNames)?'checked':''?>/>Total Supplier Amount</label>
-                                                        </li>
-                                                    <?php } ?>
-                                                </ul>
-                                            </div>
-                                             <div class="col-xs-12 marginBotBox">
-                                                <h4><strong>Guests Information</strong></h4>
-                                                <label for="selectAllActivities"><input type="checkbox" class="selectAllCheckboxes" id="selectAllActivities">Select All</label>
-                                                <ul class="list-group">
-                                                    <li class="list-group-item">
-                                                        <input type="checkbox" value="1" name="R.G.title_name::Guest_Title_Name" <?=in_array('R.G.title_name::Guest_Title_Name', $selectedCheckBoxesNames)?'checked':''?>/>
-                                                        <strong>Title Name</strong>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <input type="checkbox" value="1" name="R.G.first_name::Guest_First_Name" <?=in_array('R.G.first_name::Guest_First_Name', $selectedCheckBoxesNames)?'checked':''?>/>
-                                                        <strong>First Name</strong>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <input type="checkbox" value="1" name="R.G.last_name::Guest_Last_Name" <?=in_array('R.G.last_name::Guest_Last_Name', $selectedCheckBoxesNames)?'checked':''?>/>
-                                                        <strong>Last Name</strong>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <input type="checkbox" value="1" name="R.G.adult::Guest_Adult" <?=in_array('R.G.adult::Guest_Adult', $selectedCheckBoxesNames)?'checked':''?>/>
-                                                        <strong>Adult</strong>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <input type="checkbox" value="1" name="R.G.child_age::Guest_Child_Age" <?=in_array('R.G.child_age::Guest_Child_Age', $selectedCheckBoxesNames)?'checked':''?>/>
-                                                        <strong>Child</strong>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <input type="checkbox" value="1" name="R.G.infant_age::Guest_Infant_Age" <?=in_array('R.G.infant_age::Guest_Infant_Age', $selectedCheckBoxesNames)?'checked':''?> />
-                                                        <strong>Infant</strong>
-                                                    </li>
-                                                    <li class="list-group-item">
-                                                        <input type="checkbox" value="1" name="R.G.pnr::Guest_PNR" <?=in_array('R.G.pnr::Guest_PNR', $selectedCheckBoxesNames)?'checked':''?> />
-                                                        <strong>PNR</strong>
-                                                    </li>
-                                                </ul>
-                                            </div>
-                                        </div>
-                                        <div class="col-sm-6 col-xs-12 marginBotBox" >
-                                            <h4><strong>Arrivals Information</strong></h4>
-                                            <label for="selectAllArrivalsInformation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllArrivalsInformation">Select All</label>
-                                            <ul class="list-group">
+                                <div class="col-md-4">
+                                    <div class="col-xs-12 marginBotBox">
+                                        <h4><strong>Reservation Information</strong></h4>
+                                        <label for="selectAllPersonalInformationCheckbox"><input type="checkbox" class="selectAllCheckboxes" id="selectAllPersonalInformationCheckbox">Select All</label>
+                                        <ul class="list-group">
+                                        <input type="hidden" name="R.id::Id" value="1" />
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" id="title" name="R.title_name::Title_Name" <?=in_array('R.title_name::Title_Name', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Title</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" id="firstName" name="R.first_name::First_Name" <?=in_array('R.first_name::First_Name', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>First Name</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" id="lastName" name="R.last_name::Last_Name" <?=in_array('R.last_name::Last_Name', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Last Name</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" id="PNR" name="R.pnr::PNR" <?=in_array('R.pnr::PNR', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Passenger Name Record (PNR)</strong>
+                                            </li>
+
+                                            <?php if($_REQUEST['sect'] == 'fsft'){ ?>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_date::Arr_Date" <?=in_array('R.A.arr_date::Arr_Date', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Date</strong>
+                                                    <input type="checkbox" value="1" id="total_amount" name="R.sup_total_amount::Total_Supplier_Amount" <?=in_array('R.sup_total_amount::Total_Supplier_Amount', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Total Supplier Amount</strong>
+                                                </li>
+                                            <?php } else {?>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" id="tour_operator" name="R.tour_operator::Tour_Operator" <?=in_array('R.tour_operator::Tour_Operator', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Tour Operator</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_time::Arr_Time" <?=in_array('R.A.arr_time::Arr_Time', $selectedCheckBoxesNames)?'checked':''?>/>
-                                                    <strong>Time</strong>
+                                                    <input type="checkbox" value="1" id="operator_code" name="R.operator_code::Operator_Code" <?=in_array('R.operator_code::Operator_Code', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Operator Code/Brand</strong>
+                                                </li>
+                                               <?php  } ?>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" id="tour_ref_no" name="R.tour_ref_no::Reference_No" <?=in_array('R.tour_ref_no::Reference_No', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Reference #</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_flight_no::Arr_Flight" <?=in_array('R.A.arr_flight_no::Arr_Flight', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Flight No</strong>
+                                                        <input type="checkbox" value="1" id="adult" name="R.adult::adult" <?=in_array('R.adult::adult', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong># of Adults</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.flight_class::Arr_Flight_Class" <?=in_array('R.A.flight_class::Arr_Flight_Class', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Flight Class</strong>
+                                                        <input type="checkbox" value="1" id="child" name="R.child::Child" <?=in_array('R.child::Child', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong># of Children</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_transport::Arr_Transport" <?=in_array('R.A.arr_transport::Arr_Transport', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Transport</strong>
+                                                        <input type="checkbox" value="1" id="infant" name="R.infant::Infant" <?=in_array('R.infant::Infant', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong># of Infants</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_driver::Arr_Driver" <?=in_array('R.A.arr_driver::Arr_Driver', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Driver</strong>
+                                                        <input type="checkbox" value="1" id="tour_notes" name="R.tour_notes::Tour_Notes" <?=in_array('R.tour_notes::Tour_Notes', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Rep Notes</strong>
                                                 </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_vehicle::Arr_Vehicle" <?=in_array('R.A.arr_vehicle::Arr_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Vehicle</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_pickup::Arr_Pickup" <?=in_array('R.A.arr_pickup::Arr_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Pickup</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_dropoff::Arr_Dropoff" <?=in_array('R.A.arr_dropoff::Arr_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Dropoff</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.room_type::Arr_Room_Type" <?=in_array('R.A.room_type::Arr_Room_Type', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Room Type</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.rep_type::Arr_Rep_Type" <?=in_array('R.A.rep_type::Arr_Rep_Type', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Rep Type</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.client_reqs::Arr_Client_Reqs" <?=in_array('R.A.client_reqs::Arr_Client_Reqs', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Client Reqs</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_transport_notes::Arr_Transport_Notes" <?=in_array('R.A.arr_transport_notes::Arr_Transport_Notes', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>TransPort Notes</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_hotel_notes::Arr_Hotel_Notes" <?=in_array('R.A.arr_hotel_notes::Arr_Hotel_Notes', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Hotel Notes</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.infant_seats::Arr_Infant_Seats" <?=in_array('R.A.infant_seats::Arr_Infant_Seats', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Infant Seats</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.child_seats::Arr_Child_Seats" <?=in_array('R.A.child_seats::Arr_Child_Seats', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Child Seats</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.booster_seats::Arr_Booster_Seats" <?=in_array('R.A.booster_seats::Arr_Booster_Seats', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Booster Seats</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.vouchers::Arr_Vouchers" <?=in_array('R.A.vouchers::Arr_Vouchers', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Vouchers</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.cold_towel::Arr_Cold_Towel" <?=in_array('R.A.cold_towel::Arr_Cold_Towel', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Cold Towel</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.bottled_water::Arr_Bottled_Water" <?=in_array('R.A.bottled_water::Arr_Bottled_Water', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Water Bottles</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.rooms::Arr_Rooms" <?=in_array('R.A.rooms::Arr_Rooms', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Rooms</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.room_no::Arr_Room" <?=in_array('R.A.room_no::Arr_Room', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Room No</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_main::Arr_Main" <?=in_array('R.A.arr_main::Arr_Main', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Main</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.luggage_vehicle::Arr_Lagguage_Vehicle" <?=in_array('R.A.luggage_vehicle::Arr_Lagguage_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Luggage Vehicle</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.excursion_name::Arr_Excursion_Name" <?=in_array('R.A.excursion_name::Arr_Excursion_Name', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Excursion Name</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.excursion_date::Arr_Excursion_Date" <?=in_array('R.A.excursion_date::Arr_Excursion_Date', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Excursion Date</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.excursion_pickup::Arr_Excursion_Pickup" <?=in_array('R.A.excursion_pickup::Arr_Excursion_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Excursion Pickup</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.excursion_confirm_by::Arr_Excursion_Confirm_By" <?=in_array('R.A.excursion_confirm_by::Arr_Excursion_Confirm_By', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Excursion Confirm By</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.excursion_confirm_date::Arr_Confirm_Date" <?=in_array('R.A.excursion_confirm_date::Arr_Confirm_Date', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Excursion Confirm Date</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.excursion_guests::Arr_Excursion_Guests" <?=in_array('R.A.excursion_guests::Arr_Excursion_Guests', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Excursion Guests</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.arr_rooms::Arr_Rooms" <?=in_array('R.A.arr_rooms::Arr_Rooms', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Arr Rooms</strong>
-                                                </li>
-                                                <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.A.room_last_name::Arr_Room_Last_Name" <?=in_array('R.A.room_last_name::Arr_Room_Last_Name', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Room Last Name</strong>
-                                                </li>
-                                            </ul>
-                                        </div>
+                                        </ul>
                                     </div>
-                                    <div class="row">
-                                       
+                                     <div class="col-xs-12 marginBotBox">
+                                        <h4><strong>Guests Information</strong></h4>
+                                        <label for="selectAllActivities"><input type="checkbox" class="selectAllCheckboxes" id="selectAllActivities">Select All</label>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.G.title_name::Guest_Title_Name" <?=in_array('R.G.title_name::Guest_Title_Name', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <strong>Title Name</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.G.first_name::Guest_First_Name" <?=in_array('R.G.first_name::Guest_First_Name', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <strong>First Name</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.G.last_name::Guest_Last_Name" <?=in_array('R.G.last_name::Guest_Last_Name', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <strong>Last Name</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.G.pnr::Guest_PNR" <?=in_array('R.G.pnr::Guest_PNR', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>PNR</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.G.adult::Guest_Adult" <?=in_array('R.G.adult::Guest_Adult', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <strong>Adult</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.G.child_age::Guest_Child_Age" <?=in_array('R.G.child_age::Guest_Child_Age', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <strong>Child</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.G.infant_age::Guest_Infant_Age" <?=in_array('R.G.infant_age::Guest_Infant_Age', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Infant</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="col-sm-12 col-xs-12 marginBotBox" >
+                                        <h4><strong>Arrivals Information</strong></h4>
+                                        <label for="selectAllArrivalsInformation"><input type="checkbox" class="selectAllCheckboxes" id="selectAllArrivalsInformation">Select All</label>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_date::Arr_Date" <?=in_array('R.A.arr_date::Arr_Date', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Date</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.fast_track::Fast_Track" <?=in_array('R.A.fast_track::Fast_Track', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Fast Track</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_flight_no::Arr_Flight" <?=in_array('R.A.arr_flight_no::Arr_Flight', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Flight No</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_time::Arr_Time" <?=in_array('R.A.arr_time::Arr_Time', $selectedCheckBoxesNames)?'checked':''?>/>
+                                                <strong>Time</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.flight_class::Arr_Flight_Class" <?=in_array('R.A.flight_class::Arr_Flight_Class', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Flight Class</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_transport::Arr_Transport" <?=in_array('R.A.arr_transport::Arr_Transport', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Transport</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_driver::Arr_Driver" <?=in_array('R.A.arr_driver::Arr_Driver', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Driver</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_vehicle::Arr_Vehicle" <?=in_array('R.A.arr_vehicle::Arr_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Vehicle</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_transport_notes::Arr_Transport_Notes" <?=in_array('R.A.arr_transport_notes::Arr_Transport_Notes', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Arrival &amp; Transport Notes</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_pickup::Arr_Pickup" <?=in_array('R.A.arr_pickup::Arr_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Pickup</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_dropoff::Arr_Dropoff" <?=in_array('R.A.arr_dropoff::Arr_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Dropoff</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.rep_type::Arr_Rep_Type" <?=in_array('R.A.rep_type::Arr_Rep_Type', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Rep Type</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.client_reqs::Arr_Client_Reqs" <?=in_array('R.A.client_reqs::Arr_Client_Reqs', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Client Reqs</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_hotel_notes::Arr_Hotel_Notes" <?=in_array('R.A.arr_hotel_notes::Arr_Hotel_Notes', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Hotel Notes</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.infant_seats::Arr_Infant_Seats" <?=in_array('R.A.infant_seats::Arr_Infant_Seats', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Infant Seats</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.child_seats::Arr_Child_Seats" <?=in_array('R.A.child_seats::Arr_Child_Seats', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Child Seats</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.booster_seats::Arr_Booster_Seats" <?=in_array('R.A.booster_seats::Arr_Booster_Seats', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Booster Seats</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.vouchers::Arr_Vouchers" <?=in_array('R.A.vouchers::Arr_Vouchers', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Vouchers</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.cold_towel::Arr_Cold_Towel" <?=in_array('R.A.cold_towel::Arr_Cold_Towel', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Cold Towel</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.bottled_water::Arr_Bottled_Water" <?=in_array('R.A.bottled_water::Arr_Bottled_Water', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Bottled Water</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.room_type::Arr_Room_Type" <?=in_array('R.A.room_type::Arr_Room_Type', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Room Type</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.rooms::Arr_Rooms" <?=in_array('R.A.rooms::Arr_Rooms', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong># of Rooms</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.room_no::Arr_Room" <?=in_array('R.A.room_no::Arr_Room', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Room No</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.room_last_name::Arr_Room_Last_Name" <?=in_array('R.A.room_last_name::Arr_Room_Last_Name', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Last Name on Room</strong>
+                                            </li>
+                                             <?php /* 
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.arr_main::Arr_Main" <?=in_array('R.A.arr_main::Arr_Main', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Main</strong>
+                                            </li>
+                                            */ ?>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.luggage_vehicle::Arr_Lagguage_Vehicle" <?=in_array('R.A.luggage_vehicle::Arr_Lagguage_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Luggage Vehicle</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.excursion_name::Arr_Excursion_Name" <?=in_array('R.A.excursion_name::Arr_Excursion_Name', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Excursion Name</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.excursion_date::Arr_Excursion_Date" <?=in_array('R.A.excursion_date::Arr_Excursion_Date', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Excursion Date</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.excursion_pickup::Arr_Excursion_Pickup" <?=in_array('R.A.excursion_pickup::Arr_Excursion_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Excursion Pickup</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.excursion_confirm_by::Arr_Excursion_Confirm_By" <?=in_array('R.A.excursion_confirm_by::Arr_Excursion_Confirm_By', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Excursion Confirm By</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.excursion_confirm_date::Arr_Confirm_Date" <?=in_array('R.A.excursion_confirm_date::Arr_Confirm_Date', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Excursion Confirm Date</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.A.excursion_guests::Arr_Excursion_Guests" <?=in_array('R.A.excursion_guests::Arr_Excursion_Guests', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Excursion Guests</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-12 col-xs-12 marginBotBox" >
+                                        <h4><strong>Arrival Additional Rooms</strong></h4>
+                                        <label for="selectAllAddRooms"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAddRooms">Select All</label>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.AR.room_type::Additional_Room_Type" <?=in_array('R.AR.room_type::Additional_Room_Type', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Room Type</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.AR.room_number::Additional_Room_Number" <?=in_array('R.AR.room_number::Additional_Room_Number', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Room Number</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.AR.last_name::Additional_Last_Name" <?=in_array('R.AR.last_name::Additional_Last_Name', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Last Name on Room</strong>
+                                            </li>
+                                        </ul>
                                     </div>
                                 </div>
                                 <div class="col-md-4 marginBotBox">
+
+
+                                    <div class="col-sm-12 col-xs-12 marginBotBox" >
+                                        <h4><strong>Arrival Additional Transport</strong></h4>
+                                        <label for="selectAllAddTransport"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAddTransport">Select All</label>
+                                        <ul class="list-group">
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.AT.transport_mode::Additional_Transport_Mode" <?=in_array('R.AT.transport_mode::Additional_Transport_Mode', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Transport Mode</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.AT.driver::Additional_Transport_Supplier" <?=in_array('R.AT.driver::Additional_Transport_Supplier', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Transport Supplier</strong>
+                                            </li>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" name="R.AT.vehicle::Additional_Vehicle" <?=in_array('R.AT.vehicle::Additional_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <strong>Vehicle</strong>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="col-md-12 marginBotBox">
+                                             <h4><strong>Arrival Inter-Hotel Transfer</strong></h4>
+                                            <label for="selectAllArrIntelHotel"><input type="checkbox" class="selectAllCheckboxes" id="selectAllArrIntelHotel">Select All</label>
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.I.pickup::Inter_Hotel_Pickup" <?=in_array('R.I.pickup::Inter_Hotel_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Pickup Location</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.I.pickup_date::Inter_Hotel_Pickup_Date" <?=in_array('R.I.pickup_date::Inter_Hotel_Pickup_Date', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Pickup Date</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.I.pickup_time::Inter_Hotel_Pickup_Time" <?=in_array('R.I.pickup_time::Inter_Hotel_Pickup_Time', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Pickup Time</strong>
+                                                </li>
+                                                <?php /* ?>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.I.pickup::Pickup_Location" <?=in_array('R.I.pickup::Pickup_Location', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Transport Mode</strong>
+                                                </li>
+                                                <?php */ ?>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.I.dropoff::Inter_Hotel_Dropoff_Location" <?=in_array('R.I.dropoff::Inter_Hotel_Dropoff_Location', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Dropoff Location</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.I.transport::Inter_Hotel_Transport" <?=in_array('R.I.transport::Inter_Hotel_Transport', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Transport Supplier</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.I.vehicle::Inter_Hotel_Vehicle" <?=in_array('R.I.vehicle::Inter_Hotel_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Vehicle</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.I.transfer_notes::Inter_Hotel_Transfer_Notes" <?=in_array('R.I.transfer_notes::Inter_Hotel_Transfer_Notes', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Transfer &amp; Transport Notes</strong>
+                                                </li>
+                                            </ul>
+                                    </div>
+
+                                    <div class="col-md-12 marginBotBox">
+                                             <h4><strong>Arrival Additional Transfer</strong></h4>
+                                            <label for="selectAllArrivalsTransfer"><input type="checkbox" class="selectAllCheckboxes" id="selectAllArrivalsTransfer">Select All</label>
+                                            <ul class="list-group">
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.AD.pickup::Additional_Pickup_Location" <?=in_array('R.AD.pickup::Additional_Pickup_Location', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Pickup Location</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.AD.pickup_date::Additional_Pickup_Date" <?=in_array('R.AD.pickup_date::Additional_Pickup_Date', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Pickup Date</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.AD.pickup_time::Additional_Pickup_Time" <?=in_array('R.AD.pickup_time::Additional_Pickup_Time', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Pickup Time</strong>
+                                                </li>
+                                                <?php /* ?>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.AD.pickup::Pickup_Location" <?=in_array('R.AD.pickup::Pickup_Location', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Transport Mode</strong>
+                                                </li>
+                                                <?php */ ?>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.AD.dropoff::Additional_Dropoff_Location" <?=in_array('R.AD.dropoff::Additional_Dropoff_Location', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Dropoff Location</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.AD.transport::Additional_Transport" <?=in_array('R.AD.transport::Additional_Transport', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Transport Supplier</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.AD.vehicle::Additional_Vehicle" <?=in_array('R.AD.vehicle::Additional_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Vehicle</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.AD.transfer_notes::Additional_Transfer_Notes" <?=in_array('R.AD.transfer_notes::Additional_Transfer_Notes', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Transfer &amp; Transport Notes</strong>
+                                                </li>
+                                            </ul>
+                                    </div>
                                     <div class="col-md-12 marginBotBox">
                                         <h4><strong>Departure Information</strong></h4>
                                         <label for="selectAllAdminAir"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAdminAir">Select All</label>
@@ -333,12 +495,12 @@ else {
                                                     <strong>Date</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_time::Dept_Time" <?=in_array('R.D.dpt_time::Dept_Time', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Time</strong>
-                                                </li>
-                                                <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.dpt_flight_no::Dept_Flight" <?=in_array('R.D.dpt_flight_no::Dept_Flight', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Flight No</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.D.dpt_time::Dept_Time" <?=in_array('R.D.dpt_time::Dept_Time', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Time</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.flight_class::Dept_Flight_Class" <?=in_array('R.D.flight_class::Dept_Flight_Class', $selectedCheckBoxesNames)?'checked':''?> />
@@ -361,28 +523,30 @@ else {
                                                     <strong>Pickup</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_dropoff::Dept_Dropoff" <?=in_array('R.D.dpt_dropoff::Dept_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Dropoff</strong>
-                                                </li>
-                                                <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.dpt_pickup_time::Dept_Pickup_Time" <?=in_array('R.D.dpt_pickup_time::Dept_Pickup_Time', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Pickup Time</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_notes::Dept_Notes" <?=in_array('R.D.dpt_notes::Dept_Notes', $selectedCheckBoxesNames)?'checked':''?> />
-                                                    <strong>Notes</strong>
+                                                    <input type="checkbox" value="1" name="R.D.dpt_dropoff::Dept_Dropoff" <?=in_array('R.D.dpt_dropoff::Dept_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Dropoff</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.dpt_transport_notes::Dept_Transport_Notes" <?=in_array('R.D.dpt_transport_notes::Dept_Transport_Notes', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Transport Notes</strong>
                                                 </li>
+                                                <?php /* 
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.dpt_main::Dept_Main" <?=in_array('R.D.dpt_main::Dept_Main', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Main</strong>
                                                 </li>
+                                                 */ ?>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.dpt_jet_center::Dept_Jet_Center" <?=in_array('R.D.dpt_jet_center::Dept_Jet_Center', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Jet Center</strong>
+                                                </li>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" name="R.dpt_notes::Accounting_Notes" <?=in_array('R.dpt_notes::Accounting_Notes', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <strong>Accounting Notes</strong>
                                                 </li>
                                             </ul>
                                     </div>
@@ -425,6 +589,8 @@ else {
 <!--Select2-->
 <script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
 <!-- END THIS PAGE PLUGINS -->
+    <script type="text/javascript" src="js/plugins/moment.min.js"></script>
+    <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script> 
 
 <!-- START TEMPLATE -->
 <script type="text/javascript" src="js/relCopy.jquery.js"></script>
@@ -455,20 +621,69 @@ else {
         });
 
         $('#generateReportBtn').on('click',function(){
+            // get to and from dates 
+            var fromDate = $(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
+            var toDate = $(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
+            //
             var field = $('#reportName');
-         var reportName = field.val();
-         if(reportName == ''){
-            field.css('border-color','#b64645');
-            alert('Please Enter Report Name');
-            return false;
-         }
-            //Getting All Inputs.
-        var formData =   $('#adhocReportForm').serializeArray();
-        var postURL = '<?=$url?>/adhoc_report.php?sect=<?=$_REQUEST["sect"]?>';
-        //Just Redirect it.
-        $.redirect(postURL,formData,'POST');
+             var reportName = field.val();
+             if(reportName == ''){
+                field.css('border-color','#b64645');
+                alert('Please Enter Report Name');
+                return false;
+             }
+             if(!$('input:checked').length){
+                alert('Please Select Some Field');
+                return false;
+             }
+                //Getting All Inputs.
+            var formData =   $('#adhocReportForm').serializeArray();
+            var postURL = '<?=$url?>/adhoc_report.php?sect=<?=$_REQUEST["sect"]?>&fromDate='+fromDate+'&toDate='+toDate;
+            //Just Redirect it.
+            $.redirect(postURL,formData,'POST');
 
         });
+    });
+
+
+    $(function(){
+
+        /* reportrange */
+        if($("#reportrange").length > 0){
+            $("#reportrange").daterangepicker({
+                ranges: {
+                    'Today': [moment().subtract(3, 'month'), moment().subtract(3, 'month')],
+                    //'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    //'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    //'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    //'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    //'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                buttonClasses: ['btn btn-default'],
+                applyClass: 'btn-small btn-primary',
+                cancelClass: 'btn-small',
+                format: 'YYYY-MM-DD',
+                separator: ' to ',
+                startDate: moment().subtract(3, 'years'),
+                endDate: moment()
+            },function(start, end) { 
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            });
+
+            <?php
+
+            if(isset($dateRangeText) and !empty($dateRangeText)){
+                echo "$(\"#reportrange span\").html('".$dateRangeText."');";
+                echo "console.log('".$dateRangeText."')";
+            }else{
+                echo "$(\"#reportrange span\").html(moment().subtract(3, 'years').format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));";
+            }
+            ?>
+        }
+
+        /* end reportrange */
+
     });
 </script>
 </body>

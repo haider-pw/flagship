@@ -52,7 +52,7 @@ ini_set('max_execution_time', 0);
         if(!empty($postedItem['value'])){
             if($postedItem['name']=='reportName') {
                 // save report name in session, to use later when create pdf or save report
-                $_SESSION['reportName'] = $postedItem['value'];
+                $_SESSION['reportName'] = ucwords($postedItem['value']);
             }
             else if($postedItem['name']=='reportId'){
                  $reportId = $postedItem['value'];
@@ -98,6 +98,20 @@ if(strpos($selectData,'`D`')){
 }
 if(strpos($selectData,'`A`')){
     $query .= ' LEFT JOIN fll_arrivals A on R.ref_no_sys = A.ref_no_sys';
+
+    if(strpos($selectData,'`AR`')){
+        $query .= ' LEFT JOIN fll_arrivals_rooms AR on A.id = AR.arrival_id';
+    }
+
+    if(strpos($selectData,'`AT`')){
+        $query .= ' LEFT JOIN fll_arrivals_transports AT on A.id = AT.arrival_id';
+    }
+}
+if(strpos($selectData,'`I`')){
+    $query .= ' LEFT JOIN fll_transfer I on R.ref_no_sys = I.ref_no_sys';
+}
+if(strpos($selectData,'`AD`')){
+    $query .= ' LEFT JOIN fll_additional_transfer AD on R.ref_no_sys = AD.ref_no_sys';
 }
 
 if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){ 
@@ -107,7 +121,17 @@ if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){
 $query .= ' WHERE R.fast_track=0 && R.status!=2';
 }
 
+
+if(!isset($_REQUEST['fromDate']) || !isset($_REQUEST['toDate'])){
+    if(isset($_SESSION['repFromDate'])){
+        $_REQUEST['fromDate'] = $_SESSION['repFromDate'];
+        $_REQUEST['toDate'] = $_SESSION['repToDate'];
+    }
+}
+
 if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
+    $_SESSION['repFromDate'] = $_REQUEST['fromDate'];
+    $_SESSION['repToDate'] = $_REQUEST['toDate'];
 
     $fromDate = strtotime($_REQUEST['fromDate']);
     $toDate = strtotime($_REQUEST['toDate']);
@@ -120,14 +144,16 @@ if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
 
 if(isset($_REQUEST['query'])){
     $searchText = $_REQUEST['query'];
-    $query .= ' && (R.first_name LIKE "%'.$searchText.'%" || R.last_name LIKE "%'.$searchText.'%" || R.pnr LIKE "%'.$searchText.'%" || R.tour_operator LIKE "%'.$searchText.'%" || R.operator_code LIKE "%'.$searchText.'%" || R.tour_notes LIKE "%'.$searchText.'%" || R.flight_class LIKE "%'.$searchText.'%" || R.arr_transport LIKE "%'.$searchText.'%" || R.rep_type LIKE "%'.$searchText.'%" || R.client_reqs LIKE "%'.$searchText.'%" || R.dpt_transport LIKE "%'.$searchText.'%" || R.dpt_pickup LIKE "%'.$searchText.'%" || dpt_dropoff LIKE "%'.$searchText.'%" || dpt_notes LIKE "%'.$searchText.'%" || R.modified_by LIKE "%'.$searchText.'%" || R.arr_hotel_notes LIKE "%'.$searchText.'%" || R.dpt_transport_notes LIKE "%'.$searchText.'%")' ;
+     $query .= ' && (R.first_name LIKE "%'.$searchText.'%" || R.last_name LIKE "%'.$searchText.'%" || R.pnr LIKE "%'.$searchText.'%" || R.tour_operator LIKE "%'.$searchText.'%" || R.operator_code LIKE "%'.$searchText.'%" || R.tour_notes LIKE "%'.$searchText.'%" || R.flight_class LIKE "%'.$searchText.'%" || R.arr_transport LIKE "%'.$searchText.'%" || R.rep_type LIKE "%'.$searchText.'%" || R.client_reqs LIKE "%'.$searchText.'%" || R.dpt_transport LIKE "%'.$searchText.'%" || R.dpt_pickup LIKE "%'.$searchText.'%" || R.dpt_dropoff LIKE "%'.$searchText.'%" || R.dpt_notes LIKE "%'.$searchText.'%" || R.modified_by LIKE "%'.$searchText.'%" || R.arr_hotel_notes LIKE "%'.$searchText.'%" || R.dpt_transport_notes LIKE "%'.$searchText.'%")' ;
 }
+$query .= ' ORDER BY R.id';
 
-$sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
+//$sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
 
-if(!isset($_REQUEST['all'])) 
-    $query .= ' LIMIT  '.$start.', '.$limit;
+//if(!isset($_REQUEST['all'])) 
+  // $query .= ' LIMIT  '.$start.', '.$limit;
 
+// echo $query; exit;
 $queryResource = mysqli_query($conn,$query);
 
 if(!empty($queryResource)){
@@ -138,9 +164,28 @@ if(isset($TotalRows) and $TotalRows > 0){
     $resultData = [];
     
     while($row = mysqli_fetch_assoc($queryResource)) {
-      
+        if(isset($row['Child'])){
+            $child =$row['Child'];
+            unset($row['Child']);
+        }
+        else $child = '-';
+        if(isset($row['Infant'])){
+            $infant = $row['Infant'];
+            unset($row['Infant']);
+        }
+        else $infant = '-';
+        if(isset($row['adult'])){
+            $adult = $row['adult'];
+            unset($row['adult']);
+        }
+        else $adult = '-';
+        if($adult!='-'|| $child!='-'||$infant!='-'){
+             $row['A_/_C_/_I'] = $adult.' / '.$child.' / '.$infant;
+        }
         $resultData[] = $row;
     }
+
+   
     if(!empty($resultData)){
         $columns = array_keys($resultData[0]);
         $columns = array_map(function($column){

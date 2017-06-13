@@ -34,6 +34,7 @@ else {
 ?>
 <style>
     .buttons-pdf{background-color:#95b75d!important;background-image: none!important;color:white!important;}
+    .excelButton{float:right!important;}
 </style>
 <link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
 <link rel="stylesheet" href="css/simplePagination.css" type="text/css">
@@ -70,19 +71,19 @@ else {
                             
                             <!-- START DATATABLE EXPORT -->
                             <div class="panel panel-default">
-                                <div id="search_dt" class="dataTables_filter">
+                                <!-- <div id="search_dt" class="dataTables_filter">
                                 <label>Search:<input class="search_dt" type="search" class="" placeholder="" aria-controls="res-arrivals"></label>
-                                </div>
+                                </div> -->
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Arrival & Departure Schedules</h3>
-                                    <ul class="panel-controls panel-controls-title text-right" style="margin-left: 20px;">                       
+                                   <!--  <ul class="panel-controls panel-controls-title text-right" style="margin-left: 20px;">                       
                                         <li class="pull-right" style="width:100%">
                                             <label for="reportrange" style="display: block;">Arrival Date Filter</label>
                                             <div id="reportrange" class="dtrange pull-right" >
                                                 <span></span><b class="caret"></b>
                                             </div>                                     
                                         </li>              
-                                    </ul>  
+                                    </ul>   -->
                                     <a href="reports/adhoc_excel.php?all&sect=<?=$_REQUEST['sect']?>" class="pull-right btn btn-success export_pdf">Export Excel</a>
                                     <a href="reports/adhoc_pdf.php?all&sect=<?=$_REQUEST['sect']?>" target="_blank" style="margin-right: 5px;" class="pull-right btn btn-success export_pdf">Export Pdf</a>
                                     <?php 
@@ -123,7 +124,7 @@ else {
 
 
 
-                $total=ceil($sqlrows/$limit);
+               // $total=ceil($sqlrows/$limit);
 
                 /*if($id>1)
                 {
@@ -145,8 +146,8 @@ else {
                 echo "</ul>";*/
                                         ?>
                                     </table>                                    
-                                    <div id="data-container" style="display:none"></div>
-                                    <div id="pagination-container"></div>
+                                    <!-- <div id="data-container" style="display:none"></div>
+                                    <div id="pagination-container"></div> -->
                                 </div>
                             </div>
                             <!-- END DATATABLE EXPORT -->
@@ -333,12 +334,11 @@ else {
 
 <script type="text/javascript">
     $(document).ready(function() {
-        $('#res-arrivals').dataTable( { "searching": false,
-            "iDisplayLength": 25, 
+        $('#res-arrivals').dataTable( { 
             "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "iDisplayLength": 10, 
             "dom": 'T<"clear">lBfrtip',
             "order": [[ 1, "asc" ]],
-            "bPaginate": false,
             "buttons": [
                 {
                     extend: 'excel',
@@ -347,7 +347,8 @@ else {
                         modifier: {
                             page: 'current'
                         }
-                    }
+                    }, 
+                    className: 'excelButton' 
                 }/*,
                 {
                     extend: 'excel',
@@ -415,25 +416,25 @@ else {
         
        
 
-        $(function() {
-            $('#pagination-container').pagination({
-                items: <?=$sqlrows?>,
-                itemsOnPage: 25,
-                cssStyle: 'light-theme',
-                currentPage: <?=$id?>,
-                onPageClick:function(pageNumber, event){
-                    /*$.ajax({
-                        url:"reports/pagination_result.php"
-                        data:{page:pageNumber},
-                        type:"GET",
-                        success:function(data){
+       $(function() { 
+        //     $('#pagination-container').pagination({
+        //         items: ,
+        //         itemsOnPage: 25,
+        //         cssStyle: 'light-theme',
+        //         currentPage: <?=$id?>,
+        //         onPageClick:function(pageNumber, event){
+        //             $.ajax({
+        //                 url:"reports/pagination_result.php"
+        //                 data:{page:pageNumber},
+        //                 type:"GET",
+        //                 success:function(data){
 
-                        }
-                    })*/
-                    window.location.assign("http://<?=$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']?>?id="+pageNumber+'&sect=<?=$_REQUEST["sect"]?>');
-                }
-            });
-        });
+        //                 }
+        //             })
+        //             window.location.assign("http://<?//=$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']?>?id="+pageNumber+'&sect=<?//=$_REQUEST["sect"]?>');
+        //         }
+        //     });
+        // });
 
         // save report or edit report
 
@@ -469,16 +470,16 @@ else {
             
         })
 
-        // search report records 
+       /* // search report records 
         $('.search_dt').on('keypress', function(e){
             var queryText = $(this).val();
             if(e.which=='13'){
                 window.location.assign("http://<?=$_SERVER['HTTP_HOST'].$_SERVER['PHP_SELF']?>?sect=<?=$_REQUEST["sect"]?>&query="+queryText);
             }
             
-        })
+        })*/
 
-         //Code for DatePicker Submit
+        /* //Code for DatePicker Submit
         $("body").on("click",".range_inputs > button.applyBtn",function(e){
             var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
             var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
@@ -488,12 +489,12 @@ else {
             };
             var postURL = window.location.href; 
             $.redirect(postURL,postFilterData,'GET','_SELF');
-        });
-    });
- $(function(){
+        });*/
+    })});
+// $(function(){
 
         /* reportrange */
-        if($("#reportrange").length > 0){
+        /*if($("#reportrange").length > 0){
             $("#reportrange").daterangepicker({
                 ranges: {
                     'Today': [moment(), moment()],
@@ -513,22 +514,22 @@ else {
                 endDate: moment()
             },function(start, end) {
                 $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
-            });
+            });*/
 
             <?php
-
+/*
             if(isset($dateRangeText) and !empty($dateRangeText)){
                 echo "$(\"#reportrange span\").html('".$dateRangeText."');";
                 echo "console.log('".$dateRangeText."')";
             }else{
                 echo "$(\"#reportrange span\").html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));";
-            }
+            }*/
             ?>
-        }
+      //  }
 
         /* end reportrange */
 
-    });
+   // });
 </script>
 </body>
 </html>

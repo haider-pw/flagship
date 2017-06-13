@@ -559,9 +559,18 @@
 				  };
 				  $("#' . $form_id . '").ajaxForm(options);
 			  });
-			  function showResponse(msg) {
+			  function showResponse(msg) { 
 				  hideLoader();
-				  $(this).html(msg);
+				  if(msg.indexOf(":::")>-1){
+				  	msg = msg.split(":::");
+				  	msg = msg[1];
+				  	msg = JSON.parse(msg); 
+				  	$("#last_edit").val(msg.value);
+				  	msg = \'<div class="bggreen"><p><span class="icon-ok-sign"></span><i class="close icon-remove-circle"></i>\'+msg.msg+\'</p></div>\';
+				  	$(this).html(msg);
+				  	console.log(msg.value);
+				  } else {
+				  	$(this).html(msg);}
 				  $("html, body").animate({
 					  scrollTop: 0
 				  }, 600);

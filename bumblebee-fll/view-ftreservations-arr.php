@@ -35,6 +35,7 @@ if(isset($_POST['fromDate'])){
     }
 
 }
+$reservationQuery .= " ORDER BY id DESC";
 //echo $reservationQuery;
 //Grab all reservation info
 $reservations = mysql_query($reservationQuery);
@@ -159,11 +160,13 @@ if(mysql_errno()){
                                                 <th>Arr &amp; Trans Notes</th>
                                                 <th>Rep Notes</th>
                                                 <th>Acct Notes</th>
+                                                <th>Price</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php
+                                        <?php 
                                             while($row = mysql_fetch_array($reservations)) {
+                                                
                                                 
                                                 $arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[16] . "'"));
                                                 $arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[15] . "'"));                                                   
@@ -194,6 +197,7 @@ if(mysql_errno()){
                                                 $arr_notes = $row[44];
                                                 $rep_notes = $row[11];
                                                 $acc_notes = $row[35];
+                                                $price =$row[65];
                                                 
                                                 if ($row[47] > 0){
                                                     $displayftnotify = ' | <a href="ftreservation-review.php?id=' . $id . '"><i class="fa fa-check-square-o" data-toggle="tooltip" data-placement="top" title="Reservation reviewed"></i></a>';
@@ -250,6 +254,7 @@ if(mysql_errno()){
                                                         <td class="arrNotes" data-placement="top" data-toggle="tooltip" data-original-title="Click to See All">' . $arr_notes . '</td>
                                                         <td class="repNotes" data-placement="top" data-toggle="tooltip" data-original-title="Click to See All">' . $rep_notes . '</td>
                                                         <td class="accNotes" data-placement="top" data-toggle="tooltip" data-original-title="Click to See All">' . $acc_notes . '</td>
+                                                        <td>' . $price . '</td>
                                                 </tr>';
                                             }
                                         ?>

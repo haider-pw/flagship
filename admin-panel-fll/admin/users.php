@@ -15,6 +15,7 @@
 <p class="bluetip"><i class="icon-lightbulb icon-3x pull-left"></i> Here you can update your user info<br>
   Fields marked <i class="icon-append icon-asterisk"></i> are required.</p>
 <form class="xform" id="admin_form" method="post">
+  <input type="hidden" id="last_edit" name="last_edit" value="<?=$row->last_edit?>" />
   <header>User Manager<span>Editing Current User <i class="icon-double-angle-right"></i> <?php echo $row->username;?></span></header>
   <div class="row">
     <section class="col col-6">
@@ -93,7 +94,7 @@
       </label>
       <div class="note">User Avatar</div>
     </section>
-    <section class="col col-4"> <img src="../thumbmaker.php?src=<?php echo UPLOADURL;?><?php echo ($row->avatar) ? $row->avatar : "blank.png";?>&amp;w=40&amp;h=40&amp;s=1&amp;a=t1" alt="" title="" class="avatar" /> </section>
+    <section class="col col-4"> <img src=<?php echo UPLOADURL;?><?php echo ($row->avatar) ? $row->avatar : "blank.png";?>&amp;w=40&amp;h=40&amp;s=1&amp;a=t1" alt="" title="" class="avatar" /> </section>
   </div>
   <div class="row">
     <section class="col col-4">

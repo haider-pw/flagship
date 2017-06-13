@@ -332,6 +332,25 @@
                   Filter::$msgs['avatar'] = "Illegal file type. Only jpg and png file types allowed.";
           }
 		  
+      if($_POST['last_edit'] && !empty($_POST['last_edit'])){ 
+          // select time from database 
+        $where = 'id = '.$_POST['id'];
+        $result = self::$db->selectRecord(self::uTable, '*', $where);
+        if($result['last_edit'] && $result['last_edit']!=$_POST['last_edit']){
+          
+          $where = 'id = '.$result['id'];
+          $result = self::$db->selectRecord(self::uTable, '*', $where);
+          if($result['fname']){
+            $fname = $result['fname'];
+            $lname = $result['lname'];
+            $block_msg = "Your changes can't be saved. ".$fname." ".$lname." has updated this record. Please refresh to see the changings.";
+          } else {
+            $block_msg = "Your changes not saved, another user has updated this record";
+          }
+            Filter::$msgs['block'] = $block_msg;
+        }
+      }
+
 		  if (empty(Filter::$msgs)) {
 			  
 			  $data = array(
@@ -344,6 +363,10 @@
 				  'userlevel' => intval($_POST['userlevel']), 
 				  'active' => sanitize($_POST['active'])
 			  );
+        if($_POST['last_edit']){
+          $data['last_edit'] = date('Y-m-d h:m:s');
+          $data['edit_by'] = $_SESSION['userid'];
+        }
 
               if (!Filter::$id)
                   $data['created'] = "NOW()";
@@ -372,11 +395,22 @@
 			  
 				  
               (Filter::$id) ? self::$db->update(self::uTable, $data, "id='" . Filter::$id . "'") : self::$db->insert(self::uTable, $data);
-              $message = (Filter::$id) ? '<span>Success!</span>User updated successfully!' : '<span>Success!</span>User added successfully!';
+             /* $message = (Filter::$id) ? '<span>Success!</span>User updated successfully!' : '<span>Success!</span>User added successfully!';*/
+                $message = (Filter::$id) ? 'update':'add';
 
               if (self::$db->affected()) {
-                  Filter::msgOk($message);
-				  
+                 // Filter::msgOk($message);
+                if($message =='update'){
+                    $respdata = array('msg' => '<span>Success!</span>User updated successfully!' ,
+                                  'value'=>$data['last_edit']);
+                   
+                  } else {
+                    $respdata = array('msg' => '<span>Success!</span>User added successfully!');
+                  }
+                  $message = '<div style="display:none">:::'.json_encode($respdata).":::encode</div>";
+                   // Filter::msgOk($message);
+                  echo $message;
+				    
                   if (isset($_POST['notify']) && intval($_POST['notify']) == 1) {
                       require_once (BASEPATH . "lib/class_mailer.php");
                       $mailer = $mail->sendMail();

@@ -12,7 +12,7 @@ $sql = "SELECT * FROM fll_fsft_touroperator ORDER BY tour_operator ASC";
 $result = mysql_query($sql);
 
 echo '<select class="form-control select" id="tour-oper" name="tour_oper">
-      <option>Select Supplier</option>';
+      <option>Select Client</option>';
 while ($row = mysql_fetch_array($result)) {
     echo "<option data-price='".$row['amount']."' value='" . $row['id'] . "'>" . $row['tour_operator'] . "</option>";
 }

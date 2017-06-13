@@ -193,6 +193,15 @@
           return mysqli_free_result($this->query_id);
       }
 	  
+
+      // insert in database 
+      public function selectRecord($tbl, $data, $where){
+          $query = "SELECT $data FROM $tbl WHERE ".$where;
+          $result = mysqli_query($this->link_id, $query);
+          $row = mysqli_fetch_assoc($result);
+          return $row;
+      }
+
       /**
        * Database::insert()
        * Insert query with an array

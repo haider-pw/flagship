@@ -13,7 +13,7 @@
   if (!$user->logged_in)
       redirect_to("index.php");
 	  
-  $row = $user->getUserData();
+  $row = $user->getUserData(); 
 ?>
 <?php include("header.php");?>
 <p class="bluetip"><i class="icon-lightbulb icon-3x pull-left"></i> Here you can update your user info<br>
