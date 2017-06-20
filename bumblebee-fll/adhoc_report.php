@@ -1,4 +1,4 @@
-<?php
+<?php  header("Content-Type: text/html; charset=ISO-8859-1");
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   $url = '//' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
@@ -16,6 +16,13 @@ include('header.php');
 site_header('Ad Hoc Report');
 $reportId = '';
 require('reports/adhoc-generate.php');
+
+if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
+    $fromDate = strtotime($_REQUEST['fromDate']);
+    $toDate = strtotime($_REQUEST['toDate']);
+    $dateRange = date('d M, Y',$fromDate). ' - ' .date('d M, Y',$toDate);
+
+}
 /*echo '<pre>';
 var_dump($resultData);
 var_dump($columns);
@@ -75,7 +82,13 @@ else {
                                 <label>Search:<input class="search_dt" type="search" class="" placeholder="" aria-controls="res-arrivals"></label>
                                 </div> -->
                                 <div class="panel-heading">
-                                    <h3 class="panel-title">Arrival & Departure Schedules</h3>
+                                    <h3 class="panel-title">Arrival & Departure Schedules  
+                                    <?php 
+                                        if(isset($dateRange)){
+                                            echo '  <span style="font-size: 12px;">('.$dateRange.')</span>';
+                                        }
+                                    ?>
+                                    </h3>
                                    <!--  <ul class="panel-controls panel-controls-title text-right" style="margin-left: 20px;">                       
                                         <li class="pull-right" style="width:100%">
                                             <label for="reportrange" style="display: block;">Arrival Date Filter</label>

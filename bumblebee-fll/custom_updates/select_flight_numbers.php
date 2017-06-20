@@ -16,9 +16,11 @@ if($_POST){
         if($flightType === 'Arrivals'){
             $table = '`fll_arrivals` flight';
             $whereColumn = 'arr_date';
+            $column = 'arr_flight_no';
         }elseif($flightType === 'Departures'){
             $table = '`fll_departures` flight';
             $whereColumn = 'dpt_date';
+            $column = 'dpt_flight_no';
         }
     }else{
         echo 'bad post';
@@ -32,7 +34,9 @@ if($_POST){
 mysql_connect('localhost', 'root', 'chocolate');
 mysql_select_db ("cocoa_fll");
 
-$selectedDateFlights_sql = "SELECT ff.id_flight AS flightNumberID, ff.flight_number  from $table INNER JOIN fll_flights ff ON `ff`.`id_flight` = flight.arr_flight_no where `$whereColumn` = '$filterDate' AND arr_flight_no != 0";
+$selectedDateFlights_sql = "SELECT ff.id_flight AS flightNumberID, ff.flight_number  from $table INNER JOIN fll_flights ff ON `ff`.`id_flight` = flight.$column where `$whereColumn` = '$filterDate' AND `$column` != 0";
+
+
 $selectedDateFlights_resource = mysql_query($selectedDateFlights_sql);
 echo "<option value='0'>Select Flight Number</option>";
 while ($row = mysql_fetch_array($selectedDateFlights_resource)) {

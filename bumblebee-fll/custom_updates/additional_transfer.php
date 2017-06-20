@@ -42,7 +42,7 @@ if ($_POST) {
 <div class="additional-transfer-div" id="additional-transfer-<?=$divID?>">
     <input type="hidden" id="<?=$hiddenTransferInput?>" name="<?=$hiddenTransferInput?>" value="1"/>
     <hr/>
-    <h4>Additional Transfer Details</h4>
+    <h4>Concierge Transfer Details</h4>
     <div class="form-group col-xs-4 right20"><!-- pickup location selection -->
         <label for="<?=$transfer_pickup?>">Pickup Location</label>
         <input type="text" class="form-control" id="<?=$transfer_pickup?>" name="<?=$transfer_pickup?>" />
@@ -92,13 +92,13 @@ if ($_POST) {
     <!-- initiate chained selection drivers -->
     <div class="form-group col-xs-4"><!-- available driver selection -->
         <label for="<?=$transfer_driver?>">Transport Supplier</label>
-        <select class="form-control" id="<?=$transfer_driver?>" name="<?=$transfer_driver?>">
+        <select class="form-control concerige-supplier" id="<?=$transfer_driver?>" name="<?=$transfer_driver?>">
             <?php echo $opt->ShowTransport(); ?>
         </select>
     </div>
     <div class="form-group col-xs-3"><!-- vehicle # selection -->
         <label for="<?=$transfer_vehicle_no?>" class="left20">Vehicle</label>
-        <select class="form-control left20" id="<?=$transfer_vehicle_no?>" name="<?=$transfer_vehicle_no?>">
+        <select class="form-control left20 concerige-vehicle" id="<?=$transfer_vehicle_no?>" name="<?=$transfer_vehicle_no?>">
             <option value="0">Select vehicle</option>
         </select>
     </div>
@@ -111,7 +111,7 @@ if ($_POST) {
         </div>
     </div>
     <div class="additionalTransferActionButtonsDiv">
-        <button type="button" id="remAdditionalTransfer<?=!empty($divID)?'_'.$divID:''?>" class="btn btn-danger right20 remAdditionalTransfer">Remove Additional Transfer</button>
+        <button type="button" id="remAdditionalTransfer<?=!empty($divID)?'_'.$divID:''?>" class="btn btn-danger right20 remAdditionalTransfer">Remove Concierge Transfer</button>
         <?php
             if(!$final){
                 ?>

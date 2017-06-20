@@ -61,8 +61,7 @@ if($_POST){
             if ($maxReached !== true) {
             ?>
             <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
-                <a class="btn btn-default addArrTransportBtn left20" data-id="0"><i class="fa fa-plus"></i> Add
-                    Transport</a>
+                <a class="btn btn-default addArrTransportBtn left20" data-id="0"><i class="fa fa-plus"></i> Additional Arrival Transfer</a>
             </div>
 
             <?php

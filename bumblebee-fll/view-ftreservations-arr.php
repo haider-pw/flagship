@@ -24,7 +24,7 @@ include('header.php');
 site_header('Reservation List - Arrivals');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM fll_reservations WHERE fast_track = 1 AND status = 1";
+$reservationQuery = "SELECT * FROM fll_reservations  WHERE fast_track = 1 AND status = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
@@ -40,7 +40,9 @@ $reservationQuery .= " ORDER BY id DESC";
 //Grab all reservation info
 $reservations = mysql_query($reservationQuery);
 /*echo '<pre>';
-print_r(mysql_fetch_array($reservations));
+while($row = mysql_fetch_array($reservations)){
+    print_r($row);
+}
 exit;*/
 if(mysql_errno()){
     echo mysql_error();

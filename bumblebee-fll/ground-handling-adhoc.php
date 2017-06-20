@@ -12,6 +12,12 @@
     }
 
     .report_btns a{ margin-left:4px;     margin-top: 4px;}
+
+    @-moz-document url-prefix() {
+        .calendar.left{min-width: 300px}
+        .calendar.right{min-width: 300px}
+    }
+
 </style>
 <?php
 $url = '//' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
@@ -156,13 +162,19 @@ else {
                                             </li>
 
                                             <?php if($_REQUEST['sect'] == 'fsft'){ ?>
+                                             
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" id="total_amount" name="R.sup_total_amount::Total_Supplier_Amount" <?=in_array('R.sup_total_amount::Total_Supplier_Amount', $selectedCheckBoxesNames)?'checked':''?>/> 
-                                                <strong>Total Supplier Amount</strong>
+                                                    <input type="checkbox" value="1" id="arr_service_only" name="R.id::Arrival_Service_Only" <?=in_array('R.id::Arrival_Service_Only', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Arrival Service Only</strong>
+                                                </li>
+
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" id="client" name="R.T.tour_operator::Client" <?=in_array('R.T.tour_operator::Client', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Client</strong>
                                                 </li>
                                             <?php } else {?>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" id="tour_operator" name="R.tour_operator::Tour_Operator" <?=in_array('R.tour_operator::Tour_Operator', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                    <input type="checkbox" value="1" id="tour_operator" name="R.T.tour_operator::Tour_Operator" <?=in_array('R.T.tour_operator::Tour_Operator', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>Tour Operator</strong>
                                                 </li>
                                                 <li class="list-group-item">
@@ -175,21 +187,32 @@ else {
                                                 <strong>Reference #</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                        <input type="checkbox" value="1" id="adult" name="R.adult::adult" <?=in_array('R.adult::adult', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                        <input class="a_c_i" type="checkbox" value="1" id="adult" name="R.adult::Adult" <?=in_array('R.adult::Adult', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong># of Adults</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                        <input type="checkbox" value="1" id="child" name="R.child::Child" <?=in_array('R.child::Child', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                        <input class="a_c_i" type="checkbox" value="1" id="child" name="R.child::Child" <?=in_array('R.child::Child', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong># of Children</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                        <input type="checkbox" value="1" id="infant" name="R.infant::Infant" <?=in_array('R.infant::Infant', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                        <input class="a_c_i" type="checkbox" value="1" id="infant" name="R.infant::Infant" <?=in_array('R.infant::Infant', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong># of Infants</strong>
                                                 </li>
+                                                        <input type="hidden" value="1" id="a_c_i" name="R.id::A_C_I" 
+                                                        <?php 
+                                                        if(in_array('R.infant::Infant', $selectedCheckBoxesNames) || in_array('R.child::Child', $selectedCheckBoxesNames) || in_array('R.child::Adult', $selectedCheckBoxesNames)){
+                                                            echo 'checked';
+                                                            }?> /> 
                                                 <li class="list-group-item">
                                                         <input type="checkbox" value="1" id="tour_notes" name="R.tour_notes::Tour_Notes" <?=in_array('R.tour_notes::Tour_Notes', $selectedCheckBoxesNames)?'checked':''?>/> 
                                                 <strong>Rep Notes</strong>
                                                 </li>
+                                                  <?php if($_REQUEST['sect'] == 'fsft'){ ?>
+                                                <li class="list-group-item">
+                                                    <input type="checkbox" value="1" id="payment_type" name="R.payment_type::Payment_Type" <?=in_array('R.payment_type::Payment_Type', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                                <strong>Payment Type</strong>
+                                                </li>
+                                                <?php } ?>
                                         </ul>
                                     </div>
                                      <div class="col-xs-12 marginBotBox">
@@ -224,6 +247,12 @@ else {
                                                 <input type="checkbox" value="1" name="R.G.infant_age::Guest_Infant_Age" <?=in_array('R.G.infant_age::Guest_Infant_Age', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Infant</strong>
                                             </li>
+                                            <?php if($_REQUEST['sect'] == 'fsft'){ ?>
+                                            <li class="list-group-item">
+                                                <input type="checkbox" value="1" id="total_amount" name="R.sup_total_amount::Price" <?=in_array('R.sup_total_amount::Price', $selectedCheckBoxesNames)?'checked':''?>/> 
+                                            <strong>Price</strong>
+                                            </li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
                                 </div>
@@ -236,12 +265,14 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.arr_date::Arr_Date" <?=in_array('R.A.arr_date::Arr_Date', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Date</strong>
                                             </li>
+                                            <?php if($_REQUEST['sect'] == 'gh'){ ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.A.fast_track::Fast_Track" <?=in_array('R.A.fast_track::Fast_Track', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Fast Track</strong>
                                             </li>
+                                            <?php }?>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.arr_flight_no::Arr_Flight" <?=in_array('R.A.arr_flight_no::Arr_Flight', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.FAR.flight_number::Arr_Flight" <?=in_array('R.FAR.flight_number::Arr_Flight', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Flight No</strong>
                                             </li>
                                             <li class="list-group-item">
@@ -249,7 +280,7 @@ else {
                                                 <strong>Time</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.flight_class::Arr_Flight_Class" <?=in_array('R.A.flight_class::Arr_Flight_Class', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.FCA.class::Arr_Flight_Class" <?=in_array('R.FCA.class::Arr_Flight_Class', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Flight Class</strong>
                                             </li>
                                             <li class="list-group-item">
@@ -257,27 +288,30 @@ else {
                                                 <strong>Transport</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.arr_driver::Arr_Driver" <?=in_array('R.A.arr_driver::Arr_Driver', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.DDA.name::Arr_Driver" <?=in_array('R.DDA.name::Arr_Driver', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Driver</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.arr_vehicle::Arr_Vehicle" <?=in_array('R.A.arr_vehicle::Arr_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.AV.name::Arr_Vehicle" <?=in_array('R.AV.name::Arr_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Vehicle</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.arr_transport_notes::Arr_Transport_Notes" <?=in_array('R.A.arr_transport_notes::Arr_Transport_Notes', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.A.arr_transport_notes::Arr_and_Transport_Notes" <?=in_array('R.A.arr_transport_notes::Arr_and_Transport_Notes', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Arrival &amp; Transport Notes</strong>
                                             </li>
+                                            <?php if($_REQUEST['sect'] == 'gh'){ ?>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.arr_pickup::Arr_Pickup" <?=in_array('R.A.arr_pickup::Arr_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.AL.name::Arr_Pickup" <?=in_array('R.AL.name::Arr_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Pickup</strong>
                                             </li>
+                                            <?php } ?>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.arr_dropoff::Arr_Dropoff" <?=in_array('R.A.arr_dropoff::Arr_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.ADL.name::Arr_Dropoff" <?=in_array('R.ADL.name::Arr_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Dropoff</strong>
                                             </li>
+                                            <?php if($_REQUEST['sect'] == 'gh'){ ?>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.rep_type::Arr_Rep_Type" <?=in_array('R.A.rep_type::Arr_Rep_Type', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.RP.rep_type::Arr_Rep_Type" <?=in_array('R.RP.rep_type::Arr_Rep_Type', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Rep Type</strong>
                                             </li>
                                             <li class="list-group-item">
@@ -288,6 +322,7 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.arr_hotel_notes::Arr_Hotel_Notes" <?=in_array('R.A.arr_hotel_notes::Arr_Hotel_Notes', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Hotel Notes</strong>
                                             </li>
+                                            <?php } ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.A.infant_seats::Arr_Infant_Seats" <?=in_array('R.A.infant_seats::Arr_Infant_Seats', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Infant Seats</strong>
@@ -312,12 +347,13 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.bottled_water::Arr_Bottled_Water" <?=in_array('R.A.bottled_water::Arr_Bottled_Water', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Bottled Water</strong>
                                             </li>
+                                            <?php if($_REQUEST['sect'] == 'gh'){ ?>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.room_type::Arr_Room_Type" <?=in_array('R.A.room_type::Arr_Room_Type', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.RA.room_type::Arr_Room_Type" <?=in_array('R.RA.room_type::Arr_Room_Type', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Room Type</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.A.rooms::Arr_Rooms" <?=in_array('R.A.rooms::Arr_Rooms', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.A.rooms::Arr_No_of_Rooms" <?=in_array('R.A.rooms::Arr_No_of_Rooms', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong># of Rooms</strong>
                                             </li>
                                             <li class="list-group-item">
@@ -328,7 +364,7 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.room_last_name::Arr_Room_Last_Name" <?=in_array('R.A.room_last_name::Arr_Room_Last_Name', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Last Name on Room</strong>
                                             </li>
-                                             <?php /* 
+                                             <?php } /* 
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.A.arr_main::Arr_Main" <?=in_array('R.A.arr_main::Arr_Main', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Main</strong>
@@ -338,6 +374,7 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.luggage_vehicle::Arr_Lagguage_Vehicle" <?=in_array('R.A.luggage_vehicle::Arr_Lagguage_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Luggage Vehicle</strong>
                                             </li>
+                                             <?php if($_REQUEST['sect'] == 'gh'){ ?>
                                             <li class="list-group-item">
                                                 <input type="checkbox" value="1" name="R.A.excursion_name::Arr_Excursion_Name" <?=in_array('R.A.excursion_name::Arr_Excursion_Name', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Excursion Name</strong>
@@ -362,14 +399,16 @@ else {
                                                 <input type="checkbox" value="1" name="R.A.excursion_guests::Arr_Excursion_Guests" <?=in_array('R.A.excursion_guests::Arr_Excursion_Guests', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Excursion Guests</strong>
                                             </li>
+                                            <?php } ?>
                                         </ul>
                                     </div>
+                                    <?php if($_REQUEST['sect'] == 'gh'){ ?>
                                     <div class="col-sm-12 col-xs-12 marginBotBox" >
                                         <h4><strong>Arrival Additional Rooms</strong></h4>
                                         <label for="selectAllAddRooms"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAddRooms">Select All</label>
                                         <ul class="list-group">
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.AR.room_type::Additional_Room_Type" <?=in_array('R.AR.room_type::Additional_Room_Type', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.RAR.room_type::Additional_Room_Type" <?=in_array('R.RAR.room_type::Additional_Room_Type', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Room Type</strong>
                                             </li>
                                             <li class="list-group-item">
@@ -382,12 +421,13 @@ else {
                                             </li>
                                         </ul>
                                     </div>
+                                    <?php } ?>
                                 </div>
                                 <div class="col-md-4 marginBotBox">
 
-
+                                    <?php if($_REQUEST['sect'] == 'gh'){ ?>
                                     <div class="col-sm-12 col-xs-12 marginBotBox" >
-                                        <h4><strong>Arrival Additional Transport</strong></h4>
+                                        <h4><strong>Additional Arrival Transfer</strong></h4>
                                         <label for="selectAllAddTransport"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAddTransport">Select All</label>
                                         <ul class="list-group">
                                             <li class="list-group-item">
@@ -395,11 +435,11 @@ else {
                                                 <strong>Transport Mode</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.AT.driver::Additional_Transport_Supplier" <?=in_array('R.AT.driver::Additional_Transport_Supplier', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.ATD.name::Additional_Transport_Supplier" <?=in_array('R.ATD.name::Additional_Transport_Supplier', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Transport Supplier</strong>
                                             </li>
                                             <li class="list-group-item">
-                                                <input type="checkbox" value="1" name="R.AT.vehicle::Additional_Vehicle" <?=in_array('R.AT.vehicle::Additional_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                <input type="checkbox" value="1" name="R.ATV.name::Additional_Vehicle" <?=in_array('R.ATV.name::Additional_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
                                                 <strong>Vehicle</strong>
                                             </li>
                                         </ul>
@@ -410,7 +450,7 @@ else {
                                             <label for="selectAllArrIntelHotel"><input type="checkbox" class="selectAllCheckboxes" id="selectAllArrIntelHotel">Select All</label>
                                             <ul class="list-group">
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.I.pickup::Inter_Hotel_Pickup" <?=in_array('R.I.pickup::Inter_Hotel_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.L.name::Inter_Hotel_Pickup" <?=in_array('R.L.name::Inter_Hotel_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Pickup Location</strong>
                                                 </li>
                                                 <li class="list-group-item">
@@ -428,7 +468,7 @@ else {
                                                 </li>
                                                 <?php */ ?>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.I.dropoff::Inter_Hotel_Dropoff_Location" <?=in_array('R.I.dropoff::Inter_Hotel_Dropoff_Location', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.IL.name::Inter_Hotel_Dropoff_Location" <?=in_array('R.IL.name::Inter_Hotel_Dropoff_Location', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Dropoff Location</strong>
                                                 </li>
                                                 <li class="list-group-item">
@@ -436,7 +476,7 @@ else {
                                                     <strong>Transport Supplier</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.I.vehicle::Inter_Hotel_Vehicle" <?=in_array('R.I.vehicle::Inter_Hotel_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.IV.name::Inter_Hotel_Vehicle" <?=in_array('R.IV.name::Inter_Hotel_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Vehicle</strong>
                                                 </li>
                                                 <li class="list-group-item">
@@ -447,11 +487,11 @@ else {
                                     </div>
 
                                     <div class="col-md-12 marginBotBox">
-                                             <h4><strong>Arrival Additional Transfer</strong></h4>
+                                             <h4><strong>Concierge Transfer </strong></h4>
                                             <label for="selectAllArrivalsTransfer"><input type="checkbox" class="selectAllCheckboxes" id="selectAllArrivalsTransfer">Select All</label>
                                             <ul class="list-group">
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.AD.pickup::Additional_Pickup_Location" <?=in_array('R.AD.pickup::Additional_Pickup_Location', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.ADP.name::Additional_Pickup_Location" <?=in_array('R.ADP.name::Additional_Pickup_Location', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Pickup Location</strong>
                                                 </li>
                                                 <li class="list-group-item">
@@ -459,7 +499,7 @@ else {
                                                     <strong>Pickup Date</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.AD.pickup_time::Additional_Pickup_Time" <?=in_array('R.AD.pickup_time::Additional_Pickup_Time', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.ADPT.flight_time::Additional_Pickup_Time" <?=in_array('R.ADPT.flight_time::Additional_Pickup_Time', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Pickup Time</strong>
                                                 </li>
                                                 <?php /* ?>
@@ -469,7 +509,7 @@ else {
                                                 </li>
                                                 <?php */ ?>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.AD.dropoff::Additional_Dropoff_Location" <?=in_array('R.AD.dropoff::Additional_Dropoff_Location', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.ADDL.name::Additional_Dropoff_Location" <?=in_array('R.ADDL.name::Additional_Dropoff_Location', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Dropoff Location</strong>
                                                 </li>
                                                 <li class="list-group-item">
@@ -477,7 +517,7 @@ else {
                                                     <strong>Transport Supplier</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.AD.vehicle::Additional_Vehicle" <?=in_array('R.AD.vehicle::Additional_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.ADAV.name::Additional_Vehicle" <?=in_array('R.ADAV.name::Additional_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Vehicle</strong>
                                                 </li>
                                                 <li class="list-group-item">
@@ -486,6 +526,9 @@ else {
                                                 </li>
                                             </ul>
                                     </div>
+
+
+                                    <?php } ?>
                                     <div class="col-md-12 marginBotBox">
                                         <h4><strong>Departure Information</strong></h4>
                                         <label for="selectAllAdminAir"><input type="checkbox" class="selectAllCheckboxes" id="selectAllAdminAir">Select All</label>
@@ -495,15 +538,15 @@ else {
                                                     <strong>Date</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_flight_no::Dept_Flight" <?=in_array('R.D.dpt_flight_no::Dept_Flight', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.F.flight_number::Dept_Flight_No" <?=in_array('R.F.flight_number::Dept_Flight_No', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Flight No</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_time::Dept_Time" <?=in_array('R.D.dpt_time::Dept_Time', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.FT.flight_time::Dept_Time" <?=in_array('R.FT.flight_time::Dept_Time', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Time</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.flight_class::Dept_Flight_Class" <?=in_array('R.D.flight_class::Dept_Flight_Class', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.FC.class::Dept_Flight_Class" <?=in_array('R.FC.class::Dept_Flight_Class', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Flight Class</strong>
                                                 </li>
                                                 <li class="list-group-item">
@@ -511,25 +554,28 @@ else {
                                                     <strong>Transport</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_driver::Dept_Driver" <?=in_array('R.D.dpt_driver::Dept_Driver', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.DD.name::Dept_Driver" <?=in_array('R.DD.name::Dept_Driver', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Driver</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_vehicle::Dept_Vehicle" <?=in_array('R.D.dpt_vehicle::Dept_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.DV.name::Dept_Vehicle" <?=in_array('R.DV.name::Dept_Vehicle', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Vehicle</strong>
                                                 </li>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_pickup::Dept_Pickup" <?=in_array('R.D.dpt_pickup::Dept_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.DPL.name::Dept_Pickup" <?=in_array('R.DPL.name::Dept_Pickup', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Pickup</strong>
                                                 </li>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.dpt_pickup_time::Dept_Pickup_Time" <?=in_array('R.D.dpt_pickup_time::Dept_Pickup_Time', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Pickup Time</strong>
                                                 </li>
+
+                                                <?php if($_REQUEST['sect'] == 'gh'){ ?>
                                                 <li class="list-group-item">
-                                                    <input type="checkbox" value="1" name="R.D.dpt_dropoff::Dept_Dropoff" <?=in_array('R.D.dpt_dropoff::Dept_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
+                                                    <input type="checkbox" value="1" name="R.DDL.name::Dept_Dropoff" <?=in_array('R.DDL.name::Dept_Dropoff', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Dropoff</strong>
                                                 </li>
+                                                <?php } ?>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.D.dpt_transport_notes::Dept_Transport_Notes" <?=in_array('R.D.dpt_transport_notes::Dept_Transport_Notes', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Transport Notes</strong>
@@ -683,7 +729,14 @@ else {
         }
 
         /* end reportrange */
-
+        // on click any of adult , child or infant checkbox, checked hidden a_c_i
+        $('.a_c_i').click(function() {
+          if ($(this).is(':checked')) {
+            $('#a_c_i').prop('checked');
+          } else {
+            $('#a_c_i').prop('checked',false);
+          }
+        });
     });
 </script>
 </body>

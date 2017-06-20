@@ -26,8 +26,8 @@ site_header('Add Reservations');
 
 
 /*echo '<pre>';
-var_dump($_POST['rep_type']);*/
-//exit;
+var_dump($_POST);
+exit;*/
 
 if(isset($_POST['addreservation']))
 {
@@ -1306,7 +1306,7 @@ if(isset($_POST['addreservation']))
     //Put all the remaining stuff into the database
 	$sql = "INSERT INTO fll_reservations ". 
         "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, ftnotify, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle) ".
-        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$ftnotify', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$room_no', '$total_guests','$luggageVehicle')";
+        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$arr0_room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$ftnotify', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$arr0_room_no', '$total_guests','$luggageVehicle')";
         $retval = mysql_query( $sql, $conn );
 
     if(mysql_errno()){
@@ -1339,6 +1339,8 @@ if(isset($_POST['addreservation']))
 </style>
     <!-- start additional requirements toggle -->           
     <script type="text/javascript">
+        
+
         $(document).ready(function(){
             $('input[type="checkbox"]').click(function(){
                 if($(this).attr("value")=="clientreqs"){
@@ -1907,6 +1909,28 @@ if(isset($_POST['addreservation']))
                                         });
                                         /* end arrival hide show */
                                         
+
+                                        /* Concerige Transfer start*/
+
+                                        $(document).on('change', '.concerige-supplier',function(){
+                                            var vehicleField = $(this).parents('.additional-transfer-div').find('.concerige-vehicle');
+                                            vehicleField.attr("disabled","disabled");
+                                            vehicleField.html("<option>Loading vehicles ...</option>");
+
+                                           /* var driverid = $(this).parents('.form-group').find("concerige-supplier option:selected").attr('value');*/
+                                            var elementId = $(this).attr('id');
+                                            var driverid = $("#"+elementId+" option:selected").attr('value');
+                                            
+
+                                            $.post("select_vehicle.php", {driverid:driverid}, function(data){
+                                                vehicleField.removeAttr("disabled");
+                                                vehicleField.html(data);
+                                                
+                                            });
+                                        });
+                                        
+                                        /* Concerige Transfer End*/
+
                                         /* transfer hide show */
                                         $('#transfermain').click(function(e) {
                                             e.preventDefault();
@@ -2208,7 +2232,7 @@ if(isset($_POST['addreservation']))
 
                                     <div class="left20 actionBtnsArrTransportDiv">
                                         <div class="form-group left20" style="margin-top: 20px; display:inline-block; margin-left: 15px;">
-                                            <a class="btn btn-default addArrTransportBtn left20" data-id="0"><i class="fa fa-plus"></i> Add Transport</a>
+                                            <a class="btn btn-default addArrTransportBtn left20" data-id="0"><i class="fa fa-plus"></i> Additional Arrival Transfer</a>
                                         </div>
                                     </div>
                                     <div class="clearfix"></div>
@@ -2986,7 +3010,7 @@ if(isset($_POST['addreservation']))
                                     $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select class="form-control select" id="transfer-pickup" name="transfer_pickup">
+                                    echo '<select class="form-control select select2" id="transfer-pickup" name="transfer_pickup">
                                             <option>Pickup Location</option>';
                                         while ($row = mysql_fetch_array($result)) {
                                             echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -3074,7 +3098,7 @@ if(isset($_POST['addreservation']))
                                     $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select class="form-control select" id="transfer-pickup1" name="transfer_pickup1">
+                                    echo '<select class="form-control select select2" id="transfer-pickup1" name="transfer_pickup1">
                                             <option>Pickup Location</option>';
                                         while ($row = mysql_fetch_array($result)) {
                                             echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -3162,7 +3186,7 @@ if(isset($_POST['addreservation']))
                                     $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select class="form-control select" id="transfer-pickup2" name="transfer_pickup2">
+                                    echo '<select class="form-control select select2" id="transfer-pickup2" name="transfer_pickup2">
                                             <option>Pickup Location</option>';
                                         while ($row = mysql_fetch_array($result)) {
                                             echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -3250,7 +3274,7 @@ if(isset($_POST['addreservation']))
                                     $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select class="form-control select" id="transfer-pickup3" name="transfer_pickup3">
+                                    echo '<select class="form-control select select2" id="transfer-pickup3" name="transfer_pickup3">
                                             <option>Pickup Location</option>';
                                         while ($row = mysql_fetch_array($result)) {
                                             echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -3327,7 +3351,7 @@ if(isset($_POST['addreservation']))
                                 <div class="clearfix"></div>
                                 <!-- end transfer 3 -->
 
-                                    <div id="additionalBtnDiv"><hr /><button type="button" id="additionalMainBtn" class="btn btn-success">Additional Transfer</button></div>
+                                    <div id="additionalBtnDiv"><hr /><button type="button" id="additionalMainBtn" class="btn btn-success">Concierge Transfer</button></div>
                                     <div class="clearfix"></div>
                                     <!--All Additional Transfers Would Go Under Below Div-->
                                     <div id="additionalTransfersDiv">
@@ -3474,7 +3498,7 @@ if(isset($_POST['addreservation']))
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="dpt-transport1" name="dpt1_transport[]">
+                                    echo '<select class="form-control select" id="dpt-transport1" name="dpt1_transport">
                                         <option>Departure Transport mode</option>';
                                     while ($row = mysql_fetch_array($result)) {
                                         echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -3508,7 +3532,7 @@ if(isset($_POST['addreservation']))
                                         $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                         $result = mysql_query($sql);
                                         
-                                        echo '<select class="form-control select" id="dpt-pickup1" name="dpt_pickup1">
+                                        echo '<select class="form-control select select2" id="dpt-pickup1" name="dpt_pickup1">
                                                 <option>Pickup Location</option>';
                                         while ($row = mysql_fetch_array($result)) {
                                         echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -3595,7 +3619,7 @@ if(isset($_POST['addreservation']))
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="dpt-transport2" name="dpt2_transport[]">
+                                    echo '<select class="form-control select" id="dpt-transport2" name="dpt2_transport">
                                         <option>Departure Transport mode</option>';
                                     while ($row = mysql_fetch_array($result)) {
                                         echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -3629,7 +3653,7 @@ if(isset($_POST['addreservation']))
                                         $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                         $result = mysql_query($sql);
                                         
-                                        echo '<select class="form-control select" id="dpt-pickup2" name="dpt_pickup2">
+                                        echo '<select class="form-control select select2" id="dpt-pickup2" name="dpt_pickup2">
                                                 <option>Pickup Location</option>';
                                         while ($row = mysql_fetch_array($result)) {
                                             echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -3715,7 +3739,7 @@ if(isset($_POST['addreservation']))
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="dpt-transport3" name="dpt3_transport[]">
+                                    echo '<select class="form-control select" id="dpt-transport3" name="dpt3_transport">
                                         <option>Departure Transport mode</option>';
                                     while ($row = mysql_fetch_array($result)) {
                                         echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -3749,7 +3773,7 @@ if(isset($_POST['addreservation']))
                                         $sql = "SELECT * FROM fll_location ORDER BY name ASC";
                                         $result = mysql_query($sql);
                                         
-                                        echo '<select class="form-control select" id="dpt-pickup3" name="dpt_pickup3">
+                                        echo '<select class="form-control select select2" id="dpt-pickup3" name="dpt_pickup3">
                                                 <option>Pickup Location</option>';
                                         while ($row = mysql_fetch_array($result)) {
                                             echo "<option value='" . $row['id_location'] . "'>" . $row['name'] . "</option>";
@@ -3871,7 +3895,7 @@ if(isset($_POST['addreservation']))
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
 <script type="text/javascript">
-    $('#tour-oper,.dropSelect').select2({
+    $('#tour-oper,.dropSelect, .select2').select2({
         minimumInputLength: 3
     });
     $('.rep-type').select2();
@@ -3972,6 +3996,8 @@ if(isset($_POST['addreservation']))
         console.log(subRoomsDiv);
         var totalCurrentDivs = subRoomsDiv.find('div.roomDiv').length + 1;
         var maxRooms = 5;
+        var locId = $(this).parents('.panel-body').find('#arr-dropoff').val();
+        console.log(locId);
 
         if(totalCurrentDivs<maxRooms){
             //We Would be Adding More Guests Now to our specified Div.
@@ -3979,7 +4005,7 @@ if(isset($_POST['addreservation']))
             $.ajax({
                 url: "<?=$url?>/custom_updates/sub_room_form.php",
                 type: "POST",
-                data: {req: "roomCount", dataID: totalCurrentDivs, arrID:currentArrivalID},
+                data: {req: "roomCount", dataID: totalCurrentDivs, arrID:currentArrivalID, locationid:locId},
                 success: function (output) {
                     subRoomsDiv.append(output);
                     currentBtn.parent().hide();

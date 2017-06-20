@@ -11,7 +11,7 @@ mysql_select_db ("cocoa_fll");
 $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
 $result = mysql_query($sql);
 
-echo '<select multiple class="form-control select" id="dpt-transport" name="dpt_transport[]">';
+echo '<select class="form-control select" id="dpt-transport" name="dpt_transport">';
 while ($row = mysql_fetch_array($result)) {
     echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
 }

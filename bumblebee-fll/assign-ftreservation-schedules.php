@@ -118,7 +118,7 @@ $reservations = mysql_query("SELECT * FROM fll_reservations WHERE fast_track = 1
                                                 
                                                 
                                                 echo '<tr>
-                                                        <td><a href="ftreservation-details-rep.php?id=' . $id . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a></div></td>
+                                                        <td><a href="ftreservation-details-rep.php?id=' . $id . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Assign Rep"></i></a></div></td>
                                                         <td>' . $last_name . '</td>                                                        
                                                         <td>' . $title_name . '. ' . $first_name . '</td>
                                                         <td>' . $tour_oper[1] . '</td>

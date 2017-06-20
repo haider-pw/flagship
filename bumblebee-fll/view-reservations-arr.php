@@ -45,9 +45,9 @@ $reservations = mysql_query($reservationQuery);
 if(mysql_errno()){
     echo mysql_error();
 }
-/*echo "<pre>";
-print_r(mysql_fetch_array($reservations));
-echo "</pre>";*/
+// echo "<pre>";
+// print_r(mysql_fetch_array($reservations));
+// echo "</pre>";
 
 site_header('Reservation List - Arrivals');
 

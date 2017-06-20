@@ -14,7 +14,7 @@ site_header('Assign Reservation Reps');
 $loggedinas = $row->fname . ' ' . $row->lname;
 
 
-if($_POST){
+if($_POST){ 
 
     $selectedDate = isset($_POST['date'])?$_POST['date']:'';
     if(!empty($selectedDate)){
@@ -68,9 +68,11 @@ if($_POST){
                 LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
                 WHERE r.`assigned` = 0
                 ".(!empty($selectedHotel)?' AND loc.`id_location` ='.$selectedHotel:'')."
-                ".(!empty($selectedDate)?' AND flights.`arr_date` ="'.$selectedDate.'"':'')." 
-                ".(!empty($selectedTourOperator)?' AND fto.`tour_operator` ="'.$selectedTourOperator.'"':'')." 
+                ".(!empty($selectedDate)?' AND (flights.`arr_date` ="'.$selectedDate.'" OR 
+                    r.`arr_date`= "'.$selectedDate.'")':'')." 
+                ".(!empty($selectedTourOperator)?' AND fto.`id` ="'.$selectedTourOperator.'"':'')." 
                 GROUP BY ReservationID";
+                
         $reservations = mysql_query($query);
 
         //reservation result

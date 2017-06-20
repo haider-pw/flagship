@@ -1,4 +1,4 @@
-<?php
+<?php header("Content-Type: text/html; charset=ISO-8859-1");
 $url = '//' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
 define("_VALID_PHP", true);
 require_once("../admin-panel-fll/init.php");
@@ -1807,13 +1807,17 @@ if (isset($_POST['addreservation'])) {
                             </div>
                             <div class="form-group col-xs-7"><!-- tour operator selection -->
                                 <label for="paymentType">Payment</label>
+                                <?php 
+                                $paymentTypes = mysql_query('SELECT * FROM fll_payment_type') or die();?>
                                 <select class="form-control select" id="paymentType" name="paymentType">
-                                    <option value="0">Select Payment Type</option><!-- 
+                                    <option value="0">Select Payment Type</option>
+                                    <?php 
+                                        while($row = mysql_fetch_array($paymentTypes)){
+                                            echo '<option value="'.$row['id'].'">'.$row['payment_type'].'</option>';
+                                        }
+                                    ?><!-- 
                                     <option value="1">Payment Received</option>
                                     <option value="2">Pay on Arrival</option> -->
-                                    <option value="1">Payment Received – Credit Card</option>
-                                    <option value="2">Payment Received – Cash</option> 
-                                    <option value="2">To Be Invoiced</option> 
                                 </select>
                             </div>
                             <div class="form-group col-xs-7" id="paymentAmountDiv" style="display: none;"><!-- affiliates field -->

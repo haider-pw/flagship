@@ -4,6 +4,7 @@ if($_POST){
     $request = $_POST['req'];
     $roomCount = $_POST['dataID'];
     $arrID = $_POST['arrID'];
+
 }
 ?>
 <div class="clearfix"></div>
@@ -11,7 +12,13 @@ if($_POST){
 <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
     <label for="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>">Room type</label>
     <select class="form-control arr<?=$arrID?>_room_type right20" id="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>" name="arr<?=$arrID?>_room_type<?=isset($roomCount)?$roomCount:''?>">
-        <option>Room Type</option>
+        <?php 
+            if(!empty($_POST['locationid'])){
+               include ('../select.class.php');
+               echo $opt->ShowRoomType();
+
+            }
+        ?>
     </select>
 </div>
 <div class="form-group col-lg-2 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room number -->
