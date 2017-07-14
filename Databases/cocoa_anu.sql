@@ -1,6 +1,6 @@
 /*
 SQLyog Ultimate v12.14 (64 bit)
-MySQL - 5.6.17 : Database - cocoa_anu
+MySQL - 10.1.21-MariaDB : Database - cocoa_anu
 *********************************************************************
 */
 
@@ -13,6 +13,8 @@ MySQL - 5.6.17 : Database - cocoa_anu
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 CREATE DATABASE /*!32312 IF NOT EXISTS*/`cocoa_anu` /*!40100 DEFAULT CHARACTER SET latin1 */;
+
+USE `cocoa_anu`;
 
 /*Table structure for table `anu_activity` */
 
@@ -93,6 +95,28 @@ CREATE TABLE `anu_departures` (
 
 /*Data for the table `anu_departures` */
 
+/*Table structure for table `anu_flightclass` */
+
+DROP TABLE IF EXISTS `anu_flightclass`;
+
+CREATE TABLE `anu_flightclass` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `class` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=latin1;
+
+/*Data for the table `anu_flightclass` */
+
+insert  into `anu_flightclass`(`id`,`class`) values 
+(9,'World Traveller Plus	'),
+(10,'World Traveler	'),
+(11,'Economy	'),
+(12,'Premium Economy	'),
+(13,'Upper Class	'),
+(14,'Business Class	'),
+(15,'Club Class	'),
+(16,'First Class');
+
 /*Table structure for table `anu_flights` */
 
 DROP TABLE IF EXISTS `anu_flights`;
@@ -101,38 +125,42 @@ CREATE TABLE `anu_flights` (
   `id_flight` int(11) NOT NULL AUTO_INCREMENT,
   `flight_number` varchar(255) NOT NULL,
   PRIMARY KEY (`id_flight`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=latin1;
 
 /*Data for the table `anu_flights` */
 
 insert  into `anu_flights`(`id_flight`,`flight_number`) values 
-(1,'BA2157'),
-(2,'BA2156'),
-(3,'BA2256'),
-(4,'LI312'),
-(5,'LI550'),
-(7,'AA978'),
-(8,'AA2405'),
-(9,'LI309'),
-(10,'LI512'),
-(11,'LI771'),
-(12,'LI310'),
-(13,'LI331'),
-(14,'UA1414'),
-(15,'UA1409'),
-(16,'LI508'),
-(17,'VS87'),
-(18,'VS88'),
-(19,'VS33'),
-(20,'VS34'),
-(21,'BW459'),
-(22,'BW458'),
-(23,'WJ2738'),
-(24,'WJ2739'),
-(25,'AC960'),
-(26,'DL652'),
-(27,'DL653'),
-(29,'LI362');
+(1,'AA2405'),
+(2,'AA978'),
+(3,'AC960'),
+(4,'AC961'),
+(5,'BA2156'),
+(6,'BA2157'),
+(7,'BA2256'),
+(8,'BW458'),
+(9,'BW459'),
+(10,'DL652'),
+(11,'DL653'),
+(12,'LI309'),
+(13,'LI310'),
+(14,'LI312'),
+(15,'LI331'),
+(16,'LI362'),
+(17,'LI508'),
+(18,'LI512'),
+(19,'LI550'),
+(20,'LI771'),
+(21,'UA1409'),
+(22,'UA1414'),
+(23,'US863'),
+(25,'VS33'),
+(26,'VS34'),
+(27,'VS87'),
+(28,'VS88'),
+(29,'WJ2738'),
+(30,'WJ2739'),
+(31,'MT 2854'),
+(32,'US864');
 
 /*Table structure for table `anu_flighttime` */
 
@@ -143,77 +171,112 @@ CREATE TABLE `anu_flighttime` (
   `id_flight` int(11) NOT NULL,
   `flight_time` varchar(255) NOT NULL,
   PRIMARY KEY (`id_fltime`)
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=159 DEFAULT CHARSET=latin1;
 
 /*Data for the table `anu_flighttime` */
 
 insert  into `anu_flighttime`(`id_fltime`,`id_flight`,`flight_time`) values 
-(1,1,'14:10'),
-(2,1,'15:10'),
-(3,3,'19:35'),
-(4,3,'20:45'),
-(5,3,'19:40'),
-(6,3,'20:50'),
-(7,2,'14:30'),
-(8,2,'19:00'),
-(9,3,'17:40'),
-(10,3,'18:50'),
-(11,3,'21:40'),
-(12,2,'20:30'),
-(13,4,'13:25'),
-(14,4,'10:15'),
-(15,5,'10:35'),
-(17,2,'19:35'),
-(18,7,'11:15'),
-(19,7,'12:10'),
-(20,8,'13:10'),
-(21,8,'14:15'),
-(22,9,'17:20'),
-(23,9,'18:25'),
-(24,10,'19:30'),
-(25,11,'5:30'),
-(26,12,'10:25'),
-(27,13,'10:00'),
-(28,13,'12:05'),
-(29,14,'12:45'),
-(30,14,'13:00'),
-(31,15,'13:55'),
-(32,15,'13:35'),
-(33,16,'17:45'),
-(34,17,'14:55'),
-(35,2,'20:10'),
-(36,18,'16:55'),
-(37,19,'13:45'),
-(38,20,'16:45'),
-(39,21,'17:45'),
-(40,21,'18:30'),
-(42,22,'10:35'),
-(43,22,'11:20'),
-(44,23,'14:10'),
 (45,24,'15:05'),
-(46,25,'13:00'),
-(47,25,'14:00'),
-(48,26,'15:05'),
-(49,27,'14:05'),
-(52,5,'15:40'),
-(53,5,'11:05'),
-(54,5,'12:00'),
-(55,5,'15:30'),
-(56,16,'17:25'),
-(57,16,'19:30'),
-(58,10,'20:00'),
-(59,10,'20:55'),
-(60,10,'21:55'),
-(61,11,'6:35'),
-(62,11,'9:15'),
-(63,4,'10:35'),
-(64,4,'12:00'),
-(65,12,'11:05'),
-(66,12,'12:05'),
-(67,29,'10:15'),
-(68,29,'13:25'),
-(69,4,'13:30'),
-(70,4,'11:05');
+(71,1,'13:12'),
+(72,1,'14:06'),
+(73,1,'14:15'),
+(74,1,'15:01'),
+(75,2,'11:14'),
+(76,2,'16:13'),
+(77,2,'12:10'),
+(78,2,'17:10'),
+(79,3,'13:00'),
+(80,3,'15:10'),
+(81,4,'14:00'),
+(82,4,'16:05'),
+(83,5,'19:00'),
+(84,5,'20:40'),
+(85,5,'19:35'),
+(86,5,'21:15'),
+(87,5,'20:30'),
+(88,5,'20:25'),
+(89,5,'20:10'),
+(90,5,'21:35'),
+(91,5,'21:10'),
+(92,6,'14:10'),
+(93,6,'15:05'),
+(94,6,'15:10'),
+(95,6,'16:05'),
+(96,7,'19:35'),
+(97,7,'18:55'),
+(98,7,'19:40'),
+(99,7,'20:05'),
+(100,7,'17:40'),
+(101,7,'17:35'),
+(102,7,'20:45'),
+(103,7,'17:45'),
+(104,7,'20:50'),
+(105,7,'18:45'),
+(106,7,'20:45'),
+(107,7,'19:55'),
+(108,7,'18:50'),
+(109,7,'18:35'),
+(110,7,'21:40'),
+(111,7,'19:45'),
+(112,8,'10:35'),
+(113,8,'21:10'),
+(114,8,'11:20'),
+(115,8,'21:55'),
+(116,9,'17:45'),
+(117,9,'17:35'),
+(118,9,'18:30'),
+(119,9,'18:25'),
+(120,10,'15:07'),
+(121,10,'14:56'),
+(122,11,'14:07'),
+(123,11,'15:57'),
+(124,12,'17:20'),
+(125,12,'18:25'),
+(126,13,'10:25'),
+(127,13,'08:30'),
+(128,13,'10:15'),
+(129,14,'10:35'),
+(130,15,'10:00'),
+(131,15,'12:05'),
+(132,16,'10:15'),
+(133,16,'13:25'),
+(134,17,'17:45'),
+(135,18,'19:30'),
+(136,19,'10:35'),
+(137,20,'05:30'),
+(138,21,'13:36'),
+(139,21,'14:22'),
+(140,21,'13:55'),
+(141,21,'15:13'),
+(142,22,'12:46'),
+(143,22,'14:22'),
+(144,22,'13:00'),
+(145,22,'15:22'),
+(146,23,'15:31'),
+(147,32,'16:30'),
+(148,25,'13:45'),
+(149,25,'16:00'),
+(150,26,'16:45'),
+(151,26,'18:15'),
+(152,27,'14:55'),
+(153,28,'16:55'),
+(154,29,'14:08'),
+(155,30,'15:05'),
+(157,31,'16:25'),
+(158,31,'17:25');
+
+/*Table structure for table `anu_fsft_touroperator` */
+
+DROP TABLE IF EXISTS `anu_fsft_touroperator`;
+
+CREATE TABLE `anu_fsft_touroperator` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tour_operator` varchar(255) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COMMENT='Tour Operators table';
+
+/*Data for the table `anu_fsft_touroperator` */
 
 /*Table structure for table `anu_guest` */
 
@@ -234,6 +297,24 @@ CREATE TABLE `anu_guest` (
 
 /*Data for the table `anu_guest` */
 
+/*Table structure for table `anu_loc_coast` */
+
+DROP TABLE IF EXISTS `anu_loc_coast`;
+
+CREATE TABLE `anu_loc_coast` (
+  `id` int(8) unsigned NOT NULL AUTO_INCREMENT,
+  `coast` varchar(80) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=latin1;
+
+/*Data for the table `anu_loc_coast` */
+
+insert  into `anu_loc_coast`(`id`,`coast`) values 
+(1,'East Coast'),
+(2,'West Coast'),
+(3,'North Coast'),
+(4,'South Coast');
+
 /*Table structure for table `anu_location` */
 
 DROP TABLE IF EXISTS `anu_location`;
@@ -242,87 +323,59 @@ CREATE TABLE `anu_location` (
   `id_location` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   `zone` int(4) NOT NULL DEFAULT '0',
+  `loc_code` varchar(6) NOT NULL DEFAULT '000',
   PRIMARY KEY (`id_location`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=latin1;
 
 /*Data for the table `anu_location` */
 
-insert  into `anu_location`(`id_location`,`name`,`zone`) values 
-(1,'Blue Waters',0),
-(2,'Rex Halcycon',0),
-(3,'Hawksbill',0),
-(4,'Galley Bay',0),
-(5,'Royal Antiguan',0),
-(6,'Coconut Beach',0),
-(7,'Jolly Beach',0),
-(8,'Verandah',0),
-(9,'Grand Pineapple Beach',0),
-(10,'Coco Bay',0),
-(11,'The Inn',0),
-(12,'St.James Club',0),
-(13,'Carlise Bay',0),
-(14,'Curtain Bluff',0),
-(15,'Galleon Beach',0),
-(16,'Cocos',0),
-(17,'Sugar Ridge',0),
-(18,'Hermitage Bay',0),
-(19,'Z- Jacaranda',0),
-(20,'Z - Aujourd&#039;hui',0),
-(21,'Z - Aquamarine',0),
-(22,'Z - Alang Alang',0),
-(23,'Z - Alhambra',0),
-(24,'Z - Battaley&#039;s Mews',0),
-(25,'Z - Bali Hai',0),
-(26,'Z - Birds Rock Villa',0),
-(27,'Z - Bluff House',0),
-(28,'Z - Bohemia',0),
-(29,'Z - Buttsbury',0),
-(30,'Z - Calimba',0),
-(31,'Z - Caprice',0),
-(32,'Z - Casa Bella',0),
-(33,'Z - Church Point Two',0),
-(34,'Colina Del Mar',0),
-(35,'Z - Coco',0),
-(36,'Z - Coral Breeze',0),
-(37,'Z - Coral Sundown ',0),
-(38,'Z - Croese',0),
-(39,'Z - Easy Reach',0),
-(40,'Z - Eden on Sea',0),
-(41,'Z - Emerald Beach',0),
-(42,'Z - Evergreen',0),
-(43,'Z - Fire Fly',0),
-(44,'Z - Gibbs House',0),
-(45,'Z - Gibbs Lodge',0),
-(46,'Z - Glitter Bay',0),
-(47,'Z - Hibicus',0),
-(48,'Z - Hig Constantia',0),
-(49,'Z - Hi Five',0),
-(50,'Z - High Tide',0),
-(51,'Z - Java BAY',0),
-(52,'Z - James Bay (Lower)',0),
-(53,'Z - James Bay (Upper)',0),
-(54,'Z - Jessamine',0),
-(55,'Z - La Palama',0),
-(56,'Z - Alila',0),
-(57,'Z - Solanda',0),
-(58,'Z - Rose of Sharon',0),
-(59,'Z - Todmordan',0),
-(60,'Z - Pandora',0),
-(61,'Z - Standford',0),
-(62,'Z - Villa Horizon',0),
-(63,'Z - Foster House',0),
-(64,'Z - Aliseo',0),
-(65,'Z - Amberley House',0),
-(66,'Z - Amberley Cottage',0),
-(67,'Z - Blue Lagoon',0),
-(68,'Z - Cassie',0),
-(69,'Z - Coral Cove',0),
-(70,'Z - Coconut Grove',0),
-(71,'Z - Forest Hills',0),
-(72,'Z - Heaven Sent',0),
-(73,'Z - Old Trees',0),
-(74,'Z - Porters Court',0),
-(75,'Z - Ridgecot House',0);
+insert  into `anu_location`(`id_location`,`name`,`zone`,`loc_code`) values 
+(1,'Blue Waters',3,'027'),
+(2,'Rex Halcyon Cove',2,'025'),
+(3,'Hawksbill',3,'018'),
+(4,'Galley Bay',2,'017'),
+(5,'Royal Antiguan',2,'019'),
+(6,'Coconut Beach',3,'022'),
+(7,'Verandah',1,'002'),
+(8,'Grand Pineapple Beach',1,'001'),
+(9,'The Inn',4,'004'),
+(10,'St. James Club',1,'005'),
+(11,'Galleon Beach',4,'016'),
+(12,'Cocos',4,'011'),
+(13,'Sugar Ridge',4,'012'),
+(14,'Hermitage Bay',4,'015'),
+(15,'South Point',4,'005'),
+(16,'Admirals Inn',4,'006'),
+(17,'Anchorage INN',3,'020'),
+(18,'Dickinson Bay Cottage',3,'021'),
+(19,'Sandals',3,'024'),
+(20,'TradeWinds',3,'026'),
+(21,'Siboney',3,'023'),
+(22,'OceanPoint',3,'028'),
+(23,'Hodges Bay',3,'029'),
+(24,'Jolly Beach',2,'013'),
+(25,'Coco Bay',2,'010'),
+(26,'Carlisle Bay',2,'007'),
+(27,'Curtain Bluff',2,'008'),
+(28,'Keyonna Beach',2,'009'),
+(29,'Tranquility Beach',2,'014');
+
+/*Table structure for table `anu_payment_type` */
+
+DROP TABLE IF EXISTS `anu_payment_type`;
+
+CREATE TABLE `anu_payment_type` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `payment_type` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
+
+/*Data for the table `anu_payment_type` */
+
+insert  into `anu_payment_type`(`id`,`payment_type`) values 
+(1,'Payment Received – Credit Card'),
+(2,'Payment Received – Cash'),
+(3,'To Be Invoiced');
 
 /*Table structure for table `anu_reps` */
 
@@ -440,6 +493,109 @@ CREATE TABLE `anu_reservations` (
 
 /*Data for the table `anu_reservations` */
 
+/*Table structure for table `anu_room_loc` */
+
+DROP TABLE IF EXISTS `anu_room_loc`;
+
+CREATE TABLE `anu_room_loc` (
+  `id_room_loc` int(11) NOT NULL AUTO_INCREMENT,
+  `id_location` int(11) NOT NULL,
+  `id_roomtype` int(11) NOT NULL,
+  PRIMARY KEY (`id_room_loc`)
+) ENGINE=InnoDB AUTO_INCREMENT=89 DEFAULT CHARSET=latin1;
+
+/*Data for the table `anu_room_loc` */
+
+insert  into `anu_room_loc`(`id_room_loc`,`id_location`,`id_roomtype`) values 
+(1,1,1),
+(2,1,2),
+(3,1,3),
+(4,1,4),
+(5,1,5),
+(6,1,6),
+(7,1,7),
+(8,1,8),
+(9,2,9),
+(10,2,10),
+(11,2,11),
+(12,2,12),
+(13,3,13),
+(14,3,14),
+(15,3,15),
+(16,3,16),
+(17,3,17),
+(18,4,18),
+(19,4,19),
+(20,4,20),
+(21,4,21),
+(22,5,22),
+(23,5,23),
+(24,5,24),
+(25,5,25),
+(26,6,26),
+(27,6,27),
+(28,6,28),
+(29,6,29),
+(30,7,30),
+(31,7,31),
+(32,7,32),
+(33,7,33),
+(34,7,34),
+(35,7,35),
+(36,8,36),
+(37,8,37),
+(38,8,38),
+(39,8,39),
+(40,9,40),
+(41,9,41),
+(42,9,42),
+(43,9,43),
+(44,9,44),
+(45,10,45),
+(46,10,46),
+(47,10,47),
+(48,10,48),
+(49,10,49),
+(50,10,50),
+(51,11,51),
+(52,11,52),
+(53,11,53),
+(54,12,54),
+(55,12,55),
+(56,12,56),
+(57,12,57),
+(58,12,58),
+(59,12,59),
+(60,12,60),
+(61,13,61),
+(62,13,62),
+(63,13,63),
+(64,13,64),
+(65,13,65),
+(66,13,66),
+(67,14,67),
+(68,14,68),
+(69,14,69),
+(70,14,70),
+(71,14,71),
+(72,14,72),
+(73,14,73),
+(74,15,74),
+(75,15,75),
+(76,15,76),
+(77,15,77),
+(78,15,78),
+(79,15,79),
+(80,15,80),
+(81,15,81),
+(82,15,82),
+(83,15,83),
+(84,15,84),
+(85,17,85),
+(86,18,86),
+(87,18,87),
+(88,18,88);
+
 /*Table structure for table `anu_roomtypes` */
 
 DROP TABLE IF EXISTS `anu_roomtypes`;
@@ -551,74 +707,70 @@ CREATE TABLE `anu_touroperator` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `tour_operator` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=67 DEFAULT CHARSET=latin1 COMMENT='Tour Operators table';
+) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=latin1 COMMENT='Tour Operators table';
 
 /*Data for the table `anu_touroperator` */
 
 insert  into `anu_touroperator`(`id`,`tour_operator`) values 
-(1,'Abreu'),
-(2,'Apple Vacations'),
-(3,'Avista Travel'),
 (4,'Azure'),
 (5,'BA Holidays'),
-(6,'Bailey Robinson'),
-(7,'Best Travel'),
-(8,'Bookit.com ( Destination Experience)'),
-(9,'Caribbean World ( Berg &amp; Meer, Tropical Tours)'),
 (10,'Caribtours'),
-(11,'City Discovery&#039;'),
 (12,'Classic Resorts'),
-(13,'Cox &amp;Kings'),
-(14,'Cv Travel'),
 (15,'Destinology'),
-(16,'Diamond Air International'),
 (17,'EFR Travel (SJB Travel)'),
-(18,'Expressions'),
-(19,'Gold Medal '),
 (20,'Golden Holidays'),
 (21,'Hays'),
 (23,'Holiday Services'),
 (24,'Individual Holidays'),
 (25,'Intimate Caribbean Holidays'),
-(26,'ITC Classics / Complete Caribbean / Caribbean Connection'),
 (27,'Kuoni France'),
-(28,'Kuoni Belguim'),
-(29,'Kuoni Italy ( Best Tours Italia)'),
-(30,'Kuoni Netherlands'),
-(31,'Kuoni Spain'),
-(32,'Kuoni Switzerland (Sun Tours)'),
 (33,'Kuoni UK'),
 (34,'Kuoni USA'),
 (35,'La Fabbrica'),
 (36,'Luxury Holidays To &amp; Value Added Travel'),
-(38,'MLT'),
-(39,'Oxford Private Travel'),
-(40,'Page &amp; Moy Travel Group ( Just You Holidays)'),
 (41,'Pink Pearl'),
-(42,'Pleasant  Holidays'),
-(43,'Prestbury  Worldwide Resorts'),
 (44,'Q Holidays'),
 (45,'Scott Dunn'),
-(46,'Stella Travel Services'),
-(47,'The Global Travel Group'),
-(48,'Travel 2/4'),
-(49,'TravelBag'),
-(50,'Triton Rooms'),
 (51,'Team America'),
-(52,'The Lotus Group'),
 (53,'Thomas Cook AG'),
 (54,'Thomas Cook Signature'),
 (56,'Transfers 4 Travel'),
 (57,'Travel Counsellors'),
 (58,'Tropic Breeze'),
 (59,'Turquoise Holidays'),
-(60,'Western &amp; Oriental '),
-(61,'Key 2 Holidays'),
-(62,'Tropical Locations'),
-(63,'Wando Travel'),
-(64,'We Travel / Topflight'),
-(65,'WestJet'),
-(66,'Wilderness Explorers');
+(66,'Wilderness Explorers'),
+(67,'Agaxtur'),
+(68,'Audley Travel'),
+(71,'Bailey Robinson'),
+(72,'Best Tours Italia'),
+(73,'Bookit.com (Destination Experience)'),
+(74,'Caribbean World (Berg & Meer, Tropical Tours)'),
+(76,'Classic Collection Holidays'),
+(78,'Collett\'s Travel'),
+(79,'Cox & Kings'),
+(80,'CV Travel'),
+(82,'Dnata - Gold Medal & Stella Travel Services'),
+(84,'Expressions Holidays'),
+(90,'ITC Luxury Travel'),
+(92,'Kuoni Netherlands (now Tenzing Travel)'),
+(93,'Kuoni Switzerland (SunTours)'),
+(98,'MLT Vacations'),
+(99,'MotMot Travel'),
+(101,'Pleasant Holidays'),
+(102,'Prestbury WorldWide'),
+(105,'Simpson Travel'),
+(106,'Six Star Holidays'),
+(107,'Southall Travel Ltd  - The Holiday Team - Away Holidays - Apple House Travel'),
+(108,'Sublime Travel'),
+(109,'Suntransfers'),
+(113,'Tots Too'),
+(115,'Travel 24/7'),
+(119,'Voyage Prive'),
+(120,'Vtours GMBH'),
+(121,'W&O (Western & Oriental: Key 2 Holidays & Tropical Locations, Wando Travel)'),
+(122,'We Travel2/Topflight'),
+(123,'Weddings in Paradise'),
+(124,'WestJet Vacations');
 
 /*Table structure for table `anu_transport` */
 
@@ -628,107 +780,23 @@ CREATE TABLE `anu_transport` (
   `id_transport` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id_transport`)
-) ENGINE=InnoDB AUTO_INCREMENT=116 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=latin1;
 
 /*Data for the table `anu_transport` */
 
 insert  into `anu_transport`(`id_transport`,`name`) values 
-(1,'Anthony Phillip'),
-(2,'Arthur George'),
-(3,'Gene Mason'),
-(21,'Tyron Herbert'),
-(22,'Edlawn Lewis'),
-(23,'Mervin Thomas'),
-(24,'Daniel Ponde'),
-(25,'Egbert Roberts'),
-(27,'Otis Matthew'),
-(28,'Conroy Lewis'),
-(29,'Auckland Lewis'),
-(30,'Gerald Johnson'),
-(31,'Charlie Browne'),
-(32,'Samuel Thomas'),
-(33,'Kareem Henry'),
-(34,'Lindon Steele'),
-(35,'Delroy Henry'),
-(36,'Steadroy Holder'),
-(37,'Carlton Bedminister'),
-(38,'Samuel Williams'),
-(39,'Dudley Browne'),
-(40,'Dwane Francis'),
-(41,'Kevin Hunte'),
-(42,'Radley Baptiste'),
-(43,'Augustine Isaac'),
-(44,'Lester Byers'),
-(45,'Joan Viera'),
-(46,'Rodney Francis'),
-(47,'Artneil  Charles'),
-(48,'Randolph Phillip'),
-(49,'Oakland Richards'),
-(50,'Lenhart Martin'),
-(51,'Rachel Joyce'),
-(52,'Gary Roberts'),
-(53,'Gersham Richards'),
-(54,'Conroy Chiddick'),
-(55,'Lucy Horsford'),
-(56,'Steadman Colbourne'),
-(57,'Leopold James'),
-(58,'Marlon Francis'),
-(59,'Roderick Nicholas'),
-(60,'James Henry'),
-(61,'Colin Scholar'),
-(62,'Calmore Simon'),
-(63,'Pauline Watson '),
-(64,'Makesha Techiera'),
-(65,'Anthony Pierre'),
-(66,'Derrick Phillp'),
-(67,'Jamie Valentine'),
-(68,'Alpheus Jacobs Sr.'),
-(69,'Jerome Emmanuel'),
-(70,'David Joseph'),
-(71,'Samuel Cannoneir'),
-(72,'Winston Jackson'),
-(73,'Valentine Silcott'),
-(74,'Rodney Baltimore'),
-(75,'Johann Whenner '),
-(76,'Henley Daniel'),
-(77,'Anderson Jacobs'),
-(78,'Llewllyn Willcock'),
-(79,'Dale Merchant'),
-(80,'Dion Harrigan'),
-(81,'Malcom Nelson'),
-(82,'Solen Joseph'),
-(83,'Patrick Valentine'),
-(84,'Ira Jonas'),
-(85,'Steadroy Frederick'),
-(86,'Ashton Gregory'),
-(87,'Livingstone Otto'),
-(88,'Stephen Bowen'),
-(89,'George Carr'),
-(90,'Manley Colbourne'),
-(91,'Alpheus Jacobs Jr.'),
-(92,'David Leadette'),
-(93,'Rodney Gregory'),
-(94,'Dale Joseph'),
-(95,'Lauchland Charles'),
-(96,'Ian Joseph'),
-(97,'Greg Isaac'),
-(98,'Doyle Carter'),
-(99,'Alan Richards'),
-(100,'Leon Joseph'),
-(101,'Mario Lobby'),
-(102,'Rowan Richards'),
-(103,'Hilroy Carr'),
-(104,'Elton Williams'),
-(106,'Charles Brown'),
-(107,'Alton Roberts'),
-(108,'Kurt Francis'),
-(109,'Alfonse Greene'),
-(110,'Andy Henry'),
-(111,'Josette Simmons'),
-(112,'Emelda Frank'),
-(113,'Leroy Jimmie'),
-(114,'Ogliver Jacobs'),
-(115,'Aukland Lewis');
+(1,'Marvin Francis'),
+(2,'Franklyn Joseph'),
+(3,'Louvinca Kerwan'),
+(4,'Bernard Simon'),
+(5,'Cedric Simon'),
+(6,'Wesley Joseph'),
+(7,'Georges Thomas'),
+(8,'Kareem James'),
+(9,'Jules Bowen'),
+(10,'AVIS'),
+(11,'Gregson Gloade'),
+(12,'Chemouy York');
 
 /*Table structure for table `anu_vehicles` */
 
@@ -739,14 +807,14 @@ CREATE TABLE `anu_vehicles` (
   `id_transport` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   PRIMARY KEY (`id_vehicle`)
-) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=104 DEFAULT CHARSET=latin1;
 
 /*Data for the table `anu_vehicles` */
 
 insert  into `anu_vehicles`(`id_vehicle`,`id_transport`,`name`) values 
-(1,1,'TX1238'),
-(2,2,'TX274'),
-(3,3,'TX131'),
+(1,1,'A 40124'),
+(2,2,'A 2318'),
+(3,3,'A 6271'),
 (4,21,'TX1243'),
 (5,22,'TX979'),
 (6,23,'TX44'),
@@ -822,7 +890,31 @@ insert  into `anu_vehicles`(`id_vehicle`,`id_transport`,`name`) values
 (76,92,'TX437'),
 (77,93,'TX976'),
 (78,94,'TX688'),
-(79,95,'TX1248');
+(79,95,'TX1248'),
+(80,4,'A 4762'),
+(81,5,'A 44999'),
+(82,5,'A 8010'),
+(83,5,'A 1297'),
+(84,6,'A 42379'),
+(85,7,'A 17661'),
+(86,8,'A 46975'),
+(87,9,'A 46484'),
+(88,9,'A 46485'),
+(89,10,'A 10000'),
+(90,10,'A 35'),
+(91,10,'A 8429'),
+(92,10,'A 260'),
+(93,10,'A 765'),
+(94,10,'A 700'),
+(95,10,'A 100'),
+(96,10,'A 41'),
+(97,11,'A 41016'),
+(98,11,'A 33681'),
+(99,11,'A 30077'),
+(100,11,'A 42020'),
+(101,11,'A 975 ( LIMO )'),
+(102,12,'A 45'),
+(103,12,'A 44016');
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

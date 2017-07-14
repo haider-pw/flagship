@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -89,7 +89,7 @@ $reservations = mysql_query($query);
                                 </div>
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover">
-                                        <?php if ($user->levelCheck("5,6,7,9")) : ?>
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>

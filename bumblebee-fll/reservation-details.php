@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -13,6 +13,11 @@ ob_start();
  * @author Alvin Herbert
  * @copyright 2015
  */
+if(isset($_REQUEST['sect']) && !empty($_REQUEST['sect'])){
+    $section = $_REQUEST['sect'];
+} else {
+    $section = 'gh';
+}
 
 include('header.php');
 include('select.class.php');
@@ -118,13 +123,17 @@ if(isset($_POST['update']))
 //    $dpt_transport_notes = QuoteSmart($_POST['dpt_transport_notes']);
 //    $rooms       = QuoteSmart($_POST['no_of_rooms']);
 //    $room_no       = QuoteSmart($_POST['room_no']);        
+    //echo '<pre>'; print_r($_POST); echo '</pre>'; exit;
     $user_action = "update reservation: $title_name. $first_name $last_name #ref:$flagship_ref";
-    $ftres = isset($_POST['ftres']) ? 1 : 0;
-    if ($ftres > 0){
+   /* if($section == 'gh')
+        $ftres = isset($_POST['ftres']) ? 2 : 0;
+    else 
+        $ftres = isset($_POST['ftres']) ? 1 : 0;
+    if ($ftres == 2){
         $ftnotify = 1;
     } else {
         $ftnotify = 0;
-    }
+    }*/
     
     //Post driver info to jobsheet
     /**
@@ -160,7 +169,7 @@ if(isset($_POST['update']))
  */
     
 	$sql = "UPDATE fll_reservations ". 
-        "SET title_name = '$title_name', first_name = '$first_name', last_name = '$last_name', pnr = '$pnr', tour_operator = '$tour_oper', operator_code = '$oper_code', tour_ref_no = '$tour_ref_no', adult = '$adults', child = '$children', infant = '$infants', tour_notes = '$tour_notes', fast_track = '$ftres', modified_date = NOW(), modified_by = '$loggedinas', status = '$res_status', ftnotify = '$ftnotify'". 
+        "SET title_name = '$title_name', first_name = '$first_name', last_name = '$last_name', pnr = '$pnr', tour_operator = '$tour_oper', operator_code = '$oper_code', tour_ref_no = '$tour_ref_no', adult = '$adults', child = '$children', infant = '$infants', tour_notes = '$tour_notes', modified_date = NOW(), modified_by = '$loggedinas', status = '$res_status'". 
         "WHERE ref_no_sys = '$flagship_ref'";
         $retval = mysql_query( $sql, $conn );   
     
@@ -186,7 +195,9 @@ if(isset($_POST['update']))
                     <script type="text/javascript">
                                     $(document).ready(function(){
                                         //$("#arr-vehicle-no").attr("disabled","disabled");
-                                                                                
+                                         $('.select2').select2({
+                                            minimumInputLength: 3
+                                        });                                        
                                         $("#arr-driver").change(function(){
                                             $("#arr-vehicle-no").attr("disabled","disabled");
                                             $("#arr-vehicle-no").html("<option>Loading vehicles ...</option>");
@@ -341,6 +352,9 @@ if(isset($_POST['update']))
                                                 <option <?php echo ($reservation[1] == 'Sir') ? 'selected' : ''; ?>>Sir</option>
                                                 <option <?php echo ($reservation[1] == 'Lord') ? 'selected' : ''; ?>>Lord</option>
                                                 <option <?php echo ($reservation[1] == 'Lady') ? 'selected' : ''; ?>>Lady</option>
+                                                <option <?php echo ($reservation[1] == 'Captain') ? 'selected' : ''; ?>>Captain</option>
+                                                <option <?php echo ($reservation[1] == 'Professor') ? 'selected' : ''; ?>>Professor</option>
+                                                <option <?php echo ($reservation[1] == 'Viscount') ? 'selected' : ''; ?>>Viscount</option>
                                             </select>
                                             </div>
                                         </div>
@@ -359,7 +373,7 @@ if(isset($_POST['update']))
                                             }
                                             
                                             //Show selected tour operator and list all the others 
-                                            echo '<select class="form-control select" id="tour-oper" name="tour_oper">';
+                                            echo '<select class="form-control select select2" id="tour-oper" name="tour_oper">';
                                             while ($row = mysql_fetch_array($operselect)) {
                                                 if ($row['id'] == $get_touroperator[0]) {
                                                 echo "<option value='" . $row['id'] . "' selected>" . $row['tour_operator'] . "</option>";
@@ -476,12 +490,19 @@ if(isset($_POST['update']))
                                                 <th>No. of Rooms</th>
                                                 <th>Arr & Trans notes</th>
                                                 <th>Hotel notes</th>
+                                                <th>Excursion Name</th>
+                                                <th>Excursion Date</th>
+                                                <th>Excursion Pickup</th>
+                                                <th>Excursion Confirm By</th>
+                                                <th>Excursion Confirm Date</th>
+                                                <th>Excursion Guests</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php
                                             while($row = mysql_fetch_array($arrivalrows)) {
-                                                
+                                                /*echo '<pre>';
+                                                print_r($row); exit;*/
                                                 $arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[4] . "'"));
                                                 $arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[3] . "'"));
                                                 $arr_pickup = mysql_fetch_row(mysql_query("SELECT * FROM fll_location WHERE id_location='" . $row[9] . "'"));  
@@ -503,6 +524,13 @@ if(isset($_POST['update']))
                                                 $hotel_notes = $row[15];
                                                 $arr_transport =  $row[6];
                                                 $arrFastTrack = empty($row['fast_track'])?'N':'Y';
+
+                                                $excusrion_name = $row[27];
+                                                $excursion_date = $row[28];
+                                                $excursion_pickup = $row[29];
+                                                $excursion_confirm_by = $row[30];
+                                                $excursion_confirm_date = $row[31];
+                                                $excursion_guests = $row[32];
                                                 
                                                 if ($row[24] == 1){
                                                     $arrmain = '*';
@@ -515,7 +543,7 @@ if(isset($_POST['update']))
                                                 }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="arrival-details.php?arrival_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $arrmain_edit .'"></i></a> <span ' . $arrmain_nodel . '>| <a href="arrival-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete arrival"></i></a></span></td>
+                                                        <td><a href="arrival-details.php?arrival_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '&sect='.$section.'"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $arrmain_edit .'"></i></a> <span ' . $arrmain_nodel . '>| <a href="arrival-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete arrival"></i></a></span></td>
                                                         <td>' . $arrmain .' ' . $arr_date . '</td>
                                                         <td>' . $arr_flight_no[1] . '</td>
                                                         <td>' . $arr_time[2] . '</td>
@@ -531,7 +559,13 @@ if(isset($_POST['update']))
                                                         <td>' . $room_no . '</td>
                                                         <td>' . $rooms . '</td>
                                                         <td>' . $arr_transnotes . '</td>
-                                                        <td>' . $hotel_notes . '</td>                                                       
+                                                        <td>' . $hotel_notes . '</td>  
+                                                        <td>' . $excusrion_name . '</td>  
+                                                        <td>' . $excursion_date . '</td> 
+                                                        <td>' . $excursion_pickup . '</td>   
+                                                        <td>' . $excursion_confirm_by . '</td>  
+                                                        <td>' . $excursion_confirm_date . '</td>  
+                                                        <td>' . $excursion_guests . '</td>                                                       
                                                 </tr>';
                                             }
                                         ?>
@@ -616,6 +650,7 @@ if(isset($_POST['update']))
                                                 <th>Flight time</th>
                                                 <th>Flight class</th>
                                                 <th>Transport</th>
+                                                <th>FSFT</th>
                                                 <th>Transport Supplier</th>
                                                 <th>Vehicle</th>
                                                 <th>PU Location</th>
@@ -627,7 +662,7 @@ if(isset($_POST['update']))
                                         <tbody>
                                         <?php
                                             while($row = mysql_fetch_array($departurerows)) {
-                                                
+                                               // echo '<pre>'; print_r($row); echo '</pre>'; exit;
                                                 $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[4] . "'"));
                                                 $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[3] . "'"));
                                                 $dpt_pickup = mysql_fetch_row(mysql_query("SELECT * FROM fll_location WHERE id_location='" . $row[9] . "'"));  
@@ -642,7 +677,10 @@ if(isset($_POST['update']))
                                                 $pickup_time = $row[11];
                                                 $dpt_transnotes = $row[13];
                                                 $dpt_transport =  $row[6];
-                                                
+
+                                                if($row[16]==1) 
+                                                    $fsft = 'Y';
+                                                else $fsft = 'N';
                                                 if ($row[14] == 1){
                                                     $dptmain = '*';
                                                     $dptmain_edit = 'Edit main departure';
@@ -654,12 +692,13 @@ if(isset($_POST['update']))
                                                 }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="departure-details.php?departure_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $dptmain_edit . '"></i></a> <span ' . $dptmain_nodel .'>| <a href="departure-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete departure"></i></a></span></td>
+                                                        <td><a href="departure-details.php?departure_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '&sect='.$section.'"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $dptmain_edit . '"></i></a> <span ' . $dptmain_nodel .'>| <a href="departure-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete departure"></i></a></span></td>
                                                         <td>' . $dptmain .' ' . $dpt_date . '</td>
                                                         <td>' . $dpt_flight_no[1] . '</td>
                                                         <td>' . $dpt_time[2] . '</td>
                                                         <td>' . $dpt_flightclass[1] . '</td>
                                                         <td>' . $dpt_transport . '</td>
+                                                        <td>' . $fsft . '</td>
                                                         <td>' . $dpt_driver[1] . '</td>
                                                         <td>' . $dpt_vehicle[2] . '</td>
                                                         <td>' . $dpt_pickup[1] . '</td>
@@ -752,6 +791,8 @@ if(isset($_POST['update']))
 <script type="text/javascript" src="assets/store.js/store.min.js"></script>
 <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
 <script type="text/javascript" src="js/customScripting.js"></script>
+        <!--Select2-->
+        <script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
         <!-- END TEMPLATE -->
         <!-- END SCRIPTS -->
         <?php

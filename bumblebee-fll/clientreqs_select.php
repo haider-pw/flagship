@@ -8,7 +8,10 @@
 mysql_connect('localhost', 'root', 'chocolate');
 mysql_select_db ("cocoa_fll");
 
-$sql = "SELECT * FROM fll_clientreqs ORDER BY id ASC";
+$sql = "SELECT * FROM fll_clientreqs";
+if($section == 'gh')
+	$sql .= " WHERE section = 0 OR section = 2";
+$sql .= " ORDER BY id ASC";
 $result = mysql_query($sql);
 
 echo '<select multiple class="form-control clientReqs" id="client-reqs" name="client_reqs[]" style="width:100%">

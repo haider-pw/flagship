@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -13,7 +13,11 @@ ob_start();
  * @author Alvin Herbert
  * @copyright 2015
  */
-
+if(isset($_REQUEST['sect']) && !empty($_REQUEST['sect'])){
+    $section = $_REQUEST['sect'];
+} else {
+    $section = 'gh';
+}
 include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
@@ -29,7 +33,7 @@ $get_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM fll_flightclass WH
 $get_reptype = mysql_fetch_row(mysql_query("SELECT * FROM fll_reptype WHERE id='" . $reservation[12] . "'"));
 $flagship_ref = $reservation[1];
 
-
+$selectedFastTrack = $reservation[16];
 
 $transport_arr = mysql_query("SELECT * FROM fll_resdrivers WHERE ref_no_sys='$flagship_ref' AND res_type=1");
 $dpt_count = mysql_numrows($transport_arr);
@@ -65,16 +69,21 @@ if(isset($_POST['update']))
     $dpt_dropoff        = QuoteSmart($_POST['dpt_dropoff']);   
     $dpt_transport_notes = QuoteSmart($_POST['dpt_transport_notes']);     
     $user_action = "update arrival details: #ref:$flagship_ref";
-    $ftres = isset($_POST['ftres']) ? 1 : 0;
-    if ($ftres > 0){
-        $ftnotify = 1;
-    } else {
-        $ftnotify = 0;
+
+    if($section == 'gh'){
+         $ftres = empty($_POST['ftres']) ? 0 : 1;
+        if ($ftres > 0){
+            $ftnotify = 1;
+        } else {
+            $ftnotify = 0;
+        }
     }
     
     $sql = "UPDATE fll_departures ".
-    "SET dpt_date = '$dpt_date', dpt_time = '$dpt_time', dpt_flight_no = '$dpt_flight_no', flight_class = '$flight_class', dpt_transport = '$dpt_transport', dpt_driver = '$dpt_driver', dpt_vehicle = '$dpt_vehicle_no', dpt_pickup = '$dpt_pickup', dpt_dropoff = '$dpt_dropoff', dpt_pickup_time = '$dpt_pickup_time', dpt_transport_notes = '$dpt_transport_notes'".
-    "WHERE id = '$reservation[0]'";
+    "SET dpt_date = '$dpt_date', dpt_time = '$dpt_time', dpt_flight_no = '$dpt_flight_no', flight_class = '$flight_class', dpt_transport = '$dpt_transport', dpt_driver = '$dpt_driver', dpt_vehicle = '$dpt_vehicle_no', dpt_pickup = '$dpt_pickup', dpt_dropoff = '$dpt_dropoff', dpt_pickup_time = '$dpt_pickup_time', dpt_transport_notes = '$dpt_transport_notes'";
+    if($section == 'gh') 
+        $sql .= ", fast_track = '$ftnotify'";
+    $sql .= " WHERE id = '$reservation[0]'";
     $retval = mysql_query( $sql, $conn );
     
     if ($reservation[14] == 1){
@@ -195,6 +204,17 @@ if(isset($_POST['update']))
                                             <input type="text" class="form-control datepicker"  name="dpt_date" id="dpt-date" placeholder="Departure date" value="<?php echo $reservation[2]; ?>"/>
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span>
                                         </div>
+                                        <?php if($section == 'gh'){?>
+                                        <!-- Fasttrack Checkbox-->
+                                        <label class="checkbox-inline label_checkboxitem">
+                                            <input class="icheckbox" type="checkbox" id="ftres" name="ftres" value="1"
+                                            <?php if(empty($selectedFastTrack) || $selectedFastTrack==0) echo ''; else echo 'checked="checked"'?>>
+                                            Fast Track
+                                        </label>
+                                        <i class="fa fa-question-circle left20" data-toggle="tooltip"
+                                           data-placement="top" title="Check the box if this is a Fast Track reservation">
+                                        </i>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->

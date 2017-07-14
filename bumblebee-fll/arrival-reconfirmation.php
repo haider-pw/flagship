@@ -3,7 +3,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,4,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -85,7 +85,7 @@ text-overflow: ellipsis;
                                 </div>  
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover display">
-                                        <?php if ($user->levelCheck("2,4,5,6,7,9")) : ?>
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>

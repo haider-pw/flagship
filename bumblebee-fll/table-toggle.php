@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();

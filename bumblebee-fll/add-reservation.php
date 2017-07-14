@@ -6,7 +6,7 @@ error_reporting(E_ALL &~ E_DEPRECATED);
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -711,9 +711,15 @@ if(isset($_POST['addreservation']))
     $ftres1 = isset($_POST['ftres1']) ? 1 : 0;
     $ftres2 = isset($_POST['ftres2']) ? 1 : 0;
     $ftres3 = isset($_POST['ftres3']) ? 1 : 0;
-    if ($ftres > 0){
+
+    $ftdepres = isset($_POST['ftdepres']) ? 1 : 0;
+    $ftdepres1 = isset($_POST['ftdepres1']) ? 1 : 0;
+    $ftdepres2 = isset($_POST['ftdepres2']) ? 1 : 0;
+    $ftdepres3 = isset($_POST['ftdepres3']) ? 1 : 0;
+
+    if ($ftres > 0 || $fdepres > 0){
         $ftnotify = 1;
-    }
+    } else $ftnotify = 0;
 
 
 
@@ -1175,31 +1181,31 @@ if(isset($_POST['addreservation']))
     //If Depends on the checkbox, if not selected, then departures queries would execute.
     if($departures){
         $sql_9 = "INSERT INTO fll_departures ".
-            "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center) ".
-            "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter')";
+            "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center, fast_track) ".
+            "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter', '$ftdepres')";
         $retval9 = mysql_query( $sql_9, $conn );
 
         $departure1active = QuoteSmart($_POST['departure1active']);
         if($departure1active == 1){
             $sql_10 = "INSERT INTO fll_departures ".
-                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
-                "VALUES ('$fsref', '$dpt_date1', '$dpt_time1', '$dpt_flight_no1', '$dpt_flight_class1', '$dpt1_transport', '$dpt_driver1', '$dpt_vehicle_no1', '$dpt_pickup1', '$dpt_dropoff1', '$pickup_time1', '$dpt_transport_notes1','$jetCenter1')";
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track) ".
+                "VALUES ('$fsref', '$dpt_date1', '$dpt_time1', '$dpt_flight_no1', '$dpt_flight_class1', '$dpt1_transport', '$dpt_driver1', '$dpt_vehicle_no1', '$dpt_pickup1', '$dpt_dropoff1', '$pickup_time1', '$dpt_transport_notes1','$jetCenter1', '$ftdepres1')";
             $retval10 = mysql_query( $sql_10, $conn );
         }
 
         $departure2active = QuoteSmart($_POST['departure2active']);
         if($departure2active == 1){
             $sql_11 = "INSERT INTO fll_departures ".
-                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
-                "VALUES ('$fsref', '$dpt_date2', '$dpt_time2', '$dpt_flight_no2', '$dpt_flight_class2', '$dpt2_transport', '$dpt_driver2', '$dpt_vehicle_no2', '$dpt_pickup2', '$dpt_dropoff2', '$pickup_time2', '$dpt_transport_notes2','$jetCenter2')";
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track) ".
+                "VALUES ('$fsref', '$dpt_date2', '$dpt_time2', '$dpt_flight_no2', '$dpt_flight_class2', '$dpt2_transport', '$dpt_driver2', '$dpt_vehicle_no2', '$dpt_pickup2', '$dpt_dropoff2', '$pickup_time2', '$dpt_transport_notes2','$jetCenter2', '$ftdepres2')";
             $retval11 = mysql_query( $sql_11, $conn );
         }
 
         $departure3active = QuoteSmart($_POST['departure3active']);
         if($departure3active == 1){
             $sql_12 = "INSERT INTO fll_departures ".
-                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center) ".
-                "VALUES ('$fsref', '$dpt_date3', '$dpt_time3', '$dpt_flight_no3', '$dpt_flight_class3', '$dpt3_transport', '$dpt_driver3', '$dpt_vehicle_no3', '$dpt_pickup3', '$dpt_dropoff3', '$pickup_time3', '$dpt_transport_notes3','$jetCenter3')";
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track) ".
+                "VALUES ('$fsref', '$dpt_date3', '$dpt_time3', '$dpt_flight_no3', '$dpt_flight_class3', '$dpt3_transport', '$dpt_driver3', '$dpt_vehicle_no3', '$dpt_pickup3', '$dpt_dropoff3', '$pickup_time3', '$dpt_transport_notes3','$jetCenter3', '$ftdepres3')";
             $retval12 = mysql_query( $sql_12, $conn );
         }
     }
@@ -1308,6 +1314,14 @@ if(isset($_POST['addreservation']))
         "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, ftnotify, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle) ".
         "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$arr0_room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$ftnotify', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$arr0_room_no', '$total_guests','$luggageVehicle')";
         $retval = mysql_query( $sql, $conn );
+        $insertId = mysql_query('SELECT LAST_INSERT_ID()');
+        $insertId = mysql_fetch_array($insertId);
+        $insertId = $insertId[0];
+        if(isset($insertId) && !empty($insertId)){
+            $sysRefNo = mysql_query("SELECT `ref_no_sys` FROM fll_reservations WHERE id = '$insertId'");
+            $sysRefNo = mysql_fetch_array($sysRefNo);
+            $sysRefNo = $sysRefNo[0];
+        }
 
     if(mysql_errno()){
         echo "<br/>".mysql_error();
@@ -1325,6 +1339,9 @@ if(isset($_POST['addreservation']))
                 die('Could not enter data: ' . mysql_error());
             }
     mysql_close($conn);
+    if(isset($sysRefNo) && !empty($sysRefNo))
+        echo "<script>window.location='add-reservation.php?ok=1&sysRef=$sysRefNo'</script>";
+    else
         echo "<script>window.location='add-reservation.php?ok=1'</script>";
 	}
 ?>
@@ -1468,14 +1485,15 @@ if(isset($_POST['addreservation']))
                                         
                                         $("#arr-dropoff").change(function(){
                                             console.log('test');
-                                            $(".arr0_room_type").attr("disabled","disabled");
-                                            $(".arr0_room_type").html("<option>Loading rooms ...</option>");
+                                            var parent = $(this).parents('.arrivalsDiv');
+                                            parent.find(".arr0_room_type").attr("disabled","disabled");
+                                            parent.find(".arr0_room_type").html("<option>Loading rooms ...</option>");
                                         
                                             var locationid = $("#arr-dropoff option:selected").attr('value');
                                         
                                             $.post("select_roomtype.php", {locationid:locationid}, function(data){
-                                                $(".arr0_room_type").removeAttr("disabled");
-                                                $(".arr0_room_type").html(data);
+                                                parent.find(".arr0_room_type").removeAttr("disabled");
+                                                parent.find(".arr0_room_type").html(data);
                                                 
                                             });
                                         });
@@ -1541,16 +1559,17 @@ if(isset($_POST['addreservation']))
                                         
                                         $("#room-type1").attr("disabled","disabled");
                                         
-                                        $("#arr-dropoff1").change(function(){
-                                            var roomTypeSelector1 = $(".arr1_room_type");
-                                            roomTypeSelector1.attr("disabled","disabled");
-                                            roomTypeSelector1.html("<option>Loading rooms ...</option>");
+                                        $("#arr-dropoff1").change(function(){ 
+                                            var roomTypeSelector1 = $("#arr1_room_type");
+                                            var parent = $(this).parents('.arrivalsDiv').find('.arr1_room_type');
+                                            parent.attr("disabled","disabled");
+                                            parent.html("<option>Loading rooms ...</option>");
                                         
                                             var locationid = $("#arr-dropoff1 option:selected").attr('value');
                                         
                                             $.post("select_roomtype.php", {locationid:locationid}, function(data){
-                                                roomTypeSelector1.removeAttr("disabled");
-                                                roomTypeSelector1.html(data);
+                                                parent.removeAttr("disabled");
+                                                parent.html(data);
                                             });
                                         });
                                         /* end arrival 1 */
@@ -1617,15 +1636,16 @@ if(isset($_POST['addreservation']))
                                         $("#room-type2").attr("disabled","disabled");
                                         
                                         $("#arr-dropoff2").change(function(){
-                                            var roomTypeSelector2 = $(".arr2_room_type");
-                                            roomTypeSelector2.attr("disabled","disabled");
-                                            roomTypeSelector2.html("<option>Loading rooms ...</option>");
+                                            var roomTypeSelector2 = $("#arr2_room_type");
+                                            var parent = $(this).parents('.arrivalsDiv').find('.arr2_room_type');
+                                            parent.attr("disabled","disabled");
+                                            parent.html("<option>Loading rooms ...</option>");
                                         
                                             var locationid = $("#arr-dropoff2 option:selected").attr('value');
                                         
                                             $.post("select_roomtype.php", {locationid:locationid}, function(data){
-                                                roomTypeSelector2.removeAttr("disabled");
-                                                roomTypeSelector2.html(data);
+                                                parent.removeAttr("disabled");
+                                                parent.html(data);
                                                 
                                             });
                                         });
@@ -1693,15 +1713,16 @@ if(isset($_POST['addreservation']))
                                         $("#room-type3").attr("disabled","disabled");
                                         
                                         $("#arr-dropoff3").change(function(){
-                                            var roomTypeSelector3 = $(".arr3_room_type");
-                                            roomTypeSelector3.attr("disabled","disabled");
-                                            roomTypeSelector3.html("<option>Loading rooms ...</option>");
+                                            var roomTypeSelector3 = $("#arr3_room_type");
+                                            var parent = $(this).parents('.arrivalsDiv').find('.arr3_room_type');
+                                            parent.attr("disabled","disabled");
+                                            parent.html("<option>Loading rooms ...</option>");
                                         
                                             var locationid = $("#arr-dropoff3 option:selected").attr('value');
                                         
                                             $.post("select_roomtype.php", {locationid:locationid}, function(data){
-                                                roomTypeSelector3.removeAttr("disabled");
-                                                roomTypeSelector3.html(data);
+                                                parent.removeAttr("disabled");
+                                                parent.html(data);
                                             });
                                         });
                                         /* end arrival 3 */
@@ -2062,6 +2083,11 @@ if(isset($_POST['addreservation']))
                             <form id="add-reservations" class="form-horizontal" method="post" action="<?php $_PHP_SELF ?>">
                             <div class="panel panel-default">
                                 <div class="panel-heading">
+                                    <?php 
+                                        if(isset($_GET['sysRef']) && !empty($_GET['sysRef'])){
+                                            echo '<div style="font-weight: bold;color: green;font-size: 14px;">Reservation Added with Ref # '.$_GET['sysRef'].'</div>';
+                                        }
+                                    ?>
                                     <h3 class="panel-title"><strong>Add Reservation</strong></h3>
                                 </div>
                                 <div class="panel-body">
@@ -2082,6 +2108,9 @@ if(isset($_POST['addreservation']))
                                                 <option>Sir</option>
                                                 <option>Lord</option>
                                                 <option>Lady</option>
+                                                <option>Captain</option>
+                                                <option>Professor</option>
+                                                <option>Viscount</option>
                                             </select>
                                             </div>
                                         </div>
@@ -2255,7 +2284,7 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
                                     <label for="arr-dropoff">Dropoff Location</label>
-                                    <select class="form-control dropSelect" id="arr-dropoff" name="arr_dropoff">
+                                    <select class="form-control dropSelect arr_dropoff" id="arr-dropoff" name="arr_dropoff">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -2313,7 +2342,9 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="clientreqs reqs-box">
                                     <div class="form-group col-xs-7">                                        
-                                       <?php include ('clientreqs_select.php'); ?>
+                                       <?php
+                                       $section = 'gh';
+                                        include ('clientreqs_select.php'); ?>
                                         <span class="help-block"> Select one (1) or multiple Airport/Hotel requirements</span>
                                     </div>
                                     <div class="form-group">                                         
@@ -2459,7 +2490,7 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
                                     <label for="arr-dropoff1">Dropoff Location</label>
-                                    <select class="form-control dropSelect" id="arr-dropoff1" name="arr_dropoff1">
+                                    <select class="form-control dropSelect arr_dropoff" id="arr-dropoff1" name="arr_dropoff1">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -2471,7 +2502,7 @@ if(isset($_POST['addreservation']))
                                     <div class="clearfix"></div>
                                     <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
                                         <label for="arr1_room_type">Room type</label>
-                                        <select class="form-control right20" id="arr1_room_type" name="arr1_room_type">
+                                        <select class="form-control arr1_room_type right20" id="arr1_room_type" name="arr1_room_type">
                                             <option>Room Type</option>
                                         </select>
                                     </div>
@@ -2517,6 +2548,7 @@ if(isset($_POST['addreservation']))
                                 <br /><br />
                                 </div>
                                 <div class="clientreqs1 reqs-box">
+                                <?php /* ?>
                                     <div class="form-group col-xs-7">                                        
                                        <?php
                                        $sql = "SELECT * FROM fll_clientreqs ORDER BY id ASC";
@@ -2531,6 +2563,7 @@ if(isset($_POST['addreservation']))
                                        ?>
                                         <span class="help-block"> Select one (1) or multiple Airport/Hotel requirements</span>
                                     </div>
+                                    <?php */ ?>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-6">
                                                 <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels1" name="cold_towels1" value="" placeholder="Cold Towels">
@@ -2675,7 +2708,7 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
                                     <label for="arr-dropoff2">Dropoff Location</label>
-                                    <select class="form-control dropSelect" id="arr-dropoff2" name="arr_dropoff2">
+                                    <select class="form-control dropSelect arr_dropoff" id="arr-dropoff2" name="arr_dropoff2">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
@@ -2688,7 +2721,7 @@ if(isset($_POST['addreservation']))
 
                                     <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
                                         <label for="arr2_room_type">Room type</label>
-                                        <select class="form-control right20" id="arr2_room_type" name="arr2_room_type">
+                                        <select class="form-control arr2_room_type right20" id="arr2_room_type" name="arr2_room_type">
                                             <option>Room Type</option>
                                         </select>
                                     </div>
@@ -2733,6 +2766,7 @@ if(isset($_POST['addreservation']))
                                 <br /><br />
                                 </div>
                                 <div class="clientreqs2 reqs-box">
+                                <?php /* ?>
                                     <div class="form-group col-xs-7">                                        
                                        <?php
                                        $sql = "SELECT * FROM fll_clientreqs ORDER BY id ASC";
@@ -2747,6 +2781,7 @@ if(isset($_POST['addreservation']))
                                        ?>
                                         <span class="help-block"> Select one (1) or multiple Airport/Hotel requirements</span>
                                     </div>
+                                    <?php */ ?>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-6">
                                                 <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels2" name="cold_towels2" value="" placeholder="Cold Towels">
@@ -2890,14 +2925,14 @@ if(isset($_POST['addreservation']))
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
                                     <label for="arr-dropoff3">Dropoff Location</label>
-                                    <select class="form-control dropSelect" id="arr-dropoff3" name="arr_dropoff3">
+                                    <select class="form-control dropSelect arr_dropoff" id="arr-dropoff3" name="arr_dropoff3">
                                         <?php echo $opt->ShowLocation(); ?>     
                                     </select>
                                 </div>
                                 <div class="clearfix"></div>
                                     <div class="form-group col-lg-3 col-sm-7 col-xs-12" style="margin-right: 10px !important;"><!-- room type selection -->
                                         <label for="arr3_room_type">Room type</label>
-                                        <select class="form-control right20" id="arr3_room_type" name="arr3_room_type">
+                                        <select class="form-control arr3_room_type right20" id="arr3_room_type" name="arr3_room_type">
                                             <option>Room Type</option>
                                         </select>
                                     </div>
@@ -2943,6 +2978,7 @@ if(isset($_POST['addreservation']))
                                 <br /><br />
                                 </div>
                                 <div class="clientreqs3 reqs-box">
+                                    <?php /* ?>
                                     <div class="form-group col-xs-7">
                                        <?php
                                        $sql = "SELECT * FROM fll_clientreqs ORDER BY id ASC";
@@ -2957,6 +2993,7 @@ if(isset($_POST['addreservation']))
                                        ?>
                                         <span class="help-block"> Select one (1) or multiple Airport/Hotel requirements</span>
                                     </div>
+                                    <?php */ ?>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-6">
                                                 <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels3" name="cold_towels3" value="" placeholder="Cold Towels">
@@ -3078,7 +3115,7 @@ if(isset($_POST['addreservation']))
  
                                   <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
-                                        <label>Transfer &amp; Transport notes</label>
+                                        <label>Inter Hotel Transfer Details</label>
                                         <textarea class="form-control text-lowercase" rows="5" id="transfer-notes" name="transfer_notes" placeholder="Transfer &amp; Transportation notes: additional transfer &amp; transport comments and details here"></textarea>
                                     </div>
                                  </div>
@@ -3166,7 +3203,7 @@ if(isset($_POST['addreservation']))
  
                                   <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
-                                        <label>Transfer &amp; Transport notes</label>
+                                        <label>Inter Hotel Transfer Details</label>
                                         <textarea class="form-control text-lowercase" rows="5" id="transfer-notes1" name="transfer_notes1" placeholder="Transfer &amp; Transportation notes: additional transfer &amp; transport comments and details here"></textarea>
                                     </div>
                                  </div>
@@ -3254,7 +3291,7 @@ if(isset($_POST['addreservation']))
  
                                   <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
-                                        <label>Transfer &amp; Transport notes</label>
+                                        <label>Inter Hotel Transfer Details</label>
                                         <textarea class="form-control text-lowercase" rows="5" id="transfer-notes2" name="transfer_notes2" placeholder="Transfer &amp; Transportation notes: additional transfer &amp; transport comments and details here"></textarea>
                                     </div>
                                  </div>
@@ -3342,7 +3379,7 @@ if(isset($_POST['addreservation']))
  
                                   <div class="form-group"><!-- hotel notes -->
                                     <div class="col-xs-7">                                            
-                                        <label>Transfer &amp; Transport notes</label>
+                                        <label>Inter Hotel Transfer Details</label>
                                         <textarea class="form-control text-lowercase" rows="5" id="transfer-notes3" name="transfer_notes3" placeholder="Transfer &amp; Transportation notes: additional transfer &amp; transport comments and details here"></textarea>
                                     </div>
                                  </div>
@@ -3363,7 +3400,7 @@ if(isset($_POST['addreservation']))
                                 <h4>Departure Details <label class="checkbox-inline label_checkboxitem" style="margin-left:10px;padding-top: 0;">
                                         <input type="checkbox" id="departuresDivCheckBox" name="departuresDivCheckBox"> No Flight Details
                                     </label> </h4>
-<div id="departuresDiv">
+                            <div id="departuresDiv">
                                 <div class="form-group">
                                     <div class="form-inline left20">
                                         <!-- departure date -->
@@ -3372,6 +3409,11 @@ if(isset($_POST['addreservation']))
                                             <input type="text" class="form-control datepicker"  name="dpt_date" id="dpt-date" placeholder="Departure date"/>
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
+
+                                        <label class="checkbox-inline label_checkboxitem">
+                                            <input class="icheckbox" type="checkbox" id="ftdepres" name="ftdepres"> Fast
+                                            Track
+                                        </label>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->
@@ -3464,6 +3506,11 @@ if(isset($_POST['addreservation']))
                                             <input type="text" class="form-control datepicker"  name="dpt_date1" id="dpt-date1" placeholder="Departure date"/>
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
+
+                                        <label class="checkbox-inline label_checkboxitem">
+                                            <input class="icheckbox" type="checkbox" id="ftdepres1" name="ftdepres1"> Fast
+                                            Track
+                                        </label>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->
@@ -3585,6 +3632,11 @@ if(isset($_POST['addreservation']))
                                             <input type="text" class="form-control datepicker"  name="dpt_date2" id="dpt-date2" placeholder="Departure date"/>
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
+
+                                        <label class="checkbox-inline label_checkboxitem">
+                                            <input class="icheckbox" type="checkbox" id="ftdepres2" name="ftdepres2"> Fast
+                                            Track
+                                        </label>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->
@@ -3705,6 +3757,11 @@ if(isset($_POST['addreservation']))
                                             <input type="text" class="form-control datepicker"  name="dpt_date3" id="dpt-date3" placeholder="Departure date"/>
                                             <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
+
+                                        <label class="checkbox-inline label_checkboxitem">
+                                            <input class="icheckbox" type="checkbox" id="ftdepres3" name="ftdepres3"> Fast
+                                            Track
+                                        </label>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->
@@ -3996,7 +4053,7 @@ if(isset($_POST['addreservation']))
         console.log(subRoomsDiv);
         var totalCurrentDivs = subRoomsDiv.find('div.roomDiv').length + 1;
         var maxRooms = 5;
-        var locId = $(this).parents('.panel-body').find('#arr-dropoff').val();
+        var locId = $(this).parents('.arrivalsDiv').find('.arr_dropoff').val();
         console.log(locId);
 
         if(totalCurrentDivs<maxRooms){
@@ -4118,7 +4175,12 @@ if(isset($_POST['addreservation']))
         <?php
         $ok= isset($_GET['ok']);
         if($ok)  {
-            echo '<script> alert("Reservation successfully added"); </script>';
+            if(isset($_GET['sysRef']) && !empty($_GET['sysRef'])){
+                $sysRef = $_GET['sysRef'];
+                echo '<script> prompt("Reservation successfully added", "Ref # '.$sysRef.'"); </script>';
+            }
+            else
+                echo '<script> alert("Reservation successfully added"); </script>';
             }
         ?>
     </body>

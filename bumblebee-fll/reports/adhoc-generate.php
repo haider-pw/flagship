@@ -19,9 +19,7 @@ else {
 }
 
 
-/*echo '<pre>';
-print_r($_POST);
-echo '</pre>'; exit;*/
+
   
 if(empty($_POST)){
 
@@ -85,15 +83,26 @@ function selectData($postItems){
     return implode(',', $selectData);
 }
 
+
+
+
+
 $query = 'SELECT ';
 
 $selectData = selectData($postItems);
+
+if($_REQUEST['sect'] == 'fsft') 
+    $selectData = $selectData.', R.ftnotify as GH';
 
 $query .= $selectData . ', R.ref_no_sys as Ref_no_sys FROM fll_reservations R';
 
 if(strpos($selectData, '`tour_operator`')){
     $query .= ' LEFT JOIN fll_touroperator T on R.tour_operator = T.id';
 }
+
+/*if(strpos($selectData, 'Reps')){
+    $query .= ' LEFT JOIN fll_reps RE on R.rep = RE.id_rep';
+}*/
 
 if(strpos($selectData,'`G`')){
     $query .= ' LEFT JOIN fll_guest G on R.ref_no_sys = G.ref_no_sys';
@@ -123,7 +132,8 @@ if(strpos($selectData,'`D`') || strpos($selectData, '`flight_time`') || strpos($
         $query .= ' LEFT JOIN fll_vehicles DV on D.dpt_vehicle = DV.id_vehicle';
     }
 }
-if(strpos($selectData,'`A`') || strpos($selectData, '`rep_type`') || strpos($selectData, '`room_type`') || strpos($selectData, 'Arr_Flight') || strpos($selectData, 'Arr_Flight_Class') || strpos($selectData, 'Arr_Driver') || strpos($selectData, 'Arr_Vehicle') || strpos($selectData, 'Arr_Pickup') || strpos($selectData, 'Arr_Dropoff')){
+if(strpos($selectData,'`A`') || strpos($selectData, '`rep_type`') || strpos($selectData, '`room_type`') || strpos($selectData, 'Arr_Flight') || strpos($selectData, 'Arr_Flight_Class') || strpos($selectData, 'Arr_Driver') || strpos($selectData, 'Arr_Vehicle') || strpos($selectData, 'Arr_Pickup') || strpos($selectData, 'Arr_Dropoff') ||
+    strpos($selectData, 'Zone') || strpos($selectData, 'Location_Code') || strpos($selectData, 'Hotel_Arr_Dropoff') || strpos($selectData, 'Arr_Time')){
     $query .= ' LEFT JOIN fll_arrivals A on R.ref_no_sys = A.ref_no_sys';
 
     if(strpos($selectData,'`AR`') || strpos($selectData, 'Additional_Room_Type')){
@@ -141,7 +151,7 @@ if(strpos($selectData,'`A`') || strpos($selectData, '`rep_type`') || strpos($sel
             $query .= ' LEFT JOIN fll_vehicles ATV on AT.vehicle = ATV.id_vehicle';
         }
         if(strpos($selectData, 'Additional_Transport_Supplier')){
-        $query .= ' LEFT JOIN fll_transport ATD on AT.driver = ATD.id_transport';
+            $query .= ' LEFT JOIN fll_transport ATD on AT.driver = ATD.id_transport';
         }
     }
 
@@ -170,8 +180,15 @@ if(strpos($selectData,'`A`') || strpos($selectData, '`rep_type`') || strpos($sel
     if(strpos($selectData, 'Arr_Pickup')){
         $query .= ' LEFT JOIN fll_location AL on A.arr_pickup = AL.id_location';
     }
-    if(strpos($selectData, 'Arr_Dropoff')){
+    if(strpos($selectData, 'Arr_Dropoff') || strpos($selectData, 'Zone') || strpos($selectData, 'Location_Code') || 
+        strpos($selectData, 'Hotel_Arr_Dropoff')){
         $query .= ' LEFT JOIN fll_location ADL on A.arr_dropoff = ADL.id_location';
+        if(strpos($selectData,'Zone')){
+            $query .= ' LEFT JOIN fll_loc_coast LC on ADL.zone= LC.id';
+        }
+    }
+    if(strpos($selectData, 'Arr_Time')){
+        $query .= ' LEFT JOIN fll_flighttime FAT on A.arr_time = FAT.id_fltime';
     }
     
 }
@@ -208,7 +225,7 @@ if(isset($_REQUEST['sect']) && $_REQUEST['sect']=='fsft'){
     $query .= ' WHERE (R.fast_track=1 || R.ftnotify=1) && R.status=1';
 } else {
     $_REQUEST['sect'] = 'gh';
-$query .= ' WHERE (R.fast_track=0 || R.ftnotify=1) && R.status=1';
+    $query .= ' WHERE (R.fast_track=0 || R.ftnotify=1) && R.status=1';
 }
 
 
@@ -232,18 +249,14 @@ if(isset($_REQUEST['fromDate']) && isset($_REQUEST['toDate'])){
     $query .= ' && (R.arr_date between CAST("'.$fromDate.'" AS DATE) AND CAST("'.$toDate.'" AS DATE))';
 }
 
-if(isset($_REQUEST['query'])){
+/*if(isset($_REQUEST['query'])){
     $searchText = $_REQUEST['query'];
      $query .= ' && (R.first_name LIKE "%'.$searchText.'%" || R.last_name LIKE "%'.$searchText.'%" || R.pnr LIKE "%'.$searchText.'%" || R.tour_operator LIKE "%'.$searchText.'%" || R.operator_code LIKE "%'.$searchText.'%" || R.tour_notes LIKE "%'.$searchText.'%" || R.flight_class LIKE "%'.$searchText.'%" || R.arr_transport LIKE "%'.$searchText.'%" || R.rep_type LIKE "%'.$searchText.'%" || R.client_reqs LIKE "%'.$searchText.'%" || R.dpt_transport LIKE "%'.$searchText.'%" || R.dpt_pickup LIKE "%'.$searchText.'%" || R.dpt_dropoff LIKE "%'.$searchText.'%" || R.dpt_notes LIKE "%'.$searchText.'%" || R.modified_by LIKE "%'.$searchText.'%" || R.arr_hotel_notes LIKE "%'.$searchText.'%" || R.dpt_transport_notes LIKE "%'.$searchText.'%")' ;
-}
+}*/
 $query .= ' ORDER BY R.id';
-
-//$sqlrows=mysqli_num_rows(mysqli_query($conn,$query));
-
-//if(!isset($_REQUEST['all'])) 
-  // $query .= ' LIMIT  '.$start.', '.$limit;
-
 //echo $query; exit;
+
+
 $queryResource = mysqli_query($conn,$query);
 
 if(!empty($queryResource)){
@@ -252,7 +265,8 @@ if(!empty($queryResource)){
 if(isset($TotalRows) and $TotalRows > 0){
     // output data of each row
     $resultData = [];
-    
+    $allReps = [];
+  
     while($row = mysqli_fetch_assoc($queryResource)) {
         if(isset($row['Child'])){
             $child =$row['Child'];
@@ -274,8 +288,8 @@ if(isset($TotalRows) and $TotalRows > 0){
         } else {
             unset($row['A_C_I']);
         }
-        // check payment type
-          if(isset($row['Payment_Type'])){
+
+        if(isset($row['Payment_Type'])){
             $paymentType = $row['Payment_Type'];
             if($paymentType=='0') 
                 $row['Payment_Type']='Not Defined';
@@ -304,24 +318,140 @@ if(isset($TotalRows) and $TotalRows > 0){
             unset($row['Ref_no_sys']);
             unset($row['Arrival_Service_Only']);
         }
+        // check fast track 
+        if(isset($row['Arr_Fast_Track'])){
+            if($row['Arr_Fast_Track']==1 || $_REQUEST['sect']=='fsft')
+                $row['Arr_Fast_Track'] = 'Y';
+            else 
+                $row['Arr_Fast_Track'] = 'N';
+        } 
+        if(isset($row['Dep_Fast_Track'])){
+            if($row['Dep_Fast_Track']==1 || $_REQUEST['sect']=='fsft')
+                $row['Dep_Fast_Track'] = 'Y';
+            else 
+                $row['Dep_Fast_Track'] = 'N';
+        }
+
+        // check reps 
+        if(isset($row['Reps']))
+            $row['Reps'] = json_decode($row['Reps'], true); 
+       
+        //echo '<pre>'; print_r($row['Reps']) ; 
+        if(isset($row['Reps']) && is_array($row['Reps']) && !empty($row['Reps'])){
+            $ids = $row['Reps'];
+            $ids = implode("','",$ids);
+            $query = "SELECT `name` FROM fll_reps WHERE id_rep IN ('".$ids."')"; 
+            $query = mysqli_query($conn, $query) or die(mysql_error());
+            $allReps = [];
+            while($record = mysqli_fetch_array($query)){
+                if(isset($record[0]))
+                    $allReps[] = $record[0];
+            }
+            if(isset($allReps) && is_array($allReps)){
+                $row['Reps'] = implode(",   ", $allReps);
+            }
+        }
+
+       if(isset($row['GH'])){
+            if($row['GH'] == 1)
+                $row['GH'] = 'Y';
+            else $row['GH'] = 'N';
+            $row = array('GH'=>$row['GH']) + $row;
+        }
+
         $resultData[] = $row;
     }
 
- 
+    $rIds = [];
+    $guestIds = [];
+    $testArray = [];
+    // here wo make the array of reservation and guest columns, that will use later to duplicte the main reservation
+    $reservationCols = ['GH','Id','Title_Name','First_Name','Last_Name','PNR','Arrival_Service_Only','Client','Tour_Operator','Operator_Code','Reference_No','Adult','Child','Infant','A_C_I','Tour_Notes','Reps','Payment_Type'];
+    $guestCols=['Guest_Title_Name','Guest_First_Name','Guest_Last_Name','Guest_PNR','Guest_Adult','Guest_Child_Age','Guest_Infant_Age','Price','Guest_id'];
+
+    $countKeys = [];
+    foreach($resultData as $key=>$data){ 
+        $tempRow = $data;
+        $newKey = $data['Id'];
+        $currentKeys = array_keys($data);
+        // make new $testarray, with unique main keys by joining guest_id and reservationid
+        if(isset($data['Guest_id']) && !empty($data['Guest_id'])) $newKey .= $newKey.$data['Guest_id'];
+
+        if( in_array($data['Id'], $rIds) && 
+            (!isset($data['Guest_id']) || in_array($data['Guest_id'], $guestIds)) ) { 
+                foreach($currentKeys as $akey){
+                    if(in_array($akey, $countKeys)) 
+                        $count = $countKeys[$akey];
+                    else 
+                        $count = 1;
+                    // exlude the reservation and guest fields as they will show in multiple rows
+                    if(!in_array($akey, $reservationCols) && !in_array($akey, $guestCols)){
+                        if(isset($data[$akey])){
+                            // add new column when muliple rows exist for arrival, departure ,rooms, hotel
+                            $count++;
+                            $countKeys[$akey] = $count;
+                            $testArray[$newKey][$akey.$count] = $data[$akey]; 
+                        }
+                    }
+                }
+
+
+        } else {
+            array_push($rIds, $data['Id']);
+            if(isset($data['Guest_id'])) array_push($guestIds, $data['Guest_id']);
+            // here code start to show main reservation twice
+            $repeatReservation = [];
+            foreach($currentKeys as $akey){
+                if(in_array($akey, $reservationCols))
+                    $repeatReservation[$akey] = $data[$akey];
+                else 
+                    $repeatReservation[$akey] = '';
+            }
+            $testArray[] = $repeatReservation; 
+            $testArray[$newKey] = $data;
+        }
+    }
+
+    /* here code start to get all all sub indexes of $testarray */
+    $allIndexes = [];
+    foreach($testArray as $key=>$row){
+        $indexes = array_keys($row);
+        foreach($indexes as $index){
+            if(!in_array($index, $allIndexes)){
+                array_push($allIndexes, $index);
+            }
+
+        }
+    }
+    
+
+    /* here as every main index in testarray has different variable subindexes, that create issue in datatable,
+        so here we make equal number of subindexes for each main index
+    */
+    $dataArray = [];
+    foreach($testArray as $key=>$row){
+        foreach($allIndexes as $index){
+            if(isset($testArray[$key][$index])) 
+                $dataArray[$key][$index] = $testArray[$key][$index];
+            else 
+                $dataArray[$key][$index] = ''; // set empty value if index not exist
+        }
+    }
+
+    $resultData = $dataArray;
     if(!empty($resultData)){
-        $columns = array_keys($resultData[0]);
+
         $columns = array_map(function($column){
             $column = str_replace('_', ' ', $column);
             $column = ucfirst($column);
             return $column;
-        },$columns);
-    }
-}else{
+        },$allIndexes);
+    } 
+
+}  else{
     echo 'No Record Found';
 }
 mysqli_close($conn);
-
-
 
 
 

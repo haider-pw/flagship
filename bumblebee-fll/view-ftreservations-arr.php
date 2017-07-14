@@ -3,7 +3,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   if ($row->userlevel == 2){
@@ -24,7 +24,7 @@ include('header.php');
 site_header('Reservation List - Arrivals');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM fll_reservations  WHERE fast_track = 1 AND status = 1";
+$reservationQuery = "SELECT * FROM fll_reservations R INNER JOIN fll_arrivals A on R.ref_no_sys = A.ref_no_sys WHERE (R.fast_track = 1 OR R.ftnotify = 1) AND R.status = 1 AND A.fast_track = 1 GROUP BY R.id";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
@@ -35,7 +35,7 @@ if(isset($_POST['fromDate'])){
     }
 
 }
-$reservationQuery .= " ORDER BY id DESC";
+$reservationQuery .= " ORDER BY R.id DESC";
 //echo $reservationQuery;
 //Grab all reservation info
 $reservations = mysql_query($reservationQuery);
@@ -133,7 +133,7 @@ if(mysql_errno()){
                                
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover display">
-                                        <?php if ($user->levelCheck("5,6,7,9,3")) : ?>
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -230,7 +230,7 @@ if(mysql_errno()){
                                                     }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="ftreservation-details.php?id=' . $id . '"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a>' . $displayftnotify . '</td>
+                                                        <td><a href="ftreservation-details.php?id=' . $id . '&sect=fsft"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a>' . $displayftnotify . '</td>
                                                         <td>' . $title_name . '</td>
                                                         <td>' . $first_name . '</td>
                                                         <td>' . $last_name . '</td>

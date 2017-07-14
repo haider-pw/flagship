@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -17,8 +17,10 @@ ob_start();
 include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
-$reservationQueryResource = mysql_query("SELECT * FROM fll_reservations WHERE id='" . $_GET['id'] . "' AND fast_track = 1");
+$reservationQueryResource = mysql_query("SELECT * FROM fll_reservations WHERE id='" . $_GET['id'] . "' AND (fast_track = 1 or ftnotify = 1)");
 $reservation = mysql_fetch_array($reservationQueryResource);
+/*echo '<pre>';
+print_r($reservation); exit;*/
 $get_arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $reservation[16] . "'"));
 $get_arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $reservation[15] . "'"));
 $get_dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $reservation[28] . "'"));
@@ -60,7 +62,7 @@ $transport_dpt = mysql_query("SELECT * FROM fll_resdrivers WHERE ref_no_sys='$fl
 $dpt_count = mysql_numrows($transport_dpt);
 
 //Get tour operator list
-$operselect = mysql_query("SELECT * FROM fll_touroperator ORDER BY tour_operator ASC");
+$operselect = mysql_query("SELECT * FROM fll_fsft_touroperator ORDER BY tour_operator ASC");
 $dptlocationselect = mysql_query("SELECT * FROM fll_location ORDER BY name ASC");
 $classselect = mysql_query("SELECT * FROM fll_flightclass ORDER BY class ASC");
 $dpt_classselect = mysql_query("SELECT * FROM fll_flightclass ORDER BY class ASC");
@@ -89,6 +91,11 @@ if(isset($_POST['update']))
     $children           = QuoteSmart($_POST['children']);
     $infants            = QuoteSmart($_POST['infants']);
     $tour_notes         = QuoteSmart($_POST['tour_notes']);
+    if(isset($_POST['total_amount'])){
+        $total_amount = $_POST['total_amount'];
+    } else {
+        $total_amount = 0;
+    }
     //$arr_date           = QuoteSmart($_POST['arr_date']);
 //    $arr_time           = QuoteSmart($_POST['arr_time']);
 //    $arr_flight_no      = QuoteSmart($_POST['arr_flight_no']);
@@ -131,7 +138,7 @@ if(isset($_POST['update']))
     
     //Post driver info to jobsheet
     $sql = "UPDATE fll_reservations ". 
-        "SET title_name = '$title_name', first_name = '$first_name', last_name = '$last_name', pnr = '$pnr', tour_operator = '$tour_oper', operator_code = '$oper_code', tour_ref_no = '$tour_ref_no', adult = '$adults', child = '$children', infant = '$infants', tour_notes = '$tour_notes', fast_track = '$ftres', modified_date = NOW(), modified_by = '$loggedinas', status = '$res_status'". 
+        "SET title_name = '$title_name', first_name = '$first_name', last_name = '$last_name', pnr = '$pnr', tour_operator = '$tour_oper', operator_code = '$oper_code', tour_ref_no = '$tour_ref_no', adult = '$adults', child = '$children', infant = '$infants', tour_notes = '$tour_notes', fast_track = '$ftres', modified_date = NOW(), modified_by = '$loggedinas', status = '$res_status', sup_total_amount = '$total_amount'". 
         "WHERE ref_no_sys = '$flagship_ref'";
         $retval = mysql_query( $sql, $conn );   
     
@@ -155,6 +162,9 @@ if(isset($_POST['update']))
                     <script type="text/javascript">
                                     $(document).ready(function(){
                                         //$("#arr-vehicle-no").attr("disabled","disabled");
+                                         $('.select2').select2({
+                                            minimumInputLength: 3
+                                        });   
                                                                                 
                                         $("#arr-driver").change(function(){
                                             $("#arr-vehicle-no").attr("disabled","disabled");
@@ -228,6 +238,52 @@ if(isset($_POST['update']))
                                                 
                                             });
                                         });
+
+
+
+                                         // on select supplier set price
+                                         $('#tour-oper').on('select2:select',function(e){ 
+                                            //console.log($(this).select2('data'));
+                                           //var price = $('#tour-oper').find('option[value="'+price+'"]').attr('data-price');
+                                           var price = $('#tour-oper option:selected').attr('data-price');
+                                           //var price = $(this).select2('data')[0].element.attributes[0].nodeValue;
+                                           console.log(price);
+
+                                           $('#price').val(price);
+                                           // check adult count
+                                           var adultCount = $("#adults").val();
+                                           if(adultCount>=0){
+                                                var total_amount = adultCount * price;
+                                                $('#total_amount').val(total_amount);
+                                           }
+                                         })
+
+                                         // on price change by user , calculate result again
+                                         $('#price').on('change',function(e){
+                                            var price = $(this).val();
+                                            var adultCount =  $('.adult_count').html();
+                                            if (price>=0 && adultCount>=0) {
+                                                var total_amount = adultCount * price;
+                                                $('#total_amount').val(total_amount);
+                                            } // end of if
+                                         })
+
+                                           // on adult number change event
+                                             $("#adults").bind('keyup mouseup', function () {
+                                                updateAdult(this);            
+                                            });
+
+                                             // update adult function
+                                             function updateAdult(element){
+                                                var adultCount = $(element).val();
+                                                $('.adult_count').html(adultCount);
+                                                var price = $('#price').val();
+                                                if(price > 0){
+                                                    var total_amount = adultCount * price;
+                                                    $('#total_amount').val(total_amount);
+                                                }
+                                             }
+
                                     });
                                 </script>
                     <?php include ('profile.php'); ?>
@@ -320,6 +376,9 @@ if(isset($_POST['update']))
                                                 <option <?php echo ($reservation[1] == 'Sir') ? 'selected' : ''; ?>>Sir</option>
                                                 <option <?php echo ($reservation[1] == 'Lord') ? 'selected' : ''; ?>>Lord</option>
                                                 <option <?php echo ($reservation[1] == 'Lady') ? 'selected' : ''; ?>>Lady</option>
+                                                <option <?php echo ($reservation[1] == 'Captain') ? 'selected' : ''; ?>>Captain</option>
+                                                <option <?php echo ($reservation[1] == 'Professor') ? 'selected' : ''; ?>>Professor</option>
+                                                <option <?php echo ($reservation[1] == 'Viscount') ? 'selected' : ''; ?>>Viscount</option>
                                             </select>
                                             </div>
                                         </div>
@@ -337,13 +396,15 @@ if(isset($_POST['update']))
                                                 die(mysql_error()); 
                                             }
                                             
-                                            //Show selected tour operator and list all the others 
-                                            echo '<select class="form-control select" id="tour-oper" name="tour_oper">';
+                                           //Show selected tour operator and list all the others 
+                                            $amount = 0;
+                                            echo '<select class="form-control select select2" id="tour-oper" name="tour_oper">';
                                             while ($row = mysql_fetch_array($operselect)) {
                                                 if ($row['id'] == $get_touroperator[0]) {
-                                                echo "<option value='" . $row['id'] . "' selected>" . $row['tour_operator'] . "</option>";
+                                                echo "<option data-price='".$row['amount']."' value='" . $row['id'] . "' selected>" . $row['tour_operator'] . "</option>";
+                                                $amount = $row['amount'];
                                                 } else {
-                                                echo "<option value='" . $row['id'] . "'>" . $row['tour_operator'] . "</option>";
+                                                echo "<option data-price='".$row['amount']."' value='" . $row['id'] . "'>" . $row['tour_operator'] . "</option>";
                                                 }
                                             }
                                                 echo "</select>"
@@ -372,6 +433,27 @@ if(isset($_POST['update']))
                                         <div class="col-xs-7">                                            
                                             <textarea class="form-control text-lowercase" rows="5" id="tour-notes" name="tour_notes" placeholder="Rep notes: additional rep comments and details here"><?php echo $reservation[11]; ?></textarea>
                                         </div>
+                                    </div>
+
+                                    <div class="form-group pull-left" style="width:100%;padding:0 12px">
+
+                                         <span class="pull-left"><span class="adult_count"><?php echo $reservation[8]; ?></span> Adults @ </span>
+                                        <input type="number" min=0 class="left20 form-control pull-left" id="price" 
+                                        <?php if($reservation[65]==0) {
+                                                $price = $amount;
+                                                $total = $price * $reservation[8];
+                                        }
+                                              else {
+                                                $price = $reservation[65]/$reservation[8];
+                                                $total = $reservation[65];
+                                              }
+
+                                                echo 'value="'.$price.'"';
+                                        ?>
+                                               name="supplier_price" placeholder="Price" style="width:20%">&nbsp;  &nbsp;
+                                              <span class="pull-left" style="padding:0 12px"> = </span>
+                                        <input type="text" class="form-control" id="total_amount"
+                                               name="total_amount" value="<?=$total?>" placeholder="Total Amount" readonly style="background-color:white;color: black;float:left;width:25%"> 
                                     </div>
                                     <hr />
                                 <h5>Reservation has <?php echo $guest_count; ?> guest(s)</h5>
@@ -501,7 +583,7 @@ if(isset($_POST['update']))
                                                 }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="arrival-details.php?arrival_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas .(isset($flagship_fast_ref)?'&fsft_ref='. $flagship_fast_ref:''). '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $arrmain_edit .'"></i></a> <span ' . $arrmain_nodel . '>| <a href="arrival-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas  .(isset($flagship_fast_ref)?'&fsft_ref='. $flagship_fast_ref:''). '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete arrival"></i></a></span></td>
+                                                        <td><a href="arrival-details.php?arrival_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas .(isset($flagship_fast_ref)?'&fsft_ref='. $flagship_fast_ref:''). '&sect=fsft"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $arrmain_edit .'"></i></a> <span ' . $arrmain_nodel . '>| <a href="arrival-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas  .(isset($flagship_fast_ref)?'&fsft_ref='. $flagship_fast_ref:''). '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete arrival"></i></a></span></td>
                                                         <td>' . $arrmain .' ' . $arr_date . '</td>
                                                         <td>' . $arr_flight_no[1] . '</td>
                                                         <td>' . $arr_time[2] . '</td>
@@ -639,7 +721,7 @@ if(isset($_POST['update']))
                                                 }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="departure-details.php?departure_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $dptmain_edit . '"></i></a> <span ' . $dptmain_nodel .'>| <a href="departure-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete departure"></i></a></span></td>
+                                                        <td><a href="departure-details.php?departure_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '&sect=fsft"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $dptmain_edit . '"></i></a> <span ' . $dptmain_nodel .'>| <a href="departure-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete departure"></i></a></span></td>
                                                         <td>' . $dptmain .' ' . $dpt_date . '</td>
                                                         <td>' . $dpt_flight_no[1] . '</td>
                                                         <td>' . $dpt_time[2] . '</td>
@@ -733,6 +815,8 @@ if(isset($_POST['update']))
 <script type="text/javascript" src="assets/store.js/store.min.js"></script>
 <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
 <script type="text/javascript" src="js/customScripting.js"></script>
+        <!--Select2-->
+        <script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
            <?php

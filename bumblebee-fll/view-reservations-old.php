@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -90,7 +90,7 @@ $reservations = mysql_query("SELECT * FROM fll_reservations WHERE arr_driver > 0
                                
                                 <div class="panel-body">
                                     <table id="res-arrivals" class="table table-hover datatable display">
-                                        <?php if ($user->levelCheck("2,5,6,7,9")) : ?>
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>Tour Operator</th>

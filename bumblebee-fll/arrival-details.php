@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -13,12 +13,22 @@ ob_start();
  * @author Alvin Herbert
  * @copyright 2015
  */
+if(isset($_REQUEST['sect']) && !empty($_REQUEST['sect'])){
+    $section = $_REQUEST['sect'];
+} else {
+    $section = 'gh';
+}
 
 include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
 $reservation_id = $_GET['reservation'];
-$fast_track_ref = $_GET['fsft_ref'];
+
+    $fast_track_ref = $_GET['fsft_ref'];
+//check ftnotify , that if that reservation is both in f
+/*$ftnotify = mysql_fetch_row(mysql_query("SELECT `ftnotify` FROM fll_reservations WHERE id = '$reservation_id'"));
+if(isset($ftnotify[0])) $ftnotify = $ftnotify[0]; 
+else $ftnotify='';*/
 $getArrivalQuery = "SELECT * FROM fll_arrivals WHERE id='" . QuoteSmart($_GET['arrival_id']) . "'";
 //$reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
 $reservation = mysql_fetch_row(mysql_query($getArrivalQuery));
@@ -87,16 +97,22 @@ if(isset($_POST['update']))
     $rooms       = QuoteSmart($_POST['no_of_rooms']);
     $room_no       = QuoteSmart($_POST['room_no']);        
     $user_action = "update arrival details: #ref:$flagship_ref";
-    $ftres = empty($_POST['ftres']) ? 0 : 1;
-    if ($ftres > 0){
-        $ftnotify = 1;
-    } else {
-        $ftnotify = 0;
+   // echo '<pre>'; print_r($_POST); echo '</pre>'; exit;
+    if($section == 'gh'){
+         $ftres = empty($_POST['ftres']) ? 0 : 1;
+        if ($ftres > 0){
+            $ftnotify = 1;
+        } else {
+            $ftnotify = 0;
+        }
     }
+   
     
     $sql = "UPDATE fll_arrivals ".
-    "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no'".
-    "WHERE id = '$reservation[0]'";
+    "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no'";
+    if($section == 'gh') 
+        $sql .= ", fast_track = '$ftnotify'";
+    $sql .= " WHERE id = '$reservation[0]'";
     $retval = mysql_query( $sql, $conn );
 
     //check if its main arrival.
@@ -220,14 +236,17 @@ if(isset($_POST['update']))
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
 
+                                        <?php if($section == 'gh'){?>
                                         <!-- Fasttrack Checkbox-->
                                         <label class="checkbox-inline label_checkboxitem">
-                                            <input class="icheckbox" type="checkbox" id="ftres" name="ftres" <?=empty($selectedFastTrack)?'':'checked="checked"'?>>
+                                            <input class="icheckbox" type="checkbox" id="ftres" name="ftres" value="1"
+                                            <?php if(empty($selectedFastTrack) || $selectedFastTrack==0) echo ''; else echo 'checked="checked"'?>>
                                             Fast Track
                                         </label>
                                         <i class="fa fa-question-circle left20" data-toggle="tooltip"
                                            data-placement="top" title="Check the box if this is a Fast Track reservation">
                                         </i>
+                                        <?php } ?>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->
@@ -271,7 +290,7 @@ if(isset($_POST['update']))
                                     $sql = "SELECT * FROM fll_transporttype ORDER BY id ASC";
                                     $result = mysql_query($sql);
                                     
-                                    echo '<select multiple class="form-control select" id="arr-transport" name="arr_transport[]">
+                                    echo '<select class="form-control select" id="arr-transport" name="arr_transport[]">
                                     <option selected="true">' . $reservation[6] . '</option>';
                                     while ($row = mysql_fetch_array($result)) {
                                         echo "<option value='" . $row['transport_type'] . "'>" . $row['transport_type'] . "</option>";
@@ -309,7 +328,7 @@ if(isset($_POST['update']))
                                 </div>
                                 <div class="form-group col-xs-7"><!-- dropoff location selection -->
                                     <label for="arr-dropoff">Dropoff Location</label>
-                                    <select class="form-control" id="arr-dropoff" name="arr_dropoff">
+                                    <select class="form-control select2" id="arr-dropoff" name="arr_dropoff">
                                         <option value="<?php echo $get_arr_location[0]; ?>"><?php echo $get_arr_location[1]; ?></option>
                                         <?php echo $opt->ShowLocation(); ?>    
                                     </select>
@@ -375,7 +394,11 @@ if(isset($_POST['update']))
                                         <select multiple class="form-control select" id="client-reqs" name="client_reqs[]">                                      
                                             <option selected><?php echo $reservation[13]; ?></option>
                                             <?php
-                                            $sql = "SELECT * FROM fll_clientreqs ORDER BY id ASC";
+                                            $sql = "SELECT * FROM fll_clientreqs";
+                                            if($section == 'gh'){
+                                                $sql .= " WHERE section = 0 OR section = 2";
+                                            }
+                                            $sql .=" ORDER BY id ASC";
                                             $result = mysql_query($sql);
                                             while ($row = mysql_fetch_array($result)) {
                                                 echo "<option value='" . $row['reqs'] . "'>" . $row['reqs'] . "</option>";
@@ -481,6 +504,9 @@ if(isset($_POST['update']))
 <script type="text/javascript">
     $(function () {
         $('.rep-type').select2();
+    });
+     $('.select2').select2({
+        minimumInputLength: 3
     });
 </script>
 

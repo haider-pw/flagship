@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -24,7 +24,7 @@ $flagship_ref = $reservation[40];
 
 
 //Need to Fetch the RepTypes for Assignment.
-$queryRepTypes = "SELECT * FROM fll_rep_services";
+$queryRepTypes = "SELECT * FROM fll_rep_services WHERE section = 0 OR section = 2";
 
 $repTypes = mysql_fetch_array(mysql_query($queryRepTypes));
 $repTypesResource = mysql_query($queryRepTypes) or die(mysql_error());

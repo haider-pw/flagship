@@ -34,7 +34,7 @@ if($_POST){
 mysql_connect('localhost', 'root', 'chocolate');
 mysql_select_db ("cocoa_fll");
 
-$selectedDateFlights_sql = "SELECT ff.id_flight AS flightNumberID, ff.flight_number  from $table INNER JOIN fll_flights ff ON `ff`.`id_flight` = flight.$column where `$whereColumn` = '$filterDate' AND `$column` != 0";
+$selectedDateFlights_sql = "SELECT ff.id_flight AS flightNumberID, ff.flight_number  from $table INNER JOIN fll_flights ff ON `ff`.`id_flight` = flight.$column where `$whereColumn` = '$filterDate' AND `$column` != 0 GROUP BY ff.id_flight";
 
 
 $selectedDateFlights_resource = mysql_query($selectedDateFlights_sql);

@@ -3,7 +3,7 @@ error_reporting(0);
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   if ($row->userlevel == 2){
@@ -27,7 +27,7 @@ echo "</pre>";*/
 include('header.php');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM fll_reservations WHERE status = 1";
+$reservationQuery = "SELECT * FROM fll_reservations WHERE ( fast_track = 0 OR ftnotify = 1) AND status = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
@@ -149,7 +149,7 @@ site_header('Reservation List - Arrivals');
                                
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover display">
-                                        <?php if ($user->levelCheck("2,3,5,6,7,9")) : ?>
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -200,9 +200,9 @@ site_header('Reservation List - Arrivals');
                                             </tr>
                                         </thead>
                                         <tbody>
-                                        <?php
+                                        <?php 
                                             while($row = mysql_fetch_array($reservations)) {
-                                                
+                                                 $data[] = $row;
                                                 $arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[16] . "'"));
                                                 $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[28] . "'"));
                                                 $arr_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[15] . "'"));
@@ -302,7 +302,7 @@ site_header('Reservation List - Arrivals');
                                                 }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="'. $ftlink .'reservation-details.php?id=' . $id . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a></td>
+                                                        <td><a href="'. $ftlink .'reservation-details.php?id=' . $id . '&sect=gh"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a></td>
                                                         <td>' . $title_name . '</td>
                                                         <td>' . $first_name . '</td>
                                                         <td>' . $last_name . '</td>
@@ -348,7 +348,8 @@ site_header('Reservation List - Arrivals');
                                                         <td class="repNotes" data-placement="top" data-toggle="tooltip" data-original-title="Click to See All">' . $rep_notes . '</td>
                                                         <td class="accNotes" data-placement="top" data-toggle="tooltip" data-original-title="Click to See All">' . $acc_notes . '</td>
                                                 </tr>';
-                                            }
+                                            }/*echo '<pre>';
+                                            print_r($data); exit;*/
                                         ?>
                                         </tbody>
                                         <?php else: ?>

@@ -3,7 +3,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
   
   if ($row->userlevel == 2){
@@ -24,7 +24,7 @@ include('header.php');
 site_header('Reservation List - Arrivals');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM fll_reservations WHERE status = 1";
+$reservationQuery = "SELECT * FROM fll_reservations  WHERE ( fast_track = 0 OR ftnotify = 1) AND status = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
@@ -49,6 +49,7 @@ if(mysql_errno()){
         overflow: hidden;
         float: none;
     }
+    .hide_ele{display:none;}
 </style>
 
 
@@ -58,6 +59,37 @@ if(mysql_errno()){
             </div>
             <!-- END PAGE SIDEBAR -->
             
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body col-md-12">
+                <div class="col-md-12">
+                    <label class="hide_ele">Select Transport Supplier</label>
+                    <select id="select_data" class="select2 form-control select_data" style="width:95%">
+                    </select>
+                </div>
+                <div class="col-md-12"><br>
+                    <label class="hide_ele">Select Vehicles</label>
+                    <select id="select_vehicle" class="form-control hide_ele" style="width:95%">
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button data-id="" action="" type="button" class="btn btn-primary save-change">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
             <!-- PAGE CONTENT -->
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
@@ -112,7 +144,7 @@ if(mysql_errno()){
                                
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover display">
-                                        <?php if ($user->levelCheck("2,3,5,6,7,9")) : ?>
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -124,6 +156,10 @@ if(mysql_errno()){
                                                 <th>Rep</th>
                                                 <th>Rep Service</th>
                                                 <th>Hotel</th>
+                                                <th>Transport Mode</th>
+                                                <th>Transport Supplier</th>
+                                                <th>Vehicle</th>
+                                                <th>Pickup Time</th>
                                                 <th>Trans Type</th>
                                                 <th>FSFT</th>
                                                 <th>Inf Seat</th>
@@ -149,7 +185,7 @@ if(mysql_errno()){
                                         <tbody>
                                         <?php
                                             while($row = mysql_fetch_array($reservations)) {
-                                                
+                                                //echo '<pre>'; print_r($row); exit;
                                                 $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[28] . "'"));
                                                 $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[27] . "'"));                                                   
                                                 $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM fll_touroperator WHERE id='" . $row[5] . "'"));
@@ -158,7 +194,38 @@ if(mysql_errno()){
                                                 $rep_name = mysql_fetch_row(mysql_query("SELECT * FROM fll_reps WHERE id_rep='" . $row[42] . "'"));
                                                 $hotel = mysql_fetch_row(mysql_query("SELECT * FROM fll_location WHERE id_location='" . $row[22] . "'"));
                                                 $dpt_dropoff = mysql_fetch_row(mysql_query("SELECT * FROM fll_location WHERE id_location='" . $row[33] . "'"));
-                                                
+
+                                                $transport_mode = mysql_fetch_row(mysql_query("SELECT * FROM fll_transporttype WHERE id='" . $row[29] . "'"));
+
+                                                $driver = mysql_fetch_row(mysql_query("SELECT * FROM fll_transport WHERE id_transport='" . $row[30] . "'"));
+
+                                                $vehicle = mysql_fetch_row(mysql_query("SELECT * FROM fll_vehicles WHERE id_vehicle='" . $row[31] . "'"));
+
+                                                if(isset($transport_mode[0])){
+                                                    $trans_mode = $transport_mode[1];
+                                                    $trans_mode_id = $transport_mode[0];
+                                                } else {
+                                                    $trans_mode = '';
+                                                    $trans_mode_id = 0;
+                                                }
+
+                                                if(isset($driver[0])){
+                                                    $trans_dr = $driver[1];
+                                                    $trans_dr_id = $driver[0];
+                                                } else {
+                                                    $trans_dr = '';
+                                                    $trans_dr_id = 0;
+                                                }
+
+                                                if(isset($vehicle[0])){
+                                                    $trans_vcl = $vehicle[2];
+                                                    $trans_vcl_id = $vehicle[0];
+                                                } else {
+                                                    $trans_vcl = '';
+                                                    $trans_vcl_id = 0;
+                                                }
+
+
                                                 //assign names to results that are readable
                                                 $id = $row[0];
                                                 $title_name = $row[1];
@@ -181,7 +248,12 @@ if(mysql_errno()){
                                                 $rep_notes = $row[11];
                                                 $acc_notes = $row[35];
                                                 $putime = $row[34];
-                                                
+                                               
+                                              /*  $transport_mode = $row[29];
+                                                $driver = $row[30];
+                                                $vehicle = $row[31];*/
+                                                $pickup = $row[34];
+
                                                 
                                                 if ($row[53]>0){
                                                         $ct= ''. $cold_towel . 'CT(s)';
@@ -217,7 +289,7 @@ if(mysql_errno()){
                                                     
                                                     }
                                                 
-                                                echo '<tr>
+                                                echo '<tr data-id="'.$id.'">
                                                         <td><a href="reservation-details.php?id=' . $id . '"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a></td>
                                                         <td>' . $title_name . '</td>
                                                         <td>' . $first_name . '</td>
@@ -227,6 +299,10 @@ if(mysql_errno()){
                                                         <td>' . $rep . '</td>
                                                         <td>' . $rep_type[1] . '</td>
                                                         <td>' . $hotel[1] . '</td>
+                                                        <td class="transport_mode" data-id="'.$trans_mode_id.'"><em data-toggle="tooltip" data-placement="top" title="Edit \'Transport Mode\'" style="width:10%;float:right;z-index: 1;position: relative;" data-placement="right"><i style="color:#1e4394; cursor:pointer" class="fa fa-pencil" data-target="#myModal" data-toggle="modal"></i></em><span>' . $trans_mode . '</span></td>
+                                                        <td class="driver" data-id="'.$trans_dr_id.'"><em data-toggle="tooltip" data-placement="top" title="Edit \'Transport Driver\'" style="width:10%;float:right;z-index: 1;position: relative;" data-placement="right"><i style="color:#1e4394; cursor:pointer" class="fa fa-pencil" data-target="#myModal" data-toggle="modal"></i></em><span>' . $trans_dr . '</span></td>
+                                                        <td class="vehicle" data-id="'.$trans_vcl_id.'"><em data-toggle="tooltip" data-placement="top" title="Edit \'Vehicle\'" style="width:10%;float:right;z-index: 1;position: relative;" data-placement="right"><i style="color:#1e4394; cursor:pointer" class="fa fa-pencil" data-target="#myModal" data-toggle="modal"></i></em><span>' . $trans_vcl . '</span></td>
+                                                        <td class="pickup_time" data-id="'.$pickup.'"><em data-toggle="tooltip" data-placement="top" title="Edit \'Pickup Time\'" style="width:10%;float:right;z-index: 1;position: relative;" data-placement="right"><i style="color:#1e4394; cursor:pointer" class="fa fa-pencil" data-target="#myModal" data-toggle="modal"></i></em><span>' . $pickup . '</span></td>
                                                         <td>' . $transport_type . '</td>
                                                         <td>' . $fsft . '</td>
                                                         <td>' . $infant_seat . '</td>
@@ -478,6 +554,8 @@ if(mysql_errno()){
 <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
 <script type="text/javascript" src="js/customScripting.js"></script>
 <script type="text/javascript" src="js/jquery.redirect.js"></script>
+<!--Select2-->
+<script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
 
@@ -535,9 +613,12 @@ if(mysql_errno()){
 
 
     $(document).ready(function() {
+     $('.select2').select2({
+        });
+
         $.datepicker.regional[""].dateFormat = 'yyyy-mm-dd';
         $.datepicker.setDefaults($.datepicker.regional['']);
-        $('#res-arrivals').DataTable( {
+       /* $('#res-arrivals').DataTable( {
             "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
             dom: 'T<"clear">lfrtip',
             "order": [[ 2, "asc" ]],
@@ -561,16 +642,122 @@ if(mysql_errno()){
                     //"print"
                 ]
             }
+        });*/
+
+        // on edit modal open
+     $('#myModal').on('show.bs.modal', function (e) {
+            var parent = $(e.relatedTarget).parents('td');
+            var targetClass = parent.attr('class');
+            var id = parent.attr('data-id');
+            var rId = parent.parents('tr').attr('data-id');
+            $('.save-change').attr('action',targetClass);
+            $('.save-change').attr('data-id',rId);
+            console.log(id);
+                var data = {action:targetClass}
+                if(targetClass == 'pickup_time'){
+                   // $(".select_data").html('<option value="'+id+'">'+id+'</option>');
+                   // $(".select_data").val(id).trigger('change');
+                    $('#myModalLabel').html('Pickup Time');
+                } 
+                else if(targetClass == 'driver') {
+                    $('#myModalLabel').html('Transport Supplier'); 
+                    var vehicleId = $('tbody').find('tr[data-id="'+rId+'"]').find('.vehicle').attr('data-id');
+                    $('.hide_ele').show();
+                    $('#select_vehicle').select2();
+                }
+                else if(targetClass == 'transport_mode') 
+                    $('#myModalLabel').html('Transport Mode');
+
+                else if(targetClass == 'vehicle') {
+                    $('#myModalLabel').html('Vehicle');
+                    $('#select_vehicle').select2();
+                    $('.hide_ele').show();
+                    var trans_supp_id = $('tbody').find('tr[data-id="'+rId+'"]').find('.driver').attr('data-id');
+                    var vehicleId = id;
+                    id = trans_supp_id;
+
+                }
+                $.ajax({
+                    url:"custom_updates/select_data.php",
+                    data:data,
+                    type:"POST",
+                    success:function(data){
+                        if(targetClass=='driver' || targetClass=='vehicle'){
+                            var data = JSON.parse(data); 
+                            $('#select_data').html(data['driver']);
+                            $('#select_vehicle').html(data['vehicle']);
+                        } else
+                            $('#myModal').find('.select_data').html(data);
+                            if(targetClass == 'pickup_time'){
+                                $("#select_data").append($('<option>', {value: id, text: id}));
+                             }
+                        if(id!="")
+                            $("#select_data").val(id).trigger('change');
+                        if(typeof vehicleId!='undefined' && vehicleId!=""){
+                            $("#select_vehicle").val(vehicleId).trigger('change');
+                        }
+                    }
+                });
+            
+
+            
         });
 
+     // on click on edit modal save changes button 
+     $('.save-change').on('click', function(e){
+         var action = $(this).attr('action');
+         var rId = $(this).attr('data-id');
+         var id = $('#select_data').val();
+         var text = $('#select_data :selected').text();
+         if(action=='pickup_time' && id!=0) id = text;
+
+         var data = {action:action, id:id, rId:rId};
+         if(action =='driver' || action =='vehicle'){
+             var vehicleId = $('#select_vehicle').val();
+             var vehText = $('#select_vehicle :selected').text();
+             data['vehicleId'] = vehicleId;
+             action = 'driver';
+         }
+         if(id!=0){
+            $.ajax({
+                url:"custom_updates/update_data.php",
+                data:data,
+                type:"POST",
+                success:function(data){
+                  //  $('#myModal').find('.select_data').html(data);
+                  //  $(".select_data").val(id).trigger('change');
+                    $('#myModal').modal('toggle');
+                    // check action and set value accordingly
+                    var invoker = $('tbody').find('tr[data-id="'+rId+'"]').find('td.'+action);
+                    invoker.attr('data-id', id);
+                    invoker.find('span').html(text);
+                    if(typeof vehicleId!='undefined' && vehicleId!=""){
+                        var invoker = $('tbody').find('tr[data-id="'+rId+'"]').find('td.vehicle');
+                        invoker.attr('data-id', vehicleId);
+                        invoker.find('span').html(vehText);
+                    }
+                }
+            });
+         }
+         
+     })
+
+
+     $('#myModal').on('hidden.bs.modal', function () {
+        if($('#select_vehicle').data('select2'))
+            $('#select_vehicle').select2("destroy");
+        $('.hide_ele').hide();
+    })
+
     } );
-    new FixedHeader( document.getElementById('res-arrivals') );
+    //new FixedHeader( document.getElementById('res-arrivals') );
 
     /* Add a click handler to the rows */
     $("#res-arrivals tbody tr").on('click',function(event) {
         $("#res-arrivals tbody tr").removeClass('row_selected');
         $(this).addClass('row_selected');
     });
+
 </script>
     </body>
 </html>

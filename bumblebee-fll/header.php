@@ -29,7 +29,7 @@ function site_header($title) {
         <!--<link rel="icon" href="favicon.ico" type="image/x-icon" />-->
         <link rel="icon" type="image/png" sizes="16x16" href="img/favicon.png">
         <!-- END META SECTION -->
-        
+       
         <!-- CSS INCLUDE -->        
         <link rel="stylesheet" type="text/css" id="theme" href="css/theme-dark.css"/>
         <link rel="stylesheet" type="text/css" href="css/flag-icon.css"/>
@@ -44,7 +44,7 @@ function site_header($title) {
         <link href="console_chat/css/styles.css" rel="stylesheet">
         <style type="text/css">
         input{
-        text-transform: capitalize;
+        text-transform: capitalize; 
         }
         </style>            
     </head>

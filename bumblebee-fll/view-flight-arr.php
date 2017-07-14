@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -16,7 +16,7 @@
 include('header.php');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM fll_reservations WHERE status = 1";
+$reservationQuery = "SELECT * FROM fll_reservations WHERE ( fast_track = 0 OR ftnotify = 1) AND status = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
@@ -117,7 +117,7 @@ site_header('Arrival Flight');
                                
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover display">
-                                        <?php if ($user->levelCheck("2,3,5,6,7,9")) : ?>
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>

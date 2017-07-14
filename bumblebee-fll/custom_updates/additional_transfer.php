@@ -105,7 +105,7 @@ if ($_POST) {
 
     <div class="form-group"><!-- hotel notes -->
         <div class="col-xs-7">
-            <label>Transfer &amp; Transport notes</label>
+            <label>Concierge Notes</label>
             <textarea class="form-control text-lowercase" rows="5" id="<?=$transfer_notes?>" name="<?=$transfer_notes?>"
                       placeholder="Transfer &amp; Transportation notes: additional transfer &amp; transport comments and details here"></textarea>
         </div>

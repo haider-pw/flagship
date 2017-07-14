@@ -2,7 +2,7 @@
 $url = '//' . $_SERVER['HTTP_HOST'] . dirname($_SERVER['PHP_SELF']);
 define("_VALID_PHP", true);
 require_once("../admin-panel-fll/init.php");
-if (!$user->levelCheck("3,5,6,7,9"))
+if (!$user->levelCheck("2,9"))
     redirect_to("index.php");
 $row = $user->getUserData();
 ?>
@@ -531,8 +531,8 @@ if (isset($_POST['addreservation'])) {
         }
     }
     $sql_5 = "INSERT INTO fll_arrivals " .
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle,room_last_name) " .
-        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main','$luggageVehicle','$arr0_room_last_name')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, arr_main, luggage_vehicle,room_last_name, fast_track) " .
+        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no', '$arr_main','$luggageVehicle','$arr0_room_last_name', '$ftres')";
     $retval5 = mysql_query($sql_5, $conn);
     if (mysql_errno()) {
         echo $sql_5;
@@ -949,8 +949,8 @@ if (isset($_POST['addreservation'])) {
     //If Arrival Service Only then this Below Block Will Not Execute, If Arrival Service Not Checked then this block should Execute.
     if($arrServiceOnly !== true){
         $sql_9 = "INSERT INTO fll_departures " .
-            "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center) " .
-            "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter')";
+            "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center, fast_track) " .
+            "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter', '$ftres')";
         $retval9 = mysql_query($sql_9, $conn);
         $departure1active = QuoteSmart($_POST['departure1active']);
         if ($departure1active == 1) {
@@ -1023,6 +1023,16 @@ if (isset($_POST['addreservation'])) {
         "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, affiliates, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle,fast_ref_no_sys,payment_type,payment_amount, sup_total_amount) " .
         "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$affiliates', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$room_no', '$total_guests','$luggageVehicle','$fastRef','$paymentType','$paymentAmount', '$total_amount')";
     $retval = mysql_query($sql, $conn);
+
+    $insertId = mysql_query('SELECT LAST_INSERT_ID()');
+        $insertId = mysql_fetch_array($insertId);
+        $insertId = $insertId[0];
+        if(isset($insertId) && !empty($insertId)){
+            $sysRefNo = mysql_query("SELECT `ref_no_sys` FROM fll_reservations WHERE id = '$insertId'");
+            $sysRefNo = mysql_fetch_array($sysRefNo);
+            $sysRefNo = $sysRefNo[0];
+        }
+
     //Log user action
     $sql_19 = "INSERT INTO fll_activity " .
         "(log_user, user_action, log_time) " .
@@ -1033,7 +1043,13 @@ if (isset($_POST['addreservation'])) {
     }
     mysql_close($conn);
     //Seems Successful, so redirect the user to next page.
-    echo "<script>window.location='add-fasttrack.php?ok=1'</script>";
+    //echo "<script>window.location='add-fasttrack.php?ok=1'</script>";
+
+    if(isset($sysRefNo) && !empty($sysRefNo))
+        echo "<script>window.location='add-fasttrack.php?ok=1&sysRef=$sysRefNo'</script>";
+    else
+        echo "<script>window.location='add-fasttrack.php?ok=1'</script>";
+   
 }
 ?>
 
@@ -1736,6 +1752,11 @@ if (isset($_POST['addreservation'])) {
                 <form id="add-reservations" class="form-horizontal" method="post" action="<?php $_PHP_SELF ?>">
                     <div class="panel panel-default">
                         <div class="panel-heading">
+                            <?php 
+                                if(isset($_GET['sysRef']) && !empty($_GET['sysRef'])){
+                                    echo '<div style="font-weight: bold;color: green;font-size: 14px;">Reservation Added with Ref # '.$_GET['sysRef'].'</div>';
+                                }
+                            ?>
                             <h3 class="panel-title"><strong>Add Fast track Reservation</strong></h3>
                         </div>
                         <div class="panel-body">
@@ -1763,6 +1784,9 @@ if (isset($_POST['addreservation'])) {
                                             <option>Sir</option>
                                             <option>Lord</option>
                                             <option>Lady</option>
+                                            <option>Captain</option>
+                                            <option>Professor</option>
+                                            <option>Viscount</option>
                                         </select>
                                     </div>
                                     <label class="checkbox-inline label_checkboxitem">
@@ -1994,7 +2018,9 @@ if (isset($_POST['addreservation'])) {
                             </div>
                             <div class="clientreqs reqs-box">
                                 <div class="form-group col-xs-7">
-                                    <?php include('clientreqs_select.php'); ?>
+                                    <?php
+                                    $section = 'fsft';
+                                     include('clientreqs_select.php'); ?>
                                     <span
                                         class="help-block"> Select one (1) or multiple Airport/Hotel requirements</span>
                                 </div>
@@ -2207,8 +2233,6 @@ if (isset($_POST['addreservation'])) {
 <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-file-input.js"></script>
 <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-select.js"></script>
 <script type="text/javascript" src="js/plugins/tagsinput/jquery.tagsinput.min.js"></script>
-<!--Select2-->
-<script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
 <!-- END THIS PAGE PLUGINS -->
 
 <!-- START TEMPLATE -->
@@ -2356,7 +2380,8 @@ $('.clientReqs').select2();
      // on select supplier set price
      $('#tour-oper').on('select2:select',function(e){
         //console.log($(this).select2('data')); 
-       var price = $(this).select2('data')[0].element.attributes[0].nodeValue;
+      // var price = $(this).select2('data')[0].element.attributes[0].nodeValue;
+       var price = $('#tour-oper option:selected').attr('data-price');
        $('#price').val(price);
        // check adult count
        var adultCount = $("#adults").val();
@@ -2378,11 +2403,16 @@ $('.clientReqs').select2();
 </script>
         <?php // to add supplier 
          include ('add_field_val_mdl.php'); ?>
-<?php 
-$ok = isset($_GET['ok']);
-if ($ok) {
-    echo '<script> alert("Reservation successfully added"); </script>';
-}
-?>
+ <?php
+        $ok= isset($_GET['ok']);
+        if($ok)  {
+            if(isset($_GET['sysRef']) && !empty($_GET['sysRef'])){
+                $sysRef = $_GET['sysRef'];
+                echo '<script> prompt("Reservation successfully added", "Ref # '.$sysRef.'"); </script>';
+            }
+            else
+                echo '<script> alert("Reservation successfully added"); </script>';
+            }
+        ?>
 </body>
 </html>

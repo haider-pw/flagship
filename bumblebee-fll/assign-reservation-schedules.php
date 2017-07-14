@@ -3,7 +3,7 @@ $url = '//'.$_SERVER['HTTP_HOST'].dirname($_SERVER['PHP_SELF']);
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -15,7 +15,7 @@ site_header('Assign Reservation Reps');
 $loggedinas = $row->fname . ' ' . $row->lname;
 
 
-if($_POST){
+if($_POST){ //echo '<pre>'; print_r($_POST); exit;
     $selectedDate = isset($_POST['date'])?$_POST['date']:'';
     $selectedFlightNum = isset($_POST['flightNumID'])?$_POST['flightNumID']:'';
     $selectedTourOperator =  isset($_POST['tourOperator'])?$_POST['tourOperator']:'';
@@ -23,12 +23,13 @@ if($_POST){
     $reservationIDs = isset($_POST['reservationIDs'])?$_POST['reservationIDs']:'';
     if (!empty($reservationIDs)) {
         $repName = $_POST['repName'];
-        if(!empty($repName) and is_numeric($repName)){
+        if(!empty($repName) and is_array($repName)){
             $assigned = 1;
+            $repName = json_encode($repName);
         }else{
             $assigned = 0;
         }
-
+      
         $updateReps_sql = "UPDATE fll_reservations ".
             "SET modified_date = NOW(), modified_by = '$loggedinas', assigned = '$assigned', rep = '$repName'".
             " WHERE id IN ($reservationIDs)";
@@ -39,76 +40,87 @@ if($_POST){
         }
     }
 
+    if(isset($selectedTourOperator) && is_array($selectedTourOperator))
+        $selectedTourOperator = implode('","',$selectedTourOperator);
+   
+   // when apply button click
+    if(isset($_POST['apply']) && !empty($_POST['apply'])){
+        //This is for Arrivals only if date under arrivals gets selected.
+        if (!empty($selectedDate) and $selectedRepType === 'Arrivals') {
+            $selectedDate = date('Y-m-d', strtotime($selectedDate));
+            //Grab all reservation info
+            $query = "SELECT
+                        r.id AS ReservationID,
+                        CONCAT(title_name,' ', first_name,' ',last_name) AS resUserName,
+                        fto.`tour_operator` AS TourOperator, r.`adult` AS Adult, 
+                        r.`child` AS Child, 
+                        r.`infant` AS Infant, 
+                        r.`tour_notes` AS TourNotes,
+                        flights.arr_date AS arrivalDate,
+                        flights.arr_time AS flightTime,
+                        flights.`arr_flight_no` AS FlightID,
+                        fc.class AS FlightClass,
+                        loc.name AS Hotel,
+                        r.`affiliates` AS Affiliate
+                    FROM fll_reservations r
+                    INNER JOIN fll_arrivals flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
+                    INNER JOIN fll_flights ff ON flights.`arr_flight_no` = ff.`id_flight`
+                    LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
+                    LEFT JOIN `fll_flightclass` fc ON fc.`id` = flights.flight_class
+                    LEFT JOIN fll_location loc ON loc.`id_location` = flights.`arr_dropoff`
+                    WHERE r.`assigned` = 0
+                    AND flights.arr_date = '$selectedDate'
+                    ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator IN ("'.$selectedTourOperator.'")':'')." GROUP BY ReservationID";
+                   /* ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";*/
 
-    //This is for Arrivals only if date under arrivals gets selected.
-    if (!empty($selectedDate) and $selectedRepType === 'Arrivals') {
-        $selectedDate = date('Y-m-d', strtotime($selectedDate));
-        //Grab all reservation info
-        $query = "SELECT
-                    r.id AS ReservationID,
-                    CONCAT(title_name,' ', first_name,' ',last_name) AS resUserName,
-                    fto.`tour_operator` AS TourOperator, r.`adult` AS Adult, 
-                    r.`child` AS Child, 
-                    r.`infant` AS Infant, 
-                    r.`tour_notes` AS TourNotes,
-                    flights.arr_date AS arrivalDate,
-                    flights.arr_time AS flightTime,
-                    flights.`arr_flight_no` AS FlightID,
-                    fc.class AS FlightClass,
-                    loc.name AS Hotel,
-                    r.`affiliates` AS Affiliate
-                FROM fll_reservations r
-                INNER JOIN fll_arrivals flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
-                INNER JOIN fll_flights ff ON flights.`arr_flight_no` = ff.`id_flight`
-                LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
-                LEFT JOIN `fll_flightclass` fc ON fc.`id` = flights.flight_class
-                LEFT JOIN fll_location loc ON loc.`id_location` = flights.`arr_dropoff`
-                WHERE r.`assigned` = 0
-                AND flights.arr_date = '$selectedDate'
-                ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";
-        $reservations = mysql_query($query);
-            //Arrivals reservation result
+                 // echo $query; exit;
+            $reservations = mysql_query($query);
+                //Arrivals reservation result
+                if(isset($reservations)){
+                    $resultReservations = array();
+                    while($reservationRow = mysql_fetch_array($reservations)){
+                        array_push($resultReservations,$reservationRow);
+                    } //print_r($query); exit;
+                }
+        } //end of if  arrivals selectedDate statement
+        else if(!empty($selectedDate) and $selectedRepType === 'Departures'){
+            $selectedDate = date('Y-m-d', strtotime($selectedDate));
+            //Grab all reservation info
+            $query = "SELECT
+                        r.id AS ReservationID,
+                        CONCAT(title_name,' ', first_name,' ',last_name) AS resUserName,
+                        fto.`tour_operator` AS TourOperator, r.`adult` AS Adult, 
+                        r.`child` AS Child, 
+                        r.`infant` AS Infant, 
+                        r.`tour_notes` AS TourNotes,
+                        flights.dpt_date AS departureDate,
+                        flights.dpt_time AS flightTime,
+                        flights.`dpt_flight_no` AS FlightID,
+                        fc.class AS FlightClass,
+                        loc.name AS Hotel,
+                        r.`affiliates` AS Affiliate
+                    FROM fll_reservations r
+                    INNER JOIN fll_departures flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
+                    INNER JOIN fll_flights ff ON flights.`dpt_flight_no` = ff.`id_flight`
+                    LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
+                    LEFT JOIN `fll_flightclass` fc ON fc.`id` = flights.flight_class
+                    LEFT JOIN fll_location loc ON loc.`id_location` = flights.`dpt_dropoff`
+                    WHERE r.`assigned` = 0
+                    AND flights.dpt_date = '$selectedDate'
+                    ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator IN ("'.$selectedTourOperator.'")':'')." GROUP BY ReservationID";
+                   /* ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";*/
+
+            $reservations = mysql_query($query);
+            //Departures reservation result
             if(isset($reservations)){
                 $resultReservations = array();
                 while($reservationRow = mysql_fetch_array($reservations)){
                     array_push($resultReservations,$reservationRow);
                 }
             }
-    } //end of if  arrivals selectedDate statement
-    else if(!empty($selectedDate) and $selectedRepType === 'Departures'){
-        $selectedDate = date('Y-m-d', strtotime($selectedDate));
-        //Grab all reservation info
-        $query = "SELECT
-                    r.id AS ReservationID,
-                    CONCAT(title_name,' ', first_name,' ',last_name) AS resUserName,
-                    fto.`tour_operator` AS TourOperator, r.`adult` AS Adult, 
-                    r.`child` AS Child, 
-                    r.`infant` AS Infant, 
-                    r.`tour_notes` AS TourNotes,
-                    flights.dpt_date AS departureDate,
-                    flights.dpt_time AS flightTime,
-                    flights.`dpt_flight_no` AS FlightID,
-                    fc.class AS FlightClass,
-                    loc.name AS Hotel,
-                    r.`affiliates` AS Affiliate
-                FROM fll_reservations r
-                INNER JOIN fll_departures flights ON flights.`ref_no_sys` = `r`.`ref_no_sys`
-                INNER JOIN fll_flights ff ON flights.`dpt_flight_no` = ff.`id_flight`
-                LEFT JOIN fll_touroperator fto ON fto.`id` = r.`tour_operator`
-                LEFT JOIN `fll_flightclass` fc ON fc.`id` = flights.flight_class
-                LEFT JOIN fll_location loc ON loc.`id_location` = flights.`dpt_dropoff`
-                WHERE r.`assigned` = 0
-                AND flights.dpt_date = '$selectedDate'
-                ".(!empty($selectedFlightNum)?' AND ff.`id_flight` ='.$selectedFlightNum:'').(!empty($selectedTourOperator)?' AND r.tour_operator = '.$selectedTourOperator:'')." GROUP BY ReservationID";
-        $reservations = mysql_query($query);
-        //Departures reservation result
-        if(isset($reservations)){
-            $resultReservations = array();
-            while($reservationRow = mysql_fetch_array($reservations)){
-                array_push($resultReservations,$reservationRow);
-            }
-        }
-    }//end of elseif  departures selectedDate statement
+        }//end of elseif  departures selectedDate statement
+        
+    }
 
 
 }//end of main if $_POST
@@ -116,12 +128,16 @@ if($_POST){
 
 ?>
 
+
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
                 <!-- END X-NAVIGATION -->
             </div>
             <!-- END PAGE SIDEBAR -->
-            
+
+<style>
+    #tour-oper option[data-id="1"]{ background-color:gray; }
+</style>            
             <!-- PAGE CONTENT -->
             <div class="page-content">
                 <?php include ('vert-navigation.php'); ?>
@@ -150,27 +166,42 @@ if($_POST){
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Assign Airport Reps</h3>
                                 </div>
-                                <form id="mainFilterForm">
                                 <div class="panel-body table-responsive">
+                                <form id="mainFilterForm" method="POST">
                                     <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                         <label for="flightDateType">Flight Date Type</label>
-                                        <select class="form-control selector2" id="flightDateType" name="flightDateType">
+                                        <select class="form-control selector2 fl_fliter" id="flightDateType" name="flightDate">
                                             <?php include('custom_updates/select_flight_dates.php'); ?>
                                         </select>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                         <label for="flightNumber">Flight Number</label>
-                                        <select class="form-control selector2" id="flightNumber" name="flightNumber">
+                                        <select class="form-control selector2 fl_fliter" id="flightNumber" name="flightNumID">
                                         </select>
                                     </div>
                                     <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                         <label for="tourOperator">Tour Operator</label>
-                                        <?php include('tour_oper_select.php'); ?>
+                                        <?php // include('tour_oper_select.php'); 
+                                            $sql = "SELECT * FROM fll_touroperator ORDER BY tour_operator ASC";
+                                            $result = mysql_query($sql);
+
+                                            echo '<select multiple class="form-control selector2" id="tour-oper" name="tourOperator[]">
+                                                  <option value="0">Select tour operator</option>';
+                                            while ($row = mysql_fetch_array($result)) {
+                                                echo "<option value='" . $row['id'] . "' ".((isset($selectedTourOperator) and !empty($selectedTourOperator) and $selectedTourOperator==$row['id'])?' selected="selected"':'').">" . $row['tour_operator'] . "</option>";
+                                            }
+                                            echo "</select>";
+                                        ?>
+
                                     </div>
+                                    <input type="hidden" name="repType" class="repType" value="" />
+                                    <input type="hidden" name="date" class="date" value="" />
+                                    <input type="hidden" name="apply" value="apply" />
                                     <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                         <a href="#" class="btn btn-default" style="margin-top: 20px;" id="applyFilterBtn"> Apply Filter </a>
                                     </div>
 
+                                </form>
                                     <?php
                                     if(isset($resultReservations) and !empty($resultReservations)){
                                         ?>
@@ -212,28 +243,42 @@ if($_POST){
                                                 </tbody>
                                             </table>
                                     </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                            <label for="repType">Rep Type</label>
-                                            <select class="form-control selector2" name="repType" id="repType">
-                                                <option value="<?=$selectedRepType?>"><?=$selectedRepType?></option>
-                                            </select>
+                                            <!-- <div class="assign-rep-options col-sm-8 col-md-8 col-lg-8" style="padding:0"> -->
+                                            <form class="assign-rep-form" method="POST">
+                                            <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-3">
+                                                <label for="repType">Rep Type</label>
+                                                <select class="form-control selector2 repType" name="repType" id="repType">
+                                                    <option value="<?=$selectedRepType?>"><?=$selectedRepType?></option>
+                                                </select>
+                                            </div>
+                                            <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-3">
+                                                <label for="repName">Rep Name</label>
+                                                <select multiple class="form-control selector2" name="repName[]" id="repName">
+                                                <?php include('custom_updates/rep_select.php'); ?>
+                                                </select>
+                                            </div>
+                                            <input type="hidden" id="reservationIds" name="reservationIDs" />
+                                            <input type="hidden" value="assign" name="value" />
+                                            <?php if(isset($selectedDate)) { ?>
+                                            <input type="hidden" name="date" value="<?=$selectedDate?>" />
+                                            <?php } if(isset($selectedFlightNum)) {?>
+                                            <input type="hidden" name="flightNumID" value="<?=$selectedFlightNum?>" />
+                                            <?php } ?>
+
+                                           <!--   </div> -->
+                                      <!--   <div class="form-group col-sm-4 col-md-3 col-lg-3">
+                                            <a class="btn btn-primary" style="margin-top: 20px;" id="addrep"> Add Rep</a>
+                                        </div> -->
+                                        <div class="form-group col-xs-12 col-sm-4 col-md-4 col-lg-3">
+                                            <a class="btn btn-default" style="margin-top: 20px;" id="assignAirportReps"> Assign Airport Reps</a>
                                         </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                            <label for="repName">Rep Name</label>
-                                            <select class="form-control selector2" name="repName" id="repName">
-                                            <?php include('custom_updates/rep_select.php'); ?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                            <a href="#" class="btn btn-default" style="margin-top: 20px;" id="assignAirportReps"> Assign Airport Reps</a>
-                                        </div>
+                                        </form>
                                     <?php
                                     }
                                     ?>
 
 
                                 </div>
-                                </form>
                             </div>
                             <!-- END DATATABLE EXPORT -->
                         </div>
@@ -345,6 +390,7 @@ if($_POST){
                 data: {date:selectedOptionText,type:selectedOptionGroup,flight:prevSelectedFlight},
                 success:function(output){
                     $("#flightNumber").html(output);
+                    $('#flightNumber').trigger('change');
                 }
             });
         }
@@ -355,22 +401,28 @@ if($_POST){
         $('#applyFilterBtn').on('click',function(){
             var form = $('#mainFilterForm');
             var flightDateSelector = $('#flightDateType');
-            var flightNumber = $('#flightNumber');
-            var tourOperator = $("#tour-oper").find('option:selected').val();
+            var repType = flightDateSelector.find('option:selected').closest('optgroup').attr('data-label');
+            var date = flightDateSelector.find('option:selected').text();
+            $('.repType').val(repType);
+            $('.date').val(date);
+            form.submit();
+            //var flightNumber = $('#flightNumber');
+            //var tourOperator = $("#tour-oper").find('option:selected').val();
+            /*var tourOperator = $("#tour-oper").select2('val');
             var postFilterData = {
-                date:flightDateSelector.find('option:selected').text(),
+                ,
                 flightNumID:flightNumber.find('option:selected').val(),
                 repType:flightDateSelector.find('option:selected').closest('optgroup').attr('data-label')
             };
             if(tourOperator){
                 postFilterData.tourOperator = tourOperator;
             }
-            var postURL = "<?=$url?>/assign-reservation-schedules.php";
-            $.redirect(postURL,postFilterData,'POST','_SELF');
+            var postURL = "<?=$url?>/assign-reservation-schedules.php";*/
+            
+           //$.redirect(postURL,postFilterData,'POST', _SELF);
         });
 
         $("#assignAirportReps").on('click',function(){
-            console.log('hello');
             var table = $('#resultsTable');
             var ids = [];
             var repName = $('#repName').val();
@@ -378,7 +430,13 @@ if($_POST){
                 var dataID = $(this).attr('data-id');
                 ids.push(dataID);
             });
-            var postData = {
+
+            var reservationIDs = ids.join();
+            $('#reservationIds').val(reservationIDs);
+            $('.assign-rep-form').submit();
+            /*var data = $(".assign-rep-form").serializeArray();*/
+           //console.log(data);
+           /* var postData = {
                 reservationIDs: ids.join(),
                 repName:repName,
                 value: 'assign'
@@ -386,8 +444,46 @@ if($_POST){
             console.log(postData);
 //            return;
             var postURL = "<?=$url?>/assign-reservation-schedules.php";
-            $.redirect(postURL,postData,'POST','_SELF');
+            $.redirect(postURL,postData,'POST','_SELF');*/
+           // $('.assign-rep-form')[0].submit();
         });
+
+
+        // get tour operators on base of two filters
+        $('#flightNumber').on('change', function(e){
+                var fl_date = $('#flightDateType option:selected').text();
+                var fl_no = $('#flightNumber').val();
+            if(fl_date!="" && fl_no!=""){
+                var selectedOption = $("#flightDateType").find("option:selected");
+                var selectedOptionGroup = selectedOption.closest('optgroup').attr('data-label');
+                console.log(selectedOptionGroup);
+                $.ajax({
+                    url:"<?=$url?>/custom_updates/flight_touroperator.php",
+                    type:"POST",
+                    data:{fl_date:fl_date, fl_no:fl_no, type:selectedOptionGroup},
+                    success:function(output){
+                        $("#tour-oper").html(output);
+                    }
+
+                });
+            }
+        })
+
+       
+
+       /* $(document).on('click', '#addrep', function(e){
+            var countRep = $('.repName').length+1;
+            console.log(countRep);
+            // destroy select2 to clone
+            $('.assign-rep-options:first').find('select').select2("destroy");
+            var cloned = $('.assign-rep-options:first').clone();
+            $('.assign-rep-options').last().after(cloned); 
+            $('.repName').last().attr('name','repName'+countRep);
+            $('.repType').last().attr('name','repType'+countRep);
+
+            // set select 2 again
+            $('.assign-rep-options').find('select').select2();
+        })*/
     }); // End of document Ready Function.
 </script>
 </body>

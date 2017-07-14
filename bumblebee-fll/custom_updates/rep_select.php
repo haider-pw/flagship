@@ -12,7 +12,7 @@ $repselect = mysql_query($sql);
 if ($repselect === FALSE) {
     die(mysql_error());
 }
-echo '<option>Select a Rep</option>';
+echo '<option value="0">Select a Rep</option>';
 while ($row = mysql_fetch_array($repselect)) {
     echo "<option value='" . $row['id_rep'] . "'>" . $row['name'] . "</option>";
 }

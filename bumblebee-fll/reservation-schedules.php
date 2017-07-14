@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -25,7 +25,7 @@ $reservationQuery = "SELECT * FROM fll_reservations WHERE status = 1 AND assigne
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
-
+    
     if(validateDate($fromDate) and validateDate($toDate)){
         $reservationQuery .= " AND (arr_date BETWEEN '".$fromDate."' AND '".$toDate."')";
         $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
@@ -95,7 +95,7 @@ if(mysql_errno()){
                                 </div>
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover">
-                                    <?php if ($user->levelCheck("2,5,6,7,9")) : ?>
+                                    <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>

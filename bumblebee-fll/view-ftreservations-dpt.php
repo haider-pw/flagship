@@ -3,7 +3,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-fll/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
   
   if ($row->userlevel == 2){
@@ -24,7 +24,7 @@ include('header.php');
 site_header('Reservation List - Arrivals');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM fll_reservations WHERE fast_track = 1 AND status = 1";
+$reservationQuery = "SELECT * FROM fll_reservations R INNER JOIN fll_departures D on R.ref_no_sys = D.ref_no_sys WHERE (R.fast_track = 1 or R.ftnotify = 1) AND R.status = 1 AND D.fast_track = 1 GROUP BY R.id";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
@@ -121,7 +121,7 @@ if(mysql_errno()){
                                
                                 <div class="panel-body table-responsive">
                                     <table id="res-arrivals" class="table table-hover display">
-                                        <?php if ($user->levelCheck("2,5,6,7,9")) : ?>
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -157,7 +157,6 @@ if(mysql_errno()){
                                         <tbody>
                                         <?php
                                             while($row = mysql_fetch_array($reservations)) {
-                                                
                                                 $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM fll_flights WHERE id_flight='" . $row[28] . "'"));
                                                 $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM fll_flighttime WHERE id_fltime='" . $row[27] . "'"));                                                   
                                                 $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM fll_touroperator WHERE id='" . $row[5] . "'"));
