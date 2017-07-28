@@ -34,43 +34,43 @@ class Home extends MY_Controller {
 		    case 'A':
 		     	$this->session->set_userdata( 
 		     		array('db_name' =>'cocoa_anu',
-		     			  'prefix'=>'anu_',
-                          'cruise_db'=>'cruisecontrol_anu'
+		     			  'prefix'=>'anu_'
 		     			 )
 		     		);	
 		        break;
 		    case 'B':
 		     	$this->session->set_userdata( 
 		     		array('db_name' =>'cocoa_bgi',
-		     			  'prefix'=>'bgi_',
-						  'cruise_db'=>'cruisecontrol_bgi'
+		     			  'prefix'=>'bgi_'
 		     			 )
 		     		);	
+		     	//$redirectTo = 'http://localhost/flagship_bgi/admin_panel/';
 		        break;
 		    case 'G':
 		     	$this->session->set_userdata( 
 		     		array('db_name' =>'cocoa_gnd',
-		     			  'prefix'=>'gnd_',
-						  'cruise_db'=>'cruisecontrol_gnd'
+		     			  'prefix'=>'gnd_'
 		     			 )
 		     		);	
 		    	break;
 		    case 'S':
 		     	$this->session->set_userdata( 
 		     		array('db_name' =>'cocoa_skb',
-		     			  'prefix'=>'skb_',
-						  'cruise_db'=>'cruisecontrol_skb'
+		     			  'prefix'=>'skb_'
 		     			 )
 		     		);	
 		    	break;
 		    default:
 		     	$this->session->set_userdata( 
 		     		array('db_name' =>'cocoa_fll',
-		     			  'prefix'=>'fll_',
-						  'cruise_db'=>'cruisecontrol_fll'
+		     			  'prefix'=>'fll_'
 		     			 )
 		     		);	
+		     	//$redirectTo = 'http://localhost/flights_project/admin_panel/';
+		     	// set base url to bgi folder
+		     	//$this->config->set_item('base_url',"http://".$_SERVER['HTTP_HOST']."/flights_project/admin_panel/") ;
 			} // end of switch
+
 			if($this->input->post('path') and !empty($this->input->post('path'))){
 				redirect($this->input->post('path'));
 			}

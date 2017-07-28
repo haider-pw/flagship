@@ -18,25 +18,31 @@ class MY_Controller extends CI_Controller{
         // to load assets from front end
         $this->frontEndPath='http://localhost/flights_project/';
         $this->defaultImg='blank.png';
-        //$cruiseDb='mysqli://root:chocolate@localhost/cocoa_admin?char_set=utf8&dbcollat=utf8_general_ci&cache_on=true&cachedir=';
+     /*   $cruiseDb='mysqli://root:chocolate@localhost/cocoa_admin?char_set=utf8&dbcollat=utf8_general_ci&cache_on=true&cachedir=';*/
         $this->cruiseDb = $this->load->database('cruiseDb', TRUE);
         // check if db name store in session, then configure that db, by default selected db will be FLL - Florida
-        if(!$this->session->userdata('db_name') or !$this->session->userdata('cruise_db')){
+        if(!$this->session->userdata('db_name')){
             $this->session->set_userdata(
                     array('db_name' =>'cocoa_fll',
-                          'prefix'=>'fll_',
-                          'cruise_db'=>'cruisecontrol_fll'
+                          'prefix'=>'fll_'
                          )
                     );  
         }
         $this->db->db_select($this->session->userdata('db_name'));
-        $this->cruiseDb->db_select($this->session->userdata('cruise_db'));
+       // $this->cruiseDb->db_select($this->session->userdata('cruise_db'));
         $this->userStatus = [
             'y' => 'Active',
             'n' => 'InActive',
             'b' => 'Banned',
             't' => 'Pending'
         ];
+/*
+        // check prefix name in session and set base url accordingly
+        if($this->session->userdata('prefix') == 'bgi_'){
+            // set base url to bgi folder
+            $this->config->set_item('base_url',"http://".$_SERVER['HTTP_HOST']."/flagship_bgi/admin_panel/") ;
+        }*/
+
         // load common model
         
         $this->load->model('Common_model');
