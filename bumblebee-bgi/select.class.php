@@ -4,7 +4,7 @@
  * @author Alvin Herbert
  * @copyright 2015
  */
-
+error_reporting(E_ALL ^ E_DEPRECATED);
 class SelectList
 {
     protected $connd;
@@ -26,7 +26,7 @@ class SelectList
         {
             $sql = "SELECT * FROM bgi_transport ORDER BY name ASC";
             $resd= mysql_query($sql,$this->connd);
-            $driver = '<option value="0">Select driver</option>';
+            $driver = '<option value="0">Select Transport Supplier</option>';
             while($row = mysql_fetch_array($resd))
             {
                 $driver .= '<option value="' . $row['id_transport'] . '">' . $row['name'] . '</option>';
@@ -36,12 +36,30 @@ class SelectList
  
         public function ShowVehicle()
         {
-            $sql = "SELECT * FROM bgi_vehicles WHERE id_transport=$_POST[driverid] ORDER BY name ASC";
+            $sql = "SELECT * FROM skb_vehicles WHERE id_transport=$_POST[driverid] ORDER BY name ASC";
             $resd= mysql_query($sql,$this->connd);
-            $vehicle = '<option value="0">Select vehicle</option>';
-            while($row = mysql_fetch_array($resd))
-            {
-                $vehicle .= '<option value="' . $row['id_vehicle'] . '">' . $row['name'] . '</option>';
+
+            $vehiclesArray = array();
+            //Making a MultiDimentional Array.
+            while($row=mysql_fetch_array($resd)){
+                $arrayToPush = array(
+                    'id_vehicle' => $row['id_vehicle'],
+                    'id_transport' => $row['id_transport'],
+                    'name' => $row['name']
+                );
+                array_push($vehiclesArray,$arrayToPush);
+            }
+
+            $totalVehicles = count($vehiclesArray);
+            if($totalVehicles===1){
+                $vehicle = '<option value="' . $vehiclesArray[0]['id_vehicle'] . '" selected="selected">' . $vehiclesArray[0]['name'] . '</option>';
+            }else if($totalVehicles>1){
+                $vehicle = '<option value="0">Select vehicle</option>';
+                foreach($vehiclesArray as $v){
+                    $vehicle .= '<option value="' . $v['id_vehicle'] . '">' . $v['name'] . '</option>';
+                }
+            }else{
+                $vehicle = '<option value="0">Select vehicle</option>';
             }
             return $vehicle;
         }
@@ -84,13 +102,16 @@ class SelectList
  
         public function ShowRoomType()
         {
-            $sql = "SELECT * FROM bgi_roomtypes WHERE id_location=$_POST[locationid] ORDER BY room_type ASC";
+            //$sql = "SELECT * FROM bgi_roomtypes WHERE id_location=$_POST[locationid] ORDER BY room_type ASC";
+            $sql = "SELECT * FROM bgi_room_loc INNER JOIN bgi_roomtypes WHERE bgi_room_loc.id_location=$_POST[locationid] and
+                 bgi_room_loc.id_roomtype=bgi_roomtypes.id_room ORDER BY bgi_roomtypes.room_type ASC";
             $roomd= mysql_query($sql,$this->connd);
             $room_type = '<option value="0">Room Type</option>';
             while($row = mysql_fetch_array($roomd))
             {
                 $room_type .= '<option value="' . $row['id_room'] . '">' . $row['room_type'] . '</option>';
             }
+
             return $room_type;
         }
 }

@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -19,31 +19,7 @@ site_header('Flight List');
 //Grab all flight info
 $flight = mysql_query("SELECT * FROM bgi_flights");
 ?>
-<script type="text/javascript" language="javascript" class="init">
-    $(document).ready(function() {
-	   $('#flight-listing').DataTable( {
-            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-            dom: 'T<"clear">lfrtip',
-            tableTools: {
-                "sSwfPath": "assets/swf/copy_csv_xls_pdf.swf",
-                "aButtons": [
-                    "copy",
-                    {
-                        "sExtends": "pdf",
-                        "sButtonText": "Save to PDF",
-                        "sPdfOrientation": "portrait",
-                        "sPdfMessage": "Flight listing"
-                    },
-                    {
-                        "sExtends": "xls",
-                        "sButtonText": "Save to Excel",
-                    },
-                    //"print"
-                ]            
-            }
-	       });
-});
-</script>
+
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
                 <!-- END X-NAVIGATION -->
@@ -79,11 +55,11 @@ $flight = mysql_query("SELECT * FROM bgi_flights");
                                 </div>
                                 <div class="panel-body">
                                 <form name="frmFlight" method="post" action="<?php $_PHP_SELF ?>">
-                                    <table id="flight-listing" class="table table-hover datatable">
+                                    <table id="flight-listing" class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Flight</th>
                                                 <th></th>
+                                                <th>Flight</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -95,8 +71,8 @@ $flight = mysql_query("SELECT * FROM bgi_flights");
                                                 $flight_number = $row[1];
                                                 
                                                 echo '<tr>
-                                                        <td>' . $flight_number . '</td>
-                                                        <td><a href="flight-details.php?id=' . $id . '"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="View / Edit Flight"></i></a> | <a href="flight-delete.php?id=' . $id . '&flight=' . $flight_number . '&logger=' . $loggedinas .'"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete ' . $flight_number . '"></i></a></td>                                                       
+                                                        <td><a href="flight-details.php?id=' . $id . '"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="View / Edit Flight"></i></a> | <a href="flight-delete.php?id=' . $id . '&flight=' . $flight_number . '&logger=' . $loggedinas .'"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete ' . $flight_number . '"></i></a></td>
+                                                        <td>' . $flight_number . '</td>                                                                                                               
                                                 </tr>';
                                             }
                                         ?>
@@ -164,7 +140,7 @@ $flight = mysql_query("SELECT * FROM bgi_flights");
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -173,7 +149,15 @@ $flight = mysql_query("SELECT * FROM bgi_flights");
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/tableExport.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
@@ -184,7 +168,12 @@ $flight = mysql_query("SELECT * FROM bgi_flights");
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
     <?php
@@ -196,6 +185,35 @@ $flight = mysql_query("SELECT * FROM bgi_flights");
 					echo '<script> alert("Flight successfully removed"); </script>';
                 }
      }
-    ?>                 
+    ?>
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function() {
+        $('#flight-listing').DataTable( {
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "dom": 'T<"clear">lBfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+
+            ]
+        });
+    });
+</script>
     </body>
 </html>

@@ -4,7 +4,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -26,10 +26,7 @@ site_header('Add Departure');
 
 if(isset($_POST['adddeparture']))
 {
-
 //Sanitize data
-
-
     $dpt_date           = QuoteSmart($_POST['dpt_date']);
     $dpt_time           = QuoteSmart($_POST['dpt_time']);
     $dpt_flight_no      = QuoteSmart($_POST['dpt_flight_no']);
@@ -39,7 +36,11 @@ if(isset($_POST['adddeparture']))
     $dpt_pickup         = QuoteSmart($_POST['dpt_pickup']);
     $dpt_dropoff        = QuoteSmart($_POST['dpt_dropoff']);
     $pickup_time        = QuoteSmart($_POST['pickup_time']);
-    $dpt_notes          = QuoteSmart($_POST['dpt_notes']);
+    if(isset($_POST['dpt_transport_notes'])){
+        $dpt_notes = QuoteSmart($_POST['dpt_transport_notes']);
+    }else{
+        $dpt_notes = '';
+    }
     $dpt_transport_notes = QuoteSmart($_POST['dpt_transport_notes']);
     $flight_class       = QuoteSmart($_POST['dpt_flight_class']);
     $user_action = "add new departure: #ref:$fsref";
@@ -49,7 +50,12 @@ if(isset($_POST['adddeparture']))
         "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes) ". 
         "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes')";
         $retval = mysql_query( $sql, $conn );
-    
+
+    if(!$retval)
+    {
+        die('Could not enter data: ' . mysql_error());
+    }
+
     //Update system log
     $sql_1 = "UPDATE bgi_reservations ". 
         "SET modified_date = NOW(), modified_by = '$loggedinas'". 
@@ -60,13 +66,13 @@ if(isset($_POST['adddeparture']))
     $sql_2 = "INSERT INTO bgi_activity ". 
         "(log_user, user_action, log_time) ". 
         "VALUES ('$loggedinas', '$user_action', NOW())";
-        $retval2 = mysql_query( $sql_2, $conn );      
-        
-        
-        if(!$retval)
-            {
-                die('Could not enter data: ' . mysql_error());
-            }        
+        $retval2 = mysql_query( $sql_2, $conn );
+
+
+    if(!$retval2)
+    {
+        die('Could not enter data: ' . mysql_error());
+    }
 
         echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=6'</script>";
         mysql_close($conn);
@@ -249,7 +255,7 @@ if(isset($_POST['adddeparture']))
                                 </div>
                                 <div class="clearfix"></div>
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="dpt-driver" name="dpt_driver">
                                         <?php echo $opt->ShowTransport(); ?>    
                                     </select>
@@ -328,7 +334,7 @@ if(isset($_POST['adddeparture']))
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/clone-form-td.js"></script>              
         <!-- END PLUGINS -->
@@ -347,7 +353,12 @@ if(isset($_POST['adddeparture']))
         <!-- START TEMPLATE -->
         <script type="text/javascript" src="js/relCopy.jquery.js"></script>
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
         <?php 

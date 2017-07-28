@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,4,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -90,7 +90,7 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date = DA
                                     <table id="transfer-queue" class="table table-hover datatable">
                                         <thead>
                                             <tr>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Guest(s)</th>
                                                 <th>Date</th>
                                                 <th>Flight # | PU Time</th>                                               
@@ -203,7 +203,7 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date = DA
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -223,7 +223,12 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date = DA
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->                 
     </body>

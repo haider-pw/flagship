@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -77,6 +77,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
                                     <table id="res-arrivals" class="table table-hover datatable">
                                         <thead>
                                             <tr>
+                                                <th></th>
                                                 <th>Last Name</th>
                                                 <th>First Name</th>
                                                 <th>Tour Operator</th>
@@ -90,7 +91,6 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
                                                 <th>Flight Class</th>
                                                 <th>Hotel</th>
                                                 <th>Notes</th>
-                                                <th></th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -118,6 +118,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
                                                 
                                                 
                                                 echo '<tr>
+                                                        <td><a href="ftreservation-details-rep.php?id=' . $id . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Assign Rep"></i></a></div></td>
                                                         <td>' . $last_name . '</td>                                                        
                                                         <td>' . $title_name . '. ' . $first_name . '</td>
                                                         <td>' . $tour_oper[1] . '</td>
@@ -131,7 +132,6 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
                                                         <td>' . $flight_class . '</td>                                                        
                                                         <td>' . $arr_dropoff[1] . '</td>
                                                         <td>' . $tour_notes . '</td>
-                                                        <td><a href="ftreservation-details-rep.php?id=' . $id . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a></div></td>
                                                 </tr>';
                                             }
                                         ?>
@@ -199,7 +199,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -218,7 +218,12 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->                 
     </body>

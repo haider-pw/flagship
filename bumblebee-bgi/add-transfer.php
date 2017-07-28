@@ -4,7 +4,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -46,26 +46,37 @@ if(isset($_POST['addtransfer']))
         "(ref_no_sys, pickup, pickup_date, pickup_time, dropoff, transport, vehicle, driver, transfer_notes) ". 
         "VALUES ('$fsref', '$pickup','$pickup_date', '$pickup_time', '$dropoff', '$transport', '$vehicle', '$driver', '$transfer_notes')";
         $retval = mysql_query( $sql, $conn );
-    
+
+    if(!$retval)
+    {
+        die('Could not enter data: ' . mysql_error());
+    }
+
+
     //Update system log
     $sql_1 = "UPDATE bgi_reservations ". 
         "SET modified_date = NOW(), modified_by = '$loggedinas'". 
         "WHERE ref_no_sys = '$fsref'";
         $retval1 = mysql_query( $sql_1, $conn );
+
+    if(!$retval1)
+    {
+        die('Could not enter data: ' . mysql_error());
+    }
     
     //Log user action
     $sql_2 = "INSERT INTO bgi_activity ". 
         "(log_user, user_action, log_time) ". 
         "VALUES ('$loggedinas', '$user_action', NOW())";
-        $retval2 = mysql_query( $sql_2, $conn );      
-        
-        
-        if(!$retval)
-            {
-                die('Could not enter data: ' . mysql_error());
-            }        
+        $retval2 = mysql_query( $sql_2, $conn );
 
-        echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=9'</script>";
+    if(!$retval2)
+    {
+        die('Could not enter data: ' . mysql_error());
+    }
+
+
+    echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=9'</script>";
         mysql_close($conn);
 	}
 ?>
@@ -194,7 +205,7 @@ if(isset($_POST['addtransfer']))
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="driver" name="driver">
                                         <?php echo $opt->ShowTransport(); ?>     
                                     </select>
@@ -259,7 +270,7 @@ if(isset($_POST['addtransfer']))
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/clone-form-td.js"></script>              
         <!-- END PLUGINS -->
@@ -278,7 +289,12 @@ if(isset($_POST['addtransfer']))
         <!-- START TEMPLATE -->
         <script type="text/javascript" src="js/relCopy.jquery.js"></script>
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->         
     </body>

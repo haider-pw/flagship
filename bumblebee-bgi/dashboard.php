@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("1,2,3,4,5,6,7,9"))
+  if (!$user->levelCheck("1,2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -142,12 +142,9 @@ $transport_count = mysql_num_rows($transport);
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
-        
-        <script type="text/javascript" src="console_chat/js/scripts.js"></script>     
-
         <!-- START THIS PAGE PLUGINS-->        
         <script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>        
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
@@ -171,6 +168,11 @@ $transport_count = mysql_num_rows($transport);
         <script type="text/javascript" src="js/actions.js"></script>
         
         <script type="text/javascript" src="js/demo_dashboard.js"></script>
+
+        <!--  Script for Inactivity-->
+        <script type="text/javascript" src="assets/store.js/store.min.js"></script>
+        <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+        <script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->         
     </body>

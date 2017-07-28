@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -17,12 +17,41 @@ ob_start();
 include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
-$reservation = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reservations WHERE id='" . QuoteSmart($_GET['id']) . "' AND fast_track = 1"));
+//$reservation = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reservations WHERE id='" . QuoteSmart($_GET['id']) . "' AND fast_track = 1"));
+$reservation = mysql_fetch_array(mysql_query("SELECT * FROM bgi_reservations WHERE id='" . QuoteSmart($_GET['id']) . "' AND fast_track = 1"));
+/*echo '<pre>';
+print_r($reservation);
+exit;*/
 $get_rep = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reps WHERE id_rep='" . $reservation[42] . "'"));
 $repselect = mysql_query("SELECT * FROM bgi_reps ORDER BY name ASC");
 $flagship_ref = $reservation[40];
 
-//select assignment
+
+
+
+//Need to Fetch the RepTypes for Assignment.
+$queryRepTypes = "SELECT * FROM bgi_rep_services WHERE section = 1 OR section = 2";
+
+$repTypes = mysql_fetch_array(mysql_query($queryRepTypes));
+$repTypesResource = mysql_query($queryRepTypes) or die(mysql_error());
+//print_r($repTypes);
+$repTypesAssoc = array();
+while($repType = mysql_fetch_assoc($repTypesResource)){
+    $repTypesAssoc[$repType['id']] = $repType['service'];
+}
+
+$assignment_select = '<option>Select assignment</option>';
+foreach($repTypesAssoc as $key=>$val){
+
+    if(isset($reservation) && !empty($reservation) && intval($reservation[52]) === intval($key)){
+        $selected = 'selected="selected"';
+    }else{
+        $selected = '';
+    }
+
+    $assignment_select.='<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
+}
+/*//select assignment
 if ($reservation[52] == 1)
 {
     $assignment_select = '<option>Select assignment</option>
@@ -36,7 +65,7 @@ if ($reservation[52] == 1)
     $assignment_select = '<option selected>Select assignment</option>
                                         <option value="1">Airport Representation</option>
                                         <option value="2">Hotel Representation</option>';
-}
+}*/
 
 
 if(!$reservation) {
@@ -218,12 +247,14 @@ if(isset($_POST['update']))
                                                                                                         
                                 <div class="panel-body col-xs-7">
                                 <div class="form-group col-xs-2"><!-- Rep assignment -->
+                                    <label for="rep-name">Rep Name</label>
                                     <?php
                                             // Error handling for operselect
                                             if($repselect === FALSE) {
                                                 die(mysql_error()); 
                                             }
-                                            
+
+
                                             //Show selected tour operator and list all the others 
                                             echo '<select class="form-control select" id="rep-name" name="rep_name">';
                                             echo '<option>Select a Rep</option>';
@@ -231,7 +262,6 @@ if(isset($_POST['update']))
                                                 if ($row['id_rep'] == $get_rep[0]) {
                                                 echo "<option value='" . $row['id_rep'] . "' selected>" . $row['name'] . "</option>";
                                                 } else {
-                                                
                                                 echo "<option value='" . $row['id_rep'] . "'>" . $row['name'] . "</option>";
                                                 }
                                             }
@@ -239,6 +269,7 @@ if(isset($_POST['update']))
                                             ?>
                                 </div>
                                 <div class="form-group col-xs-2"><!-- Rep assignment -->
+                                    <label for="assignment" style="margin-left: 21px;">Assignment</label>
                                    <select class="form-control left20" id="assignment" name="assignment">
                                         <?php echo $assignment_select; ?>    
                                     </select>
@@ -290,7 +321,7 @@ if(isset($_POST['update']))
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/clone-form-td.js"></script>              
         <!-- END PLUGINS -->
@@ -308,7 +339,12 @@ if(isset($_POST['update']))
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
         <?php 

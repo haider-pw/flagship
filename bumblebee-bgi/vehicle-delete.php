@@ -11,7 +11,7 @@ if(isset($_GET['id']))
 {
 $transport_id = $_GET['transport'];
 $vehicle_id=$_GET['id'];
-$sql=mysql_query("delete from bgi_vehicles where id_vehicle='$vehicle_id'");
+$sql=mysql_query("delete from skb_vehicles where id_vehicle='$vehicle_id'");
 
 //Activity Log info
 $loggedinas=$_GET['logger'];

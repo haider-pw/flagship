@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -22,27 +22,7 @@ site_header('Transport Job Sheet');
 //Grab all reservation info
 $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport = '" . $driver_job . "' AND transport_date >= CURDATE() ORDER BY transport_date");
 ?>
-<script type="text/javascript" language="javascript" class="init">
-    $(document).ready(function() {
-	   $('#transfer-queue').DataTable( {
-            "order": [[ 1, "asc" ]],
-            dom: 'T<"clear">lfrtip',
-            tableTools: {
-                "sSwfPath": "assets/swf/copy_csv_xls_pdf.swf",
-                "aButtons": [
-                    "copy",
-                    {
-                        "sExtends": "pdf",
-                        "sButtonText": "Save to PDF",
-                        "sPdfOrientation": "landscape",
-                        "sPdfMessage": "Jobsheet - <?php echo $transport_name; ?>"
-                    },
-                    //"print"
-                ]            
-            }
-	       } );
-    } );
-</script>
+
 <!--end table ordering --> 
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
@@ -77,12 +57,19 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport = '" . $d
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Jobsheet - <?php echo $transport_name; ?></h3>
+                                    <ul class="panel-controls panel-controls-title">
+                                        <li>
+                                            <div id="reportrange" class="dtrange">
+                                                <span></span><b class="caret"></b>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="panel-body">
-                                    <table id="transfer-queue" class="table table-hover datatable">
+                                    <table id="transfer-queue" class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Guest(s)</th>
                                                 <th>Date</th>
                                                 <th>Flight # | PU Time</th>                                               
@@ -195,7 +182,7 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport = '" . $d
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -204,7 +191,15 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport = '" . $d
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/tableExport.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
@@ -215,8 +210,87 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport = '" . $d
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
+        <script type="text/javascript" src="js/plugins/moment.min.js"></script>
+        <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->                 
+    <!-- END SCRIPTS -->
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function() {
+        $('#transfer-queue').DataTable( {
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "order": [[ 1, "asc" ]],
+            "dom": 'T<"clear">lBfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+
+            ]
+        });
+
+        //Code for DatePicker SUbmit
+        $(".range_inputs > button.applyBtn").on("click",function(e){
+            var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
+            var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
+            var postFilterData = {
+                fromDate:fromDate,
+                toDate:toDate
+            };
+            var postURL = window.location.href;
+            $.redirect(postURL,postFilterData,'POST','_SELF')
+        });
+    } );
+
+    $(function(){
+        /* reportrange */
+        if($("#reportrange").length > 0){
+            $("#reportrange").daterangepicker({
+                ranges: {
+                    'Today': [moment(), moment()],
+                    //'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    //'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    //'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    //'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    //'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                buttonClasses: ['btn btn-default'],
+                applyClass: 'btn-small btn-primary',
+                cancelClass: 'btn-small',
+                format: 'YYYY-MM-DD',
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment()
+            },function(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            });
+
+            $("#reportrange span").html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));
+        }
+        /* end reportrange */
+
+    });
+</script>
     </body>
 </html>

@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -103,10 +103,13 @@ ob_end_flush();
                                 </div>
                                 <div class="panel-body">                                                                        
                                     <div class="form-group col-xs-7"><!-- Location name record field -->
+                                        <label for="location-name">Location Name</label>
                                         <input type="text" class="form-control" placeholder="location name" id="location-name" name="location_name" value="<?php echo $location[1]; ?>">
                                     </div>
                                     <div class="clearfix"></div>
-                                    <div class="form-group col-xs-4"><!-- Zone selection -->                                       
+
+                                    <div class="form-group col-xs-4"><!-- Zone selection -->
+                                        <label for="zone">Zone</label>
                                             <select class="form-control select select_ttl" id="zone" name="zone">
                                                 <option value="<?php echo $location[2]; ?>" selected><?php echo $zone_tag; ?></option>
                                                 <option value="1">East</option>
@@ -116,6 +119,7 @@ ob_end_flush();
                                             </select>
                                     </div>
                                     <div class="form-group col-xs-3"><!-- Sorting order field -->
+                                        <label for="sorting-order">Sorting Order</label>
                                         <input type="text" class="form-control left20" placeholder="Sorting order" id="sorting-order" name="sorting_order" value="<?php echo $location[3]; ?>">
                                     </div>
                                 <div class="panel-footer">
@@ -134,11 +138,11 @@ ob_end_flush();
                                 </div>
                                 <div class="panel-body">
                                 <form name="frmLocation" method="post" action="<?php $_PHP_SELF ?>">
-                                    <table id="location-listing" class="table table-hover datatable">
+                                    <table id="location-listing" class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Room Type</th>
                                                 <th></th>
+                                                <th>Room Type</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -151,8 +155,9 @@ ob_end_flush();
                                                     
                                                 
                                                 echo '<tr>
+                                                        <td><a href="room-details.php?id=' . $id . '&location=' . $location[0] . '&location_name=' . $location[1] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Edit Room Type"></i></a> | <a href="room-delete.php?id=' . $id . '&location=' . $location[0] . '&roomtype=' . $type_name . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete ' . $type_name . '"></i></a></td>
                                                         <td>' . $type_name . '</td>
-                                                        <td><a href="room-details.php?id=' . $id . '&location=' . $location[0] . '&location_name=' . $location[1] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Edit Room Type"></i></a> | <a href="room-delete.php?id=' . $id . '&location=' . $location[0] . '&roomtype=' . $type_name . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete ' . $type_name . '"></i></a></td>                                                       
+                                                                                                               
                                                 </tr>';
                                             }
                                         ?>
@@ -198,12 +203,21 @@ ob_end_flush();
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <!--<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>-->
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>           
         <!-- END PLUGINS -->
         
         <!-- THIS PAGE PLUGINS -->
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.tableTools.js"></script>
         <script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>             
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-file-input.js"></script>
@@ -213,7 +227,12 @@ ob_end_flush();
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
         <?php
@@ -229,6 +248,35 @@ ob_end_flush();
 							echo '<script> alert("Room Type successfully removed"); </script>';
                 }
             }
-    ?>    
+    ?>
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function() {
+        $('#location-listing').DataTable( {
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "dom": 'T<"clear">lBfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+
+            ]
+        });
+    });
+</script>
     </body>
 </html>

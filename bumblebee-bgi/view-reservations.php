@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -14,51 +14,35 @@
  */
 
 include('header.php');
-site_header('Reservation List');
 
 //Grab all reservation info
-$reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1"); 
-?>
-<script type="text/javascript" language="javascript" class="init">
-    $(document).ready(function() {
-        $.datepicker.regional[""].dateFormat = 'yyyy-mm-dd';
-        $.datepicker.setDefaults($.datepicker.regional['']);
-	   $('#res-arrivals').dataTable( {
-            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-            dom: 'T<"clear">lfrtip',
-            "order": [[ 2, "asc" ]],
-            scrollY:        200,
-            deferRender:    true,
-            scroller:       true,
-            tableTools: {
-                "sSwfPath": "assets/swf/copy_csv_xls_pdf.swf",
-                "aButtons": [
-                    "copy",
-                    {
-                        "sExtends": "pdf",
-                        "sButtonText": "Save to PDF",
-                        "sPdfOrientation": "landscape",
-                        "sPdfMessage": "Arrival & Departure Schedules"
-                    },
-                    {
-                        "sExtends": "xls",
-                        "sButtonText": "Save to Excel",
-                    },
-                    //"print"
-                ]            
-            });
-            
-	       } );
-        new FixedHeader( document.getElementById('res-arrivals') );
-           
-/* Add a click handler to the rows */
-	$("#res-arrivals tbody tr").on('click',function(event) {
-		$("#res-arrivals tbody tr").removeClass('row_selected');		
-		$(this).addClass('row_selected');
-	});
+$reservationQuery = "SELECT * FROM bgi_reservations WHERE ( fast_track = 0 OR ftnotify = 1) AND status = 1";
+if(isset($_POST['fromDate'])){
+    $fromDate = $_POST['fromDate'];
+    $toDate = $_POST['toDate'];
 
-    } );
-</script>
+    if(validateDate($fromDate) and validateDate($toDate)){
+        $reservationQuery .= " AND (arr_date BETWEEN '".$fromDate."' AND '".$toDate."' OR dpt_date BETWEEN '".$fromDate."' AND '".$toDate."')";
+        $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
+    }
+
+}
+
+$reservations = mysql_query($reservationQuery);
+if(mysql_errno()){
+    echo mysql_error();
+}
+
+site_header('Reservation List');
+?>
+
+<style type="text/css">
+    ul.panel-controls > li{
+        display: block;
+        overflow: hidden;
+        float: none;
+    }
+</style>
 
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
@@ -106,17 +90,20 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1");
                                     <!-- Date picker -->
                                     <ul class="panel-controls panel-controls-title">                                        
                                         <li>
+                                            <label for="reportrange" style="display: block;">Date Filter</label>
                                             <div id="reportrange" class="dtrange">                                            
                                                 <span></span><b class="caret"></b>
                                             </div>                                     
-                                        </li>                                
-                                    </ul>                                    
-                                    
+                                        </li>
+                                        <li>
+                                            <button class="btn btn-success" style="align-self: center; margin-top: 10px; margin-left: auto; margin-right: auto; float: right;" id="exportBtn">Export Excel</button>
+                                        </li>
+                                    </ul>
                                 </div>
                                
                                 <div class="panel-body">
-                                    <table id="res-arrivals" class="table table-hover datatable display">
-                                        <?php if ($user->levelCheck("2,3,5,6,7,9")) : ?>
+                                    <table id="res-arrivals" class="table table-hover display">
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -154,7 +141,6 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1");
                                                         $displayft='*';
                                                     } else {
                                                         $displayft='';
-                                                    
                                                     }
                                                 
                                                 echo '<tr>
@@ -291,7 +277,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1");
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -300,8 +286,14 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1");
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="js/plugins/datatables/dataTables.fixedHeader.min.js"></script>
-        <script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/tableExport.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
@@ -316,8 +308,75 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1");
         <script type="text/javascript" src="js/jquery.dataTables.columnFilter.js"></script>      
         <script type="text/javascript" src="js/plugins.js"></script>        
         <script type="text/javascript" src="js/actions.js"></script> 
-        <script type="text/javascript" src="js/demo_dashboard.js"></script>       
+        <script type="text/javascript" src="js/demo_dashboard.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
+<script type="text/javascript" src="js/jquery.redirect.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->                 
+    <!-- END SCRIPTS -->
+
+<script type="text/javascript" language="javascript" class="init">
+
+    $(function(){
+        $("#exportBtn").on("click",function(){
+            console.log('Hello World');
+//            location.href = "custom_updates/export_excel.php";
+            location.href = "custom_updates/export_reservations_excel.php";
+        });
+
+        //Code for DatePicker SUbmit
+        $("body").on("click",".range_inputs > button.applyBtn",function(e){
+            console.log("im working");
+            var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
+            var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
+            var postFilterData = {
+                fromDate:fromDate,
+                toDate:toDate
+            };
+            var postURL = window.location.href;
+            $.redirect(postURL,postFilterData,'POST','_SELF');
+        });
+
+
+    });
+
+    $(document).ready(function() {
+        $('#res-arrivals').DataTable({
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "dom": 'T<"clear">lBfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+            ]
+        });
+    new FixedHeader( document.getElementById('res-arrivals') );
+
+    /* Add a click handler to the rows */
+    $("#res-arrivals tbody tr").on('click',function(event) {
+        $("#res-arrivals tbody tr").removeClass('row_selected');
+        $(this).addClass('row_selected');
+    });
+
+    });
+</script>
     </body>
 </html>

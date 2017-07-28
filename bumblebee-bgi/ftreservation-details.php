@@ -2,11 +2,11 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
-?> 
+?>
 <?php
 ob_start();
 /**
@@ -17,7 +17,10 @@ ob_start();
 include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
-$reservation = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reservations WHERE id='" . $_GET['id'] . "' AND fast_track = 1"));
+$reservationQueryResource = mysql_query("SELECT * FROM bgi_reservations WHERE id='" . $_GET['id'] . "' AND (fast_track = 1 or ftnotify = 1)");
+$reservation = mysql_fetch_array($reservationQueryResource);
+/*echo '<pre>';
+print_r($reservation); exit;*/
 $get_arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flights WHERE id_flight='" . $reservation[16] . "'"));
 $get_arr_time = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flighttime WHERE id_fltime='" . $reservation[15] . "'"));
 $get_dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flights WHERE id_flight='" . $reservation[28] . "'"));
@@ -26,9 +29,9 @@ $get_arr_pickup = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE 
 $get_arr_location = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $reservation[22] . "'"));
 $get_arr_roomtype = mysql_fetch_row(mysql_query("SELECT * FROM bgi_roomtypes WHERE id_room='" . $reservation[23] . "'"));  
 $get_arr_driver = mysql_fetch_row(mysql_query("SELECT * FROM bgi_transport WHERE id_transport='" . $reservation[19] . "'"));
-$get_arr_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM bgi_vehicles WHERE id_vehicle='" . $reservation[20] ."'"));
+$get_arr_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM skb_vehicles WHERE id_vehicle='" . $reservation[20] ."'"));
 $get_dpt_driver = mysql_fetch_row(mysql_query("SELECT * FROM bgi_transport WHERE id_transport='" . $reservation[30] . "'"));
-$get_dpt_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM bgi_vehicles WHERE id_vehicle='" . $reservation[31] . "'"));
+$get_dpt_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM skb_vehicles WHERE id_vehicle='" . $reservation[31] . "'"));
 $get_touroperator = mysql_fetch_row(mysql_query("SELECT * FROM bgi_touroperator WHERE id='" . $reservation[5] . "'"));
 $get_dptpickup = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $reservation[32] . "'"));
 $get_dptdropoff = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $reservation[33] . "'"));
@@ -36,6 +39,11 @@ $get_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flightclass WH
 $get_dpt_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flightclass WHERE id='" . $reservation[55] . "'"));
 $get_reptype = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reptype WHERE id='" . $reservation[24] . "'"));
 $flagship_ref = $reservation[40];
+
+if(!empty($reservation)){
+    $flagship_fast_ref = $reservation['fast_ref_no_sys'];
+}
+
 
 //Get and count how many guests are on this reservation
 $guestrows = mysql_query("SELECT * FROM bgi_guest WHERE ref_no_sys='$flagship_ref'");
@@ -54,7 +62,7 @@ $transport_dpt = mysql_query("SELECT * FROM bgi_resdrivers WHERE ref_no_sys='$fl
 $dpt_count = mysql_numrows($transport_dpt);
 
 //Get tour operator list
-$operselect = mysql_query("SELECT * FROM bgi_touroperator ORDER BY tour_operator ASC");
+$operselect = mysql_query("SELECT * FROM bgi_fsft_touroperator ORDER BY tour_operator ASC");
 $dptlocationselect = mysql_query("SELECT * FROM bgi_location ORDER BY name ASC");
 $classselect = mysql_query("SELECT * FROM bgi_flightclass ORDER BY class ASC");
 $dpt_classselect = mysql_query("SELECT * FROM bgi_flightclass ORDER BY class ASC");
@@ -83,6 +91,11 @@ if(isset($_POST['update']))
     $children           = QuoteSmart($_POST['children']);
     $infants            = QuoteSmart($_POST['infants']);
     $tour_notes         = QuoteSmart($_POST['tour_notes']);
+    if(isset($_POST['total_amount'])){
+        $total_amount = $_POST['total_amount'];
+    } else {
+        $total_amount = 0;
+    }
     //$arr_date           = QuoteSmart($_POST['arr_date']);
 //    $arr_time           = QuoteSmart($_POST['arr_time']);
 //    $arr_flight_no      = QuoteSmart($_POST['arr_flight_no']);
@@ -125,7 +138,7 @@ if(isset($_POST['update']))
     
     //Post driver info to jobsheet
     $sql = "UPDATE bgi_reservations ". 
-        "SET title_name = '$title_name', first_name = '$first_name', last_name = '$last_name', pnr = '$pnr', tour_operator = '$tour_oper', operator_code = '$oper_code', tour_ref_no = '$tour_ref_no', adult = '$adults', child = '$children', infant = '$infants', tour_notes = '$tour_notes', fast_track = '$ftres', modified_date = NOW(), modified_by = '$loggedinas', status = '$res_status'". 
+        "SET title_name = '$title_name', first_name = '$first_name', last_name = '$last_name', pnr = '$pnr', tour_operator = '$tour_oper', operator_code = '$oper_code', tour_ref_no = '$tour_ref_no', adult = '$adults', child = '$children', infant = '$infants', tour_notes = '$tour_notes', fast_track = '$ftres', modified_date = NOW(), modified_by = '$loggedinas', status = '$res_status', sup_total_amount = '$total_amount'". 
         "WHERE ref_no_sys = '$flagship_ref'";
         $retval = mysql_query( $sql, $conn );   
     
@@ -149,6 +162,9 @@ if(isset($_POST['update']))
                     <script type="text/javascript">
                                     $(document).ready(function(){
                                         //$("#arr-vehicle-no").attr("disabled","disabled");
+                                         $('.select2').select2({
+                                            minimumInputLength: 3
+                                        });   
                                                                                 
                                         $("#arr-driver").change(function(){
                                             $("#arr-vehicle-no").attr("disabled","disabled");
@@ -222,6 +238,52 @@ if(isset($_POST['update']))
                                                 
                                             });
                                         });
+
+
+
+                                         // on select supplier set price
+                                         $('#tour-oper').on('select2:select',function(e){ 
+                                            //console.log($(this).select2('data'));
+                                           //var price = $('#tour-oper').find('option[value="'+price+'"]').attr('data-price');
+                                           var price = $('#tour-oper option:selected').attr('data-price');
+                                           //var price = $(this).select2('data')[0].element.attributes[0].nodeValue;
+                                           console.log(price);
+
+                                           $('#price').val(price);
+                                           // check adult count
+                                           var adultCount = $("#adults").val();
+                                           if(adultCount>=0){
+                                                var total_amount = adultCount * price;
+                                                $('#total_amount').val(total_amount);
+                                           }
+                                         })
+
+                                         // on price change by user , calculate result again
+                                         $('#price').on('change',function(e){
+                                            var price = $(this).val();
+                                            var adultCount =  $('.adult_count').html();
+                                            if (price>=0 && adultCount>=0) {
+                                                var total_amount = adultCount * price;
+                                                $('#total_amount').val(total_amount);
+                                            } // end of if
+                                         })
+
+                                           // on adult number change event
+                                             $("#adults").bind('keyup mouseup', function () {
+                                                updateAdult(this);            
+                                            });
+
+                                             // update adult function
+                                             function updateAdult(element){
+                                                var adultCount = $(element).val();
+                                                $('.adult_count').html(adultCount);
+                                                var price = $('#price').val();
+                                                if(price > 0){
+                                                    var total_amount = adultCount * price;
+                                                    $('#total_amount').val(total_amount);
+                                                }
+                                             }
+
                                     });
                                 </script>
                     <?php include ('profile.php'); ?>
@@ -265,7 +327,15 @@ if(isset($_POST['update']))
                                             </div>
                                             <div class="widget-data">
                                                 <div class="widget-title">System Info</div>
-                                                <div class="widget-subtitle"><strong>Reference#: <?php echo $reservation[40]; ?></strong></div>
+                                                <div class="widget-subtitle"><strong>GH Ref#: <?php echo $reservation[40]; ?></strong></div>
+                                                <?php
+                                                if (isset($flagship_fast_ref)) {
+                                                    ?>
+                                                    <div class="widget-subtitle"><strong>FSFT
+                                                            Ref#: <?php echo $flagship_fast_ref; ?></strong></div>
+                                                    <?php
+                                                }
+                                                ?>
                                                 <div class="widget-subtitle">
                                                     Status: <?php echo ($reservation[43]< 2) ? '<span class="label label-info">Active</span>' : '<span class="label label-danger">Cancelled</span>'; ?>
                                                     <div class="clearfix"></div>
@@ -306,6 +376,9 @@ if(isset($_POST['update']))
                                                 <option <?php echo ($reservation[1] == 'Sir') ? 'selected' : ''; ?>>Sir</option>
                                                 <option <?php echo ($reservation[1] == 'Lord') ? 'selected' : ''; ?>>Lord</option>
                                                 <option <?php echo ($reservation[1] == 'Lady') ? 'selected' : ''; ?>>Lady</option>
+                                                <option <?php echo ($reservation[1] == 'Captain') ? 'selected' : ''; ?>>Captain</option>
+                                                <option <?php echo ($reservation[1] == 'Professor') ? 'selected' : ''; ?>>Professor</option>
+                                                <option <?php echo ($reservation[1] == 'Viscount') ? 'selected' : ''; ?>>Viscount</option>
                                             </select>
                                             </div>
                                         </div>
@@ -323,13 +396,15 @@ if(isset($_POST['update']))
                                                 die(mysql_error()); 
                                             }
                                             
-                                            //Show selected tour operator and list all the others 
-                                            echo '<select class="form-control select" id="tour-oper" name="tour_oper">';
+                                           //Show selected tour operator and list all the others 
+                                            $amount = 0;
+                                            echo '<select class="form-control select select2" id="tour-oper" name="tour_oper">';
                                             while ($row = mysql_fetch_array($operselect)) {
                                                 if ($row['id'] == $get_touroperator[0]) {
-                                                echo "<option value='" . $row['id'] . "' selected>" . $row['tour_operator'] . "</option>";
+                                                echo "<option data-price='".$row['amount']."' value='" . $row['id'] . "' selected>" . $row['tour_operator'] . "</option>";
+                                                $amount = $row['amount'];
                                                 } else {
-                                                echo "<option value='" . $row['id'] . "'>" . $row['tour_operator'] . "</option>";
+                                                echo "<option data-price='".$row['amount']."' value='" . $row['id'] . "'>" . $row['tour_operator'] . "</option>";
                                                 }
                                             }
                                                 echo "</select>"
@@ -358,6 +433,27 @@ if(isset($_POST['update']))
                                         <div class="col-xs-7">                                            
                                             <textarea class="form-control text-lowercase" rows="5" id="tour-notes" name="tour_notes" placeholder="Rep notes: additional rep comments and details here"><?php echo $reservation[11]; ?></textarea>
                                         </div>
+                                    </div>
+
+                                    <div class="form-group pull-left" style="width:100%;padding:0 12px">
+
+                                         <span class="pull-left"><span class="adult_count"><?php echo $reservation[8]; ?></span> Adults @ </span>
+                                        <input type="number" min=0 class="left20 form-control pull-left" id="price" 
+                                        <?php if($reservation[65]==0) {
+                                                $price = $amount;
+                                                $total = $price * $reservation[8];
+                                        }
+                                              else {
+                                                $price = $reservation[65]/$reservation[8];
+                                                $total = $reservation[65];
+                                              }
+
+                                                echo 'value="'.$price.'"';
+                                        ?>
+                                               name="supplier_price" placeholder="Price" style="width:20%">&nbsp;  &nbsp;
+                                              <span class="pull-left" style="padding:0 12px"> = </span>
+                                        <input type="text" class="form-control" id="total_amount"
+                                               name="total_amount" value="<?=$total?>" placeholder="Total Amount" readonly style="background-color:white;color: black;float:left;width:25%"> 
                                     </div>
                                     <hr />
                                 <h5>Reservation has <?php echo $guest_count; ?> guest(s)</h5>
@@ -407,7 +503,7 @@ if(isset($_POST['update']))
                                                 $guest_pnr = $row[8];   
                                                 
                                                 echo '<tr>
-                                                        <td><a href="guest-details.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Edit guest"></i></a> | <a href="guest-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&guest=' . $guest_first_name . ' ' . $guest_last_name . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete guest"></i></a></td>
+                                                        <td><a href="guest-details.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas.'"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Edit guest"></i></a> | <a href="guest-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&guest=' . $guest_first_name . ' ' . $guest_last_name . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete guest"></i></a></td>
                                                         <td>' . $guest_title . '</td>
                                                         <td>' . $guest_first_name . '</td>
                                                         <td>' . $guest_last_name . '</td>
@@ -427,7 +523,7 @@ if(isset($_POST['update']))
                                 <h5>Reservation has <?php echo $arrival_count; ?> arrival(s)</h5>
                                 <div class="panel panel-default">
                                 <div class="panel-heading">
-                                    <h3 class="panel-title"><a href="add-arrival.php?reservation=<?php echo $reservation[0]; ?>&ref=<?php echo $reservation[40]; ?>"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="Click to Arrival"></i> Add Arrival</a></h3>    
+                                    <h3 class="panel-title"><a href="add-arrival.php?reservation=<?php echo $reservation[0]; ?>&ref=<?php echo $reservation[40]; ?><?=(isset($flagship_fast_ref)?'&fsft_ref='.$flagship_fast_ref:'')?>"><i class="fa fa-plus" data-toggle="tooltip" data-placement="top" title="Click to Arrival"></i> Add Arrival</a></h3>
                                 </div>
                                 <div class="panel-body table-responsive">
                                     <table id="arrival-listing" class="table table-hover">
@@ -440,7 +536,7 @@ if(isset($_POST['update']))
                                                 <th>Flight class</th>
                                                 <th>Rep Service</th>
                                                 <th>Transport</th>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Vehicle</th>
                                                 <th>PU Location</th>
                                                 <th>Dropoff Location</th>
@@ -461,7 +557,7 @@ if(isset($_POST['update']))
                                                 $arr_dropoff = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $row[10] . "'"));
                                                 $room_type = mysql_fetch_row(mysql_query("SELECT * FROM bgi_roomtypes WHERE id_room='" . $row[11] . "'"));  
                                                 $arr_driver = mysql_fetch_row(mysql_query("SELECT * FROM bgi_transport WHERE id_transport='" . $row[7] . "'"));
-                                                $arr_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM bgi_vehicles WHERE id_vehicle='" . $row[8] ."'"));
+                                                $arr_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM skb_vehicles WHERE id_vehicle='" . $row[8] ."'"));
                                                 $arr_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flightclass WHERE id='" . $row[5] . "'"));
                                                 $arr_reptype = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reptype WHERE id='" . $row[12] . "'"));
                                                 
@@ -487,7 +583,7 @@ if(isset($_POST['update']))
                                                 }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="arrival-details.php?arrival_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $arrmain_edit .'"></i></a> <span ' . $arrmain_nodel . '>| <a href="arrival-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete arrival"></i></a></span></td>
+                                                        <td><a href="arrival-details.php?arrival_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas .(isset($flagship_fast_ref)?'&fsft_ref='. $flagship_fast_ref:''). '&sect=fsft"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $arrmain_edit .'"></i></a> <span ' . $arrmain_nodel . '>| <a href="arrival-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas  .(isset($flagship_fast_ref)?'&fsft_ref='. $flagship_fast_ref:''). '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete arrival"></i></a></span></td>
                                                         <td>' . $arrmain .' ' . $arr_date . '</td>
                                                         <td>' . $arr_flight_no[1] . '</td>
                                                         <td>' . $arr_time[2] . '</td>
@@ -529,7 +625,7 @@ if(isset($_POST['update']))
                                                 <th>PU Time</th>
                                                 <th>Dropoff</th>
                                                 <th>Transport</th>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Vehicle</th>
                                                 <th>Transfer notes</th>
                                             </tr>
@@ -541,7 +637,7 @@ if(isset($_POST['update']))
                                                 
                                                 $transfer_pickup = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $row[2] . "'"));  
                                                 $transfer_dropoff = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $row[5] . "'"));  
-                                                $transfer_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM bgi_vehicles WHERE id_vehicle='" . $row[7] ."'"));
+                                                $transfer_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM skb_vehicles WHERE id_vehicle='" . $row[7] ."'"));
                                                 $transfer_driver = mysql_fetch_row(mysql_query("SELECT * FROM bgi_transport WHERE id_transport='" . $row[8] . "'"));
                                                 
 
@@ -587,7 +683,7 @@ if(isset($_POST['update']))
                                                 <th>Flight time</th>
                                                 <th>Flight class</th>
                                                 <th>Transport</th>
-                                                <th>Driver</th>
+                                                <th>Transport Supplier</th>
                                                 <th>Vehicle</th>
                                                 <th>PU Location</th>
                                                 <th>PU Time</th>
@@ -604,7 +700,7 @@ if(isset($_POST['update']))
                                                 $dpt_pickup = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $row[9] . "'"));  
                                                 $dpt_dropoff = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $row[10] . "'"));  
                                                 $dpt_driver = mysql_fetch_row(mysql_query("SELECT * FROM bgi_transport WHERE id_transport='" . $row[7] . "'"));
-                                                $dpt_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM bgi_vehicles WHERE id_vehicle='" . $row[8] ."'"));
+                                                $dpt_vehicle = mysql_fetch_row(mysql_query("SELECT * FROM skb_vehicles WHERE id_vehicle='" . $row[8] ."'"));
                                                 $dpt_flightclass = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flightclass WHERE id='" . $row[5] . "'"));
 
                                                 //assign names to results that are readable
@@ -625,7 +721,7 @@ if(isset($_POST['update']))
                                                 }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="departure-details.php?departure_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $dptmain_edit . '"></i></a> <span ' . $dptmain_nodel .'>| <a href="departure-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete departure"></i></a></span></td>
+                                                        <td><a href="departure-details.php?departure_id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '&sect=fsft"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="' . $dptmain_edit . '"></i></a> <span ' . $dptmain_nodel .'>| <a href="departure-delete.php?id=' . $id . '&reservation=' . $reservation[0] . '&ref=' . $reservation[40] . '&logger=' . $loggedinas . '"><i class="fa fa-ban" data-toggle="tooltip" data-placement="top" title="Delete departure"></i></a></span></td>
                                                         <td>' . $dptmain .' ' . $dpt_date . '</td>
                                                         <td>' . $dpt_flight_no[1] . '</td>
                                                         <td>' . $dpt_time[2] . '</td>
@@ -702,7 +798,7 @@ if(isset($_POST['update']))
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>            
         <!-- END PLUGINS -->
         
@@ -714,7 +810,13 @@ if(isset($_POST['update']))
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
+        <!--Select2-->
+        <script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
            <?php

@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -20,21 +20,7 @@ site_header('Reservation Cancellations List');
 $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2"); 
 
 ?>
-<script type="text/javascript">
-            $(document).ready(function() {
-    $('#res-arrivals').dataTable( {
-        "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-        "order": [[ 1, "asc" ]]
-    } );
-    
-    /* Add a click handler to the rows */
-	$("#res-arrivals tbody tr").on('click',function(event) {
-		$("#res-arrivals tbody tr").removeClass('row_selected');		
-		$(this).addClass('row_selected');
-	});
-} );
-        </script> 
-
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
                 <!-- END X-NAVIGATION -->
@@ -69,10 +55,11 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2");
                                     <h3 class="panel-title">Arrival & Departure Schedules</h3>
                                 </div>
                                 <div class="panel-body table-responsive">
-                                    <table id="res-arrivals" class="table table-hover datatable">
-                                        <?php if ($user->levelCheck("5,6,7,9")) : ?>
+                                    <table id="res-arrivals" class="table table-hover">
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
+                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                                 <th>T/O</th>
                                                 <th>Ref #</th>
                                                 <th>Rep</th>
@@ -102,7 +89,6 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2");
                                                 <th>Dpt &amp; Trans Notes</th>
                                                 <th>Rep Notes</th>
                                                 <th>Acct Notes</th>
-                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -173,6 +159,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2");
                                                     }
                                                 
                                                 echo '<tr>
+                                                        <td><a href="reservation-details.php?id=' . $id . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a></td>
                                                         <td>' . $tour_oper[1] . '</td>
                                                         <td>' . $ref_no . '</td>
                                                         <td>' . $rep[1] . '</td>
@@ -198,11 +185,10 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2");
                                                         <td>' . $dpt_date . '</td>
                                                         <td>' . $dpt_flight_no[1] . '</td>
                                                         <td>' . $dpt_time[2] . '</td>
-                                                        <td>' . $arr_notes . '</td>
-                                                        <td>' . $dpt_notes . '</td>
-                                                        <td>' . $rep_notes . '</td>
-                                                        <td>' . $acc_notes . '</td>
-                                                        <td><a href="reservation-details.php?id=' . $id . '"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="View / Edit reservation"></i></a></td>
+                                                        <td><span class="arrNotes" data-placement="top" data-toggle="tooltip" data-original-title="Edit \'Click to See All \'" style="display: block;overflow: hidden;text-overflow: ellipsis;width: 400px;word-break: break-all;word-wrap: break-word;cursor:pointer;">' . $arr_notes . '</span></td>
+                                                        <td><span class="dptNotes" data-placement="top" data-toggle="tooltip" data-original-title="Edit \'Click to See All \'" style="display: block;overflow: hidden;text-overflow: ellipsis;width: 400px;word-break: break-all;word-wrap: break-word;cursor:pointer;">' . $dpt_notes . '</span></td>
+                                                        <td><span class="repNotes" data-placement="top" data-toggle="tooltip" data-original-title="Edit \'Click to See All \'" style="display: block;overflow: hidden;text-overflow: ellipsis;width: 400px;word-break: break-all;word-wrap: break-word;cursor:pointer;">' . $rep_notes . '</span></td>
+                                                        <td><span class="acctNotes" data-placement="top" data-toggle="tooltip" data-original-title="Edit \'Click to See All \'" style="display: block;overflow: hidden;text-overflow: ellipsis;width: 400px;word-break: break-all;word-wrap: break-word;cursor:pointer;">' . $acc_notes . '</span></td>
                                                 </tr>';
                                             }
                                         ?>
@@ -398,6 +384,84 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2");
         </div>
         <!-- END MESSAGE BOX-->
 
+<div class="modal fade" id="repNotes" tabindex="-1" role="dialog" aria-labelledby="repNotesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="arrNotes" tabindex="-1" role="dialog" aria-labelledby="repNotesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="dptNotes" tabindex="-1" role="dialog" aria-labelledby="repNotesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="acctNotes" tabindex="-1" role="dialog" aria-labelledby="repNotesLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</div>
+
+
         <!-- START PRELOADS -->
         <audio id="audio-alert" src="audio/alert.mp3" preload="auto"></audio>
         <audio id="audio-fail" src="audio/fail.mp3" preload="auto"></audio>
@@ -406,7 +470,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2");
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -415,6 +479,15 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2");
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
+        <script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+        <script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+        <script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+        <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+<!--        <script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>-->
         <script type="text/javascript" src="js/plugins/tableexport/tableExport.js"></script>
 	<script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
 	<script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
@@ -425,8 +498,96 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 2");
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->                 
-    </body>
+    <!-- END SCRIPTS -->
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#res-arrivals').dataTable( {
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "dom": 'T<"clear">lBfrtip',
+            "order": [[ 1, "asc" ]],
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+
+            ]
+        } );
+
+        /* Add a click handler to the rows */
+        $("#res-arrivals tbody tr").on('click',function(event) {
+            $("#res-arrivals tbody tr").removeClass('row_selected');
+            $(this).addClass('row_selected');
+        });
+
+
+
+        //Custom Code Syed Haider Hassan
+        $(".repNotes").on("click",function(){
+            var m = $("#repNotes");
+            var modalLabel = m.find("#myModalLabel");
+            var modalBody = m.find(".modal-body");
+
+            modalLabel.text("Rep Notes");
+            modalBody.html($(this).html());
+
+            m.modal('show');
+        });
+        $(".arrNotes").on("click",function(){
+            var m = $("#repNotes");
+            var modalLabel = m.find("#myModalLabel");
+            var modalBody = m.find(".modal-body");
+
+            modalLabel.text("Arr & Trans Notes");
+            modalBody.html($(this).html());
+
+            m.modal('show');
+        });
+        $(".dptNotes").on("click",function(){
+            var m = $("#repNotes");
+            var modalLabel = m.find("#myModalLabel");
+            var modalBody = m.find(".modal-body");
+
+            modalLabel.text("Dpt & Trans Notes");
+            modalBody.html($(this).html());
+
+            m.modal('show');
+        });
+        $(".acctNotes").on("click",function(){
+            var m = $("#repNotes");
+            var modalLabel = m.find("#myModalLabel");
+            var modalBody = m.find(".modal-body");
+
+            modalLabel.text("Acct Notes");
+            modalBody.html($(this).html());
+
+            m.modal('show');
+        });
+        //End of Custom Code Syed Haider Hassan
+
+    });
+</script>
+</body>
 </html>

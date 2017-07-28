@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -89,6 +89,7 @@ ob_end_flush();
                                 <div class="panel-body">  
                                 <div class="form-group"><!-- pickup time -->
                                         <div class="input-group bootstrap-timepicker col-xs-3">
+                                            <label for="flighttime">Flight Time</label>
                                             <input type="text" class="form-control timepicker24" name="flighttime" id="flighttime" placeholder="flight time" value="<?php echo $flight_time[2]; ?>"/>
                                             <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
                                         </div>
@@ -143,7 +144,7 @@ ob_end_flush();
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <!--<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>-->
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>           
         <!-- END PLUGINS -->
         
@@ -160,7 +161,12 @@ ob_end_flush();
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS --> 
     </body>

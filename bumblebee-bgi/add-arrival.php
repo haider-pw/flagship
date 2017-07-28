@@ -4,7 +4,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -14,22 +14,27 @@
  * @author Alvin Herbert
  * @copyright 2015
  */
+
+/*echo '<pre>';
+    var_dump($row);
+echo '</pre>';
+exit;*/
 include ('ref.php');
 include('header.php');
 include ('select.class.php');
 $fsref = $_GET['ref'];
 $reservation_id = $_GET['reservation'];
+if(isset($_GET['fsft_ref']))
+    $fast_track_ref = $_GET['fsft_ref'];
 $loggedinas = $row->fname . ' ' . $row->lname;
 site_header('Add Arrival');
 
 
-
 if(isset($_POST['addarrival']))
 {
-
-//Sanitize data
-
+    //Sanitize data
     $arr_date           = QuoteSmart($_POST['arr_date']);
+    $fast_track           = QuoteSmart($_POST['ftres']);
     $arr_time           = QuoteSmart($_POST['arr_time']);
     $arr_flight_no      = QuoteSmart($_POST['arr_flight_no']);
     $flight_class       = QuoteSmart($_POST['flight_class']);
@@ -53,7 +58,7 @@ if(isset($_POST['addarrival']))
     $room_no       = QuoteSmart($_POST['room_no']);
     
     $user_action = "add new arrival: #ref:$fsref";
-    
+    $fast_track = empty($fast_track) ? 0 : 1;
     $ftres = isset($_POST['ftres']) ? 1 : 0;
     if ($ftres > 0){
         $ftnotify = 1;
@@ -61,15 +66,24 @@ if(isset($_POST['addarrival']))
    
         //Put all the remaining stuff into the database
 	$sql = "INSERT INTO bgi_arrivals ". 
-        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no) ". 
-        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no')";
+        "(ref_no_sys, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, arr_transport_notes, arr_hotel_notes, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, rooms, room_no, fast_track) ".
+        "VALUES ('$fsref', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$room_type', '$rep_type', '$client_reqs', '$arr_transport_notes', '$arr_hotel_notes', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$rooms', '$room_no','$fast_track')";
         $retval = mysql_query( $sql, $conn );
+
+    if(!empty(mysql_errno())){
+        die(mysql_error());
+    }
     
     //Update system log
     $sql_1 = "UPDATE bgi_reservations ". 
         "SET modified_date = NOW(), modified_by = '$loggedinas'". 
         "WHERE ref_no_sys = '$fsref'";
-        $retval1 = mysql_query( $sql_1, $conn );  
+        $retval1 = mysql_query( $sql_1, $conn );
+
+    //If Error in mysql_query() then roll back;
+    if(!empty(mysql_errno())){
+        die(mysql_error());
+    }
     
     //Log user action
     $sql_2 = "INSERT INTO bgi_activity ". 
@@ -78,13 +92,15 @@ if(isset($_POST['addarrival']))
         $retval2 = mysql_query( $sql_2, $conn );      
         
         
-        if(!$retval)
+        if(!empty(mysql_errno()))
             {
+                echo $sql_1;
                 die('Could not enter data: ' . mysql_error());
-            }        
+            }
 
-        echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=5'</script>";
         mysql_close($conn);
+        echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=5'</script>";
+
 	}
 ?>
 
@@ -225,6 +241,14 @@ if(isset($_POST['addarrival']))
                                                 <input type="text" class="form-control datepicker" name="arr_date" id="arr-date" placeholder="Arrival date"/>
                                                 <span class="input-group-addon add-on"><span class="glyphicon glyphicon-calendar"></span></span>
                                         </div>
+                                        <!-- Fasttrack Checkbox-->
+                                        <label class="checkbox-inline label_checkboxitem">
+                                            <input class="icheckbox" type="checkbox" id="ftres" name="ftres">
+                                            Fast Track
+                                        </label>
+                                        <i class="fa fa-question-circle left20" data-toggle="tooltip"
+                                                   data-placement="top" title="Check the box if this is a Fast Track reservation">
+                                        </i>
                                     </div>
                                 </div>
                                 <!-- initiate chained selection flight# -->
@@ -252,7 +276,7 @@ if(isset($_POST['addarrival']))
                                 <div class="clearfix"></div>
                                 <!-- initiate chained selection drivers -->
                                 <div class="form-group col-xs-4"><!-- available driver selection -->
-                                    <label>Driver</label>
+                                    <label>Transport Supplier</label>
                                     <select class="form-control" id="arr-driver" name="arr_driver">
                                         <?php echo $opt->ShowTransport(); ?>     
                                     </select>
@@ -300,10 +324,19 @@ if(isset($_POST['addarrival']))
                                         <textarea class="form-control text-lowercase" rows="5" id="arr-hotel-notes" name="arr_hotel_notes" placeholder="Hotel notes: additional hotel comments and details here"></textarea>
                                     </div>
                                  </div>
-                                <div class="form-group col-xs-7"><!-- representation type selection -->
-                                    <label>Represetation Type</label>
-                                    <?php include ('reptype_select.php'); ?>
-                                </div>
+
+                                    <?php if(isset($fast_track_ref) && !$fast_track_ref){
+                                        ?>
+                                        <div class="form-group col-xs-7"><!-- representation type selection -->
+                                            <label>Representation Type</label>
+                                            <select multiple class="form-control rep-type" id="rep_type" name="rep_type[]">
+                                                <option value="0">Select Representation</option>
+                                                <?php include ('reptype_select_multiple.php'); ?>
+                                            </select>
+                                        </div>
+                                    <?php
+                                    }
+                                    ?>
                                 <div class="clearfix"></div>
                                 <hr />
                                 <div class="form-group col-xs-7 checkbox"><!-- additional requirements show -->
@@ -377,7 +410,7 @@ if(isset($_POST['addarrival']))
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/clone-form-td.js"></script>              
         <!-- END PLUGINS -->
@@ -391,14 +424,23 @@ if(isset($_POST['addarrival']))
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-file-input.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-select.js"></script>
         <script type="text/javascript" src="js/plugins/tagsinput/jquery.tagsinput.min.js"></script>
+<!--Select2-->
+<script type="text/javascript" src="js/plugins/select2/dist/js/select2.full.min.js"></script>
         <!-- END THIS PAGE PLUGINS -->       
         
         <!-- START TEMPLATE -->
         <script type="text/javascript" src="js/relCopy.jquery.js"></script>
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->  
+    <!-- END SCRIPTS -->
+<script type="text/javascript">
+    $('.rep-type').select2();
+</script>
         <?php 
 $ok= isset($_GET['ok']);
 if($ok)  {

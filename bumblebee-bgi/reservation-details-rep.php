@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -22,6 +22,31 @@ $get_rep = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reps WHERE id_rep='" .
 $repselect = mysql_query("SELECT * FROM bgi_reps ORDER BY name ASC");
 $flagship_ref = $reservation[40];
 
+
+//Need to Fetch the RepTypes for Assignment.
+$queryRepTypes = "SELECT * FROM bgi_rep_services WHERE section = 0 OR section = 2";
+
+$repTypes = mysql_fetch_array(mysql_query($queryRepTypes));
+$repTypesResource = mysql_query($queryRepTypes) or die(mysql_error());
+//print_r($repTypes);
+$repTypesAssoc = array();
+while($repType = mysql_fetch_assoc($repTypesResource)){
+    $repTypesAssoc[$repType['id']] = $repType['service'];
+}
+
+$assignment_select = '<option>Select assignment</option>';
+foreach($repTypesAssoc as $key=>$val){
+
+    if(isset($reservation) && !empty($reservation) && intval($reservation[52]) === intval($key)){
+        $selected = 'selected="selected"';
+    }else{
+        $selected = '';
+    }
+
+    $assignment_select.='<option value="'.$key.'" '.$selected.'>'.$val.'</option>';
+}
+
+/*
 //select assignment
 if ($reservation[52] == 1)
 {
@@ -36,7 +61,7 @@ if ($reservation[52] == 1)
     $assignment_select = '<option selected>Select assignment</option>
                                         <option value="1">Airport Representation</option>
                                         <option value="2">Hotel Representation</option>';
-}
+}*/
 
 
     
@@ -62,7 +87,6 @@ if(isset($_POST['update']))
     $user_action = "Assign team $rep_action[1] / update reservation: $title_name. $first_name $last_name #ref:$flagship_ref";
     
 //Put all this stuff into the database
-    
 	$sql = "UPDATE bgi_reservations ". 
         "SET modified_date = NOW(), modified_by = '$loggedinas', assigned = '$assigned', rep = '$rep_name', assignment ='$assignment'". 
         "WHERE ref_no_sys = '$flagship_ref'";
@@ -298,7 +322,7 @@ if(isset($_POST['update']))
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>
         <script type="text/javascript" src="js/clone-form-td.js"></script>              
         <!-- END PLUGINS -->
@@ -316,7 +340,12 @@ if(isset($_POST['update']))
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
                 

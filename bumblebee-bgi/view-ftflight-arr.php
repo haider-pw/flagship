@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -17,44 +17,46 @@ include('header.php');
 site_header('Arrival Flight');
 
 //Grab all reservation info
-$reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1 AND status = 1"); 
-?>
-<script type="text/javascript" language="javascript" class="init">
-    $(document).ready(function() {
-        $.datepicker.regional[""].dateFormat = 'yyyy-mm-dd';
-        $.datepicker.setDefaults($.datepicker.regional['']);
-	   $('#res-arrivals').DataTable( {
-            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-            dom: 'T<"clear">lfrtip',
-            "order": [[ 16, "asc" ]],
-            scrollY:        200,
-            deferRender:    true,
-            scroller:       true,
-            tableTools: {
-                "sSwfPath": "assets/swf/copy_csv_xls_pdf.swf",
-                "aButtons": [
-                    "copy",
-                    {
-                        "sExtends": "pdf",
-                        "sButtonText": "Save to PDF",
-                        "sPdfOrientation": "landscape",
-                        "sPdfMessage": "Arrival Flight Schedules"
-                    },
-                    //"print"
-                ]
-                }            
-            });
-            
-	       } );
-        new FixedHeader( document.getElementById('res-arrivals') );
-           
-/* Add a click handler to the rows */
-	$("#res-arrivals tbody tr").on('click',function(event) {
-		$("#res-arrivals tbody tr").removeClass('row_selected');		
-		$(this).addClass('row_selected');
-	});
+$reservationQuery = "SELECT * FROM bgi_reservations WHERE (fast_track = 1 OR ftnotify = 1) AND status = 1";
+if(isset($_POST['fromDate'])){
+    $fromDate = $_POST['fromDate'];
+    $toDate = $_POST['toDate'];
 
-</script>
+    if(validateDate($fromDate) and validateDate($toDate)){
+        $reservationQuery .= " AND (arr_date BETWEEN '".$fromDate."' AND '".$toDate."')";
+        $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
+    }
+
+}
+
+//echo  $reservationQuery;
+
+$reservations = mysql_query($reservationQuery);
+if(mysql_errno()){
+    echo mysql_error();
+}
+
+?>
+<style type="text/css">
+    .repNotes, .arrNotes, .accNotes, .hotelNotes{
+        -ms-word-wrap:break-word;
+        word-wrap:break-word;
+        max-width: 400px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        cursor: pointer;
+    }
+</style>
+<style type="text/css">
+    ul.panel-controls > li{
+        display: block;
+        overflow: hidden;
+        float: none;
+    }
+</style>
+
+
 
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
@@ -103,17 +105,22 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
                                     <!-- Date picker -->
                                     <ul class="panel-controls panel-controls-title">                                        
                                         <li>
+                                            <label for="reportrange" style="display: block;">Arrival Date Filter</label>
                                             <div id="reportrange" class="dtrange">                                            
                                                 <span></span><b class="caret"></b>
                                             </div>                                     
-                                        </li>                                
+                                        </li>
+
+                                        <li>
+                                            <button class="btn btn-success" style="align-self: center; margin-top: 10px; margin-left: auto; margin-right: auto; float: right;" id="exportBtn">Export Excel</button>
+                                        </li>
                                     </ul>                                    
                                     
                                 </div>
                                
                                 <div class="panel-body table-responsive">
-                                    <table id="res-arrivals" class="table table-hover datatable display">
-                                        <?php if ($user->levelCheck("2,5,6,7,9")) : ?>
+                                    <table id="res-arrivals" class="table table-hover display">
+                                        <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
                                                 <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
@@ -229,7 +236,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
                                                         <td>' . $arr_time[2] . '</td>
                                                         <td>' . $flight_class[1] . '</td>
                                                         <td>' . $dpt_date . '</td>
-                                                        <td>' . $rep_notes . '</td>
+                                                        <td class="repNotes" data-placement="top" data-toggle="tooltip" data-original-title="Click to See All">' . $rep_notes . '</td>
                                                 </tr>';
                                             }
                                         ?>
@@ -391,8 +398,26 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
                 </div>
             </div>
         </div>
-        <!-- END MESSAGE BOX-->        
-        
+        <!-- END MESSAGE BOX-->
+<div class="modal fade" id="repNotesModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                ...
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <!--                <button type="button" class="btn btn-primary">Save changes</button>-->
+            </div>
+        </div>
+    </div>
+</div>
         <!-- MESSAGE BOX-->
         <div class="message-box animated fadeIn" data-sound="alert" id="mb-signout">
             <div class="mb-container">
@@ -421,7 +446,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -430,8 +455,14 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="js/plugins/datatables/dataTables.fixedHeader.min.js"></script>
-        <script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/tableExport.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
@@ -446,8 +477,84 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE fast_track = 1
         <script type="text/javascript" src="js/jquery.dataTables.columnFilter.js"></script>      
         <script type="text/javascript" src="js/plugins.js"></script>        
         <script type="text/javascript" src="js/actions.js"></script> 
-        <script type="text/javascript" src="js/demo_dashboard.js"></script>       
+        <script type="text/javascript" src="js/demo_dashboard.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
+<script type="text/javascript" src="js/jquery.redirect.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->                 
+    <!-- END SCRIPTS -->
+<script type="text/javascript" language="javascript" class="init">
+
+    $(function(){
+
+        $("#exportBtn").on("click",function(){
+//            location.href = "custom_updates/export_excel.php";
+            location.href = "custom_updates/export_fsft_reservations_excel.php";
+        });
+        
+        //Code for DatePicker SUbmit
+        $("body").on("click",".range_inputs > button.applyBtn",function(e){
+            console.log("im working");
+            var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
+            var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
+            var postFilterData = {
+                fromDate:fromDate,
+                toDate:toDate
+            };
+            var postURL = window.location.href;
+            $.redirect(postURL,postFilterData,'POST','_SELF');
+        });
+
+        //Rep Notes
+        $(".repNotes").on("click",function(){
+            var m = $("#repNotesModal");
+            var modalLabel = m.find("#myModalLabel");
+            var modalBody = m.find(".modal-body");
+
+            modalLabel.text("Rep Notes");
+            modalBody.html($(this).html());
+
+            m.modal('show');
+        });
+    });
+
+    $(document).ready(function() {
+        //datatables
+        $('#res-arrivals').DataTable({
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "dom": 'T<"clear">lBfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+            ]
+        });
+    });
+
+    /* Add a click handler to the rows */
+    $("#res-arrivals tbody tr").on('click',function(event) {
+        $("#res-arrivals tbody tr").removeClass('row_selected');
+        $(this).addClass('row_selected');
+    });
+
+</script>
     </body>
 </html>

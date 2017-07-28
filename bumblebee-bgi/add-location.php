@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -96,11 +96,13 @@ if(isset($_POST['addlocation']))
                                     <h4>Location Details</h4>
                                 </div>
                                 <div class="panel-body">                                                                        
-                                    <div class="form-group col-xs-7"><!-- Location name record field -->
+                                    <div class="form-group col-xs-6"><!-- Location name record field -->
+                                        <label for="location-name">Location</label>
                                         <input type="text" class="form-control text-capitalize" placeholder="location name" id="location-name" name="location_name">
                                     </div>
                                     
-                                    <div class="form-group col-xs-4"><!-- Zone selection -->                                       
+                                    <div class="form-group col-xs-4"><!-- Zone selection -->
+                                        <label for="zone">Zone</label>
                                             <select class="form-control select select_ttl" id="zone" name="zone">
                                                 <option value="0" selected>Select Zone</option>
                                                 <option value="1">East</option>
@@ -111,6 +113,7 @@ if(isset($_POST['addlocation']))
                                     </div>
                                     
                                     <div class="form-group col-xs-3"><!-- sorting order field -->
+                                        <label for="sorting-order">Sorting Order</label>
                                         <input type="text" class="form-control left20" placeholder="Sorting order" id="sorting-order" name="sorting_order">
                                     </div>
                                 <div class="panel-footer">
@@ -158,7 +161,7 @@ if(isset($_POST['addlocation']))
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <!--<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>-->
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>           
         <!-- END PLUGINS -->
         
@@ -172,7 +175,12 @@ if(isset($_POST['addlocation']))
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
                 

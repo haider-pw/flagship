@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -19,22 +19,7 @@ site_header('Transport Job Queue');
 //Grab all reservation info
 $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date >= CURDATE() GROUP BY transport");
 ?>
-<!-- table ordering -->
-<script type="text/javascript">
-            $(document).ready(function() {
-    $('#transfer-queue').dataTable( {
-        "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-        "order": [[ 1, "asc" ]]
-    } );
-    
-        /* Add a click handler to the rows */
-	$("#transfer-queue tbody tr").on('click',function(event) {
-		$("#transfer-queue tbody tr").removeClass('row_selected');		
-		$(this).addClass('row_selected');
-	});
-} );
-        </script>
-<!--end table ordering --> 
+
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
                 <!-- END X-NAVIGATION -->
@@ -69,11 +54,11 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date >= C
                                     <h3 class="panel-title">Arrival & Departure Transfers</h3>
                                 </div>
                                 <div class="panel-body">
-                                    <table id="transfer-queue" class="table table-hover datatable">
+                                    <table id="transfer-queue" class="table table-hover">
                                         <thead>
                                             <tr>
-                                                <th>Driver</th>
                                                 <th>Action</th>
+                                                <th>Transport Supplier</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -88,8 +73,8 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date >= C
                                                
                                                 
                                                 echo '<tr>
-                                                        <td>' . $drivers . '</td>
-                                                        <td><a href="transport-jobsheet.php?id=' . $row[1] . '&transport=' . $drivers .'"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="View Jobsheet: ' . $drivers . '"></i></a></div></td>
+<td><a href="transport-jobsheet.php?id=' . $row[1] . '&transport=' . $drivers .'"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="View Jobsheet: ' . $drivers . '"></i></a></div></td>
+                                                        <td>' . $drivers . '</td>                                                        
                                                 </tr>';
                                             }
                                         ?>
@@ -157,7 +142,7 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date >= C
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -166,6 +151,16 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date >= C
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+<!--<script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>-->
         <script type="text/javascript" src="js/plugins/tableexport/tableExport.js"></script>
 	<script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
 	<script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
@@ -176,8 +171,51 @@ $transport = mysql_query("SELECT * FROM bgi_resdrivers WHERE transport_date >= C
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->                 
-    </body>
+    <!-- END SCRIPTS -->
+<!-- table ordering -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $('#transfer-queue').dataTable( {
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "dom": 'T<"clear">lBfrtip',
+            "order": [[ 1, "asc" ]],
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+
+            ]
+        } );
+
+        /* Add a click handler to the rows */
+        $("#transfer-queue tbody tr").on('click',function(event) {
+            $("#transfer-queue tbody tr").removeClass('row_selected');
+            $(this).addClass('row_selected');
+        });
+    } );
+</script>
+<!--end table ordering -->
+</body>
 </html>

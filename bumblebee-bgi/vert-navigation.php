@@ -16,13 +16,13 @@
                         <a href="#" class="x-navigation-minimize"><span class="fa fa-dedent"></span></a>
                     </li>
                     <!-- END TOGGLE NAVIGATION -->
-                    <?php if ($user->levelCheck("9,7,6,1")) : ?>
+                    <?php if ($user->levelCheck("9,1")) : ?>
                     <!-- DESTINATIOIN -->
                     <li style="margin-top: 10px; margin-left: 15px;">
                         <form>
                             <select id="destination_select" class="form-control">
-                                <option value="" selected>BGI - Barbados</option>
-                                <option value="<?php echo $uri;?>bumblebee-fll/">FLL - Florida</option>
+                                <option value="http://localhost/flights_project/">FLL - Florida</option>
+                                <option value="http://localhost/flagship_bgi/bumblebee-bgi/" selected>BGI - Barbados</option>
                                 <option value="<?php echo $uri;?>bumblebee-anu/">ANU - Antigua</option>
                                 <option value="<?php echo $uri;?>bumblebee-gnd/">GND - Grenada</option>
                                 <option value="<?php echo $uri;?>bumblebee-skb/">SKB - St.Kitts & Nevis</option>
@@ -48,6 +48,7 @@
                     <li class="xn-icon-button pull-right" style="margin-right: 35px;">
                         <a href="#" class="mb-control" data-box="#mb-signout"> <span class="fa fa-sign-out"><strong>Logout</strong></span></a>                        
                     </li> 
+                
                     <!-- END SIGN OUT -->
                 </ul>
                 <!-- END X-NAVIGATION VERTICAL -->

@@ -14,43 +14,30 @@
  */
 
 include('header.php');
-site_header('Fast Track Assignments');
+site_header('Assign Reservation Reps');
 
 //Grab all reservation info
-//$reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND fast_track = 1 AND assigned = 1 AND yearweek(arr_date) = yearweek(curdate())");
-//$reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND fast_track = 1 AND assigned = 1");
+$query = "SELECT * FROM bgi_reservations WHERE assigned = 0 AND arr_date >= DATE(NOW())";
 
-
-//Grab all reservation info
-$reservationQuery = "SELECT * FROM bgi_reservations WHERE status = 1 AND fast_track = 1 AND assigned = 1";
+$dateFilter = false;
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
 
     if(validateDate($fromDate) and validateDate($toDate)){
-        $reservationQuery .= " AND (arr_date BETWEEN '".$fromDate."' AND '".$toDate."')";
+        $dateFilter = true;
+        $reservationQuery .= " AND (arr_date BETWEEN '".$fromDate."' AND '".$toDate."' OR dpt_date BETWEEN '".$fromDate."' AND '".$toDate."')";
         $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
+    }else{
+        $dateFilter = false;
     }
 }
-
-//echo  $reservationQuery;
-
-$reservations = mysql_query($reservationQuery);
-if(mysql_errno()){
-    echo mysql_error();
-}
+$reservations = mysql_query($query);
 ?>
-<style type="text/css">
-    ul.panel-controls > li{
-        display: block;
-        overflow: hidden;
-        float: none;
-    }
-</style>
 
 
                     <?php include ('profile.php'); ?>
-                    <?php include ('navigation.php'); ?>
+                   <?php include ('navigation.php'); ?>
                 <!-- END X-NAVIGATION -->
             </div>
             <!-- END PAGE SIDEBAR -->
@@ -61,15 +48,15 @@ if(mysql_errno()){
                 <!-- START BREADCRUMB -->
                 <ul class="breadcrumb">
                     <li><a href="dashboard.php">Home</a></li>
-                    <li><a href="#">Fast Track</a></li>
-                    <li><a href="#">Team Assignment</a></li>
-                    <li class="active">Fast Track Reservation Assignments</li>
+                    <li>Reservations</li>
+                    <li>Team Assignment</li>                    
+                    <li class="active"><a href="assign-reservation-schedules.php">Assign</a></li>
                 </ul>
                 <!-- END BREADCRUMB -->
-
+                
                 <!-- PAGE TITLE -->
                 <div class="page-title">                    
-                    <h2><span class="fa fa-arrow-circle-o-left"></span> Fast Track Reservations Assignments</h2>
+                    <h2><span class="fa fa-arrow-circle-o-left"></span> Add Schedules</h2>
                 </div>
                 <!-- END PAGE TITLE -->                
                 
@@ -82,6 +69,7 @@ if(mysql_errno()){
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Arrival & Departure Schedules</h3>
+                                    <!-- Date picker -->
                                     <ul class="panel-controls panel-controls-title">
                                         <li>
                                             <label for="reportrange" style="display: block;">Arrival Date Filter</label>
@@ -96,61 +84,56 @@ if(mysql_errno()){
                                         <thead>
                                             <tr>
                                                 <th></th>
-                                                <th>Last Name</th>
-                                                <th>First Name</th>
-                                                <th>Tour Operator</th>
-                                                <th>Affiliate</th>
-                                                <th>A</th>
-                                                <th>C</th>
-                                                <th>I</th>
+                                                <th>Ref #</th>
                                                 <th>Arrival Date</th>
                                                 <th>Arr Flight#</th>
                                                 <th>Arrival Time</th>
-                                                <th>Flight Class</th>
-                                                <th>Hotel</th>
-                                                <th>Rep</th>
-                                                <th>Notes</th>
+                                                <th>Depart Date</th>
+                                                <th>Depart Flight#</th>
+                                                <th>Depart Time</th>
+                                                <th>First Name</th>
+                                                <th>Last Name</th>
+                                                <th>Tour Operator</th>
                                             </tr>
                                         </thead>
                                         <tbody>
                                         <?php
                                             while($row = mysql_fetch_array($reservations)) {
-                                                $flight_class = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flightclass WHERE id='" . $row[17] . "'"));
+                                                
                                                 $arr_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flights WHERE id_flight='" . $row[16] . "'"));
                                                 $arr_time = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flighttime WHERE id_fltime='" . $row[15] . "'"));
+                                                $dpt_flight_no = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flights WHERE id_flight='" . $row[28] . "'"));
+                                                $dpt_time = mysql_fetch_row(mysql_query("SELECT * FROM bgi_flighttime WHERE id_fltime='" . $row[27] . "'"));                                                     
                                                 $tour_oper = mysql_fetch_row(mysql_query("SELECT * FROM bgi_touroperator WHERE id='" . $row[5] . "'"));
-                                                $arr_dropoff = mysql_fetch_row(mysql_query("SELECT * FROM bgi_location WHERE id_location='" . $row[22] . "'"));
-                                                $rep = mysql_fetch_row(mysql_query("SELECT * FROM bgi_reps WHERE id_rep='" . $row[42] . "'"));
-                                                
                                                 //assign names to results that are readable
                                                 $id = $row[0];
                                                 $title_name = $row[1];
                                                 $first_name = $row[2];
                                                 $last_name = $row[3];
-                                                $ref_no = $row[4];
-                                                $adult = $row[8];
-                                                $child = $row[9];
-                                                $infant = $row[10];
-                                                $tour_notes = $row[11];
-                                                $affiliate = $row[13];
+                                                $ref_no = $row[7];
                                                 $arr_date = $row[14];
+                                                $dpt_date = $row[26];
+                                                
+                                                if ($row[12]>0){
+                                                    $displayft='5<i class="fa fa-star"></i>';
+                                                    
+                                                    } else {
+                                                        $displayft='';
+                                                    
+                                                    }
                                                 
                                                 echo '<tr>
-                                                        <td><a href="ftreservation-details-rep.php?id=' . $id . '"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Click to change rep: ' . $rep[1] . '"></i></a></div></td>
-                                                        <td>' . $last_name . '</td>                                                        
-                                                        <td>' . $title_name . '. ' . $first_name . '</td>
-                                                        <td>' . $tour_oper[1] . '</td>
-                                                        <td>' . $affiliate . '</td>
-                                                        <td>' . $adult . '</td>
-                                                        <td>' . $child . '</td>
-                                                        <td>' . $infant . '</td>
+                                                        <td><a href="reservation-details-rep.php?id=' . $id . '"><i class="fa fa-pencil" data-toggle="tooltip" data-placement="top" title="Assign a rep"></i></a> ' . $displayft . '</td>
+                                                        <td>' . $ref_no . '</td>
                                                         <td>' . $arr_date . '</td>
                                                         <td>' . $arr_flight_no[1] . '</td>
                                                         <td>' . $arr_time[2] . '</td>
-                                                        <td>' . $flight_class[1] . '</td>                                                        
-                                                        <td>' . $arr_dropoff[1] . '</td>
-                                                        <td>' . $rep[1] . '</td>
-                                                        <td>' . $tour_notes . '</td>
+                                                        <td>' . $dpt_date . '</td>
+                                                        <td>' . $dpt_flight_no[1] . '</td>
+                                                        <td>' . $dpt_time[2] . '</td>
+                                                        <td>' . $title_name . '. ' . $first_name . '</td>
+                                                        <td>' . $last_name . '</td>
+                                                        <td>' . $tour_oper[1] . '</td>                                                        
                                                 </tr>';
                                             }
                                         ?>
@@ -218,7 +201,7 @@ if(mysql_errno()){
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -238,32 +221,30 @@ if(mysql_errno()){
 <script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 <!--<script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>-->
         <script type="text/javascript" src="js/plugins/tableexport/tableExport.js"></script>
-        <script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
-        <script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
-        <script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/sprintf.js"></script>
-        <script type="text/javascript" src="js/plugins/tableexport/jspdf/jspdf.js"></script>
-        <script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>
+	<script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
+	<script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
+	<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/sprintf.js"></script>
+	<script type="text/javascript" src="js/plugins/tableexport/jspdf/jspdf.js"></script>
+	<script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>
 <script type="text/javascript" src="js/plugins/moment.min.js"></script>
 <script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>
-        <!-- END THIS PAGE PLUGINS-->  
+<!-- END THIS PAGE PLUGINS-->
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
         <script type="text/javascript" src="js/actions.js"></script>
 
+
 <!--  Script for Inactivity-->
 <script type="text/javascript" src="assets/store.js/store.min.js"></script>
 <script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
 <script type="text/javascript" src="js/customScripting.js"></script>
-
-<script type="text/javascript" src="js/jquery.redirect.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->
 <script type="text/javascript" language="javascript" class="init">
     $(document).ready(function() {
-        $('#res-arrivals').DataTable({
+        $('#res-arrivals').DataTable( {
             "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-            fixedHeader: true,
             "dom": 'T<"clear">lBfrtip',
             "buttons": [
                 {
@@ -286,35 +267,12 @@ if(mysql_errno()){
                 }
 
             ]
-        });
-
-        /* Add a click handler to the rows */
-        $("#res-arrivals tbody tr").on('click',function(event) {
-            $("#res-arrivals tbody tr").removeClass('row_selected');
-            $(this).addClass('row_selected');
-        });
-
+        } );
     } );
-</script>
-<script type="text/javascript">
-    $(function () {
-
-
-        //Code for DatePicker Submit
-        $("body").on("click",".range_inputs > button.applyBtn",function(e){
-            console.log("im working");
-            var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
-            var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
-            var postFilterData = {
-                fromDate:fromDate,
-                toDate:toDate
-            };
-            var postURL = window.location.href;
-            $.redirect(postURL,postFilterData,'POST','_SELF');
-        });
+    $(function(){
 
         /* reportrange */
-        if ($("#reportrange").length > 0) {
+        if($("#reportrange").length > 0){
             $("#reportrange").daterangepicker({
                 ranges: {
                     'Today': [moment(), moment()],
@@ -332,16 +290,16 @@ if(mysql_errno()){
                 separator: ' to ',
                 startDate: moment().subtract('days', 29),
                 endDate: moment()
-            }, function (start, end) {
+            },function(start, end) {
                 $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
             });
 
             <?php
 
-            if (isset($dateRangeText) and !empty($dateRangeText)) {
-                echo "$(\"#reportrange span\").html('" . $dateRangeText . "');";
-                echo "console.log('" . $dateRangeText . "')";
-            } else {
+            if(isset($dateRangeText) and !empty($dateRangeText)){
+                echo "$(\"#reportrange span\").html('".$dateRangeText."');";
+                echo "console.log('".$dateRangeText."')";
+            }else{
                 echo "$(\"#reportrange span\").html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));";
             }
 
@@ -352,5 +310,5 @@ if(mysql_errno()){
 
     });
 </script>
-    </body>
+</body>
 </html>

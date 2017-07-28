@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9"))
+  if (!$user->levelCheck("2,9"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -17,37 +17,38 @@ include('header.php');
 site_header('Reservation Assignments');
 
 //Grab all reservation info
-$reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND assigned = 1 AND yearweek(arr_date) = yearweek(curdate())");
-?>
-<script type="text/javascript" language="javascript" class="init">
-    $(document).ready(function() {
-	   $('#res-arrivals').DataTable( {
-            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
-            fixedHeader: true,
-            dom: 'T<"clear">lfrtip',
-            tableTools: {
-                "sSwfPath": "assets/swf/copy_csv_xls_pdf.swf",
-                "aButtons": [
-                    "copy",
-                    {
-                        "sExtends": "pdf",
-                        "sButtonText": "Save to PDF",
-                        "sPdfOrientation": "landscape",
-                        "sPdfMessage": "Arrival Schedules"
-                    },
-                    //"print"
-                ]            
-            }
-	       } );
-           
-    /* Add a click handler to the rows */
-	$("#res-arrivals tbody tr").on('click',function(event) {
-		$("#res-arrivals tbody tr").removeClass('row_selected');		
-		$(this).addClass('row_selected');
-	});
+//$reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND assigned = 1 AND yearweek(arr_date) = yearweek(curdate())");
+//$reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND assigned = 1");
+
+//Grab all reservation info
+$reservationQuery = "SELECT * FROM bgi_reservations WHERE status = 1 AND assigned = 1";
+if(isset($_POST['fromDate'])){
+    $fromDate = $_POST['fromDate'];
+    $toDate = $_POST['toDate'];
     
-    } );
-</script>
+    if(validateDate($fromDate) and validateDate($toDate)){
+        $reservationQuery .= " AND (arr_date BETWEEN '".$fromDate."' AND '".$toDate."')";
+        $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
+    }
+}
+
+//echo  $reservationQuery;
+
+$reservations = mysql_query($reservationQuery);
+if(mysql_errno()){
+    echo mysql_error();
+}
+?>
+
+
+<style type="text/css">
+    ul.panel-controls > li{
+        display: block;
+        overflow: hidden;
+        float: none;
+    }
+</style>
+
 
                     <?php include ('profile.php'); ?>
                     <?php include ('navigation.php'); ?>
@@ -82,12 +83,22 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND
                             <div class="panel panel-default">
                                 <div class="panel-heading">
                                     <h3 class="panel-title">Arrival Schedules | <?php echo date("Y-m-d H:i"); ?></h3>
+                                    <!-- Date picker -->
+                                    <ul class="panel-controls panel-controls-title">
+                                        <li>
+                                            <label for="reportrange" style="display: block;">Arrival Date Filter</label>
+                                            <div id="reportrange" class="dtrange">
+                                                <span></span><b class="caret"></b>
+                                            </div>
+                                        </li>
+                                    </ul>
                                 </div>
                                 <div class="panel-body table-responsive">
-                                    <table id="res-arrivals" class="table table-hover datatable">
-                                    <?php if ($user->levelCheck("2,5,6,7,9")) : ?>
+                                    <table id="res-arrivals" class="table table-hover">
+                                    <?php if ($user->levelCheck("2,9")) : ?>
                                         <thead>
                                             <tr>
+                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                                 <th>Rep</th>
                                                 <th>Ref#</th>
                                                 <th>Title</th>
@@ -111,7 +122,6 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND
                                                 <th>Hotel Notes</th>
                                                 <th>rep Notes</th>
                                                 <th>Acc Notes</th>
-                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -151,6 +161,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND
                                                     }                                              
                                                 
                                                 echo '<tr>
+                                                        <td><a href="reservation-details-rep.php?id=' . $id . '"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Click to change rep: ' . $rep[1] . '"></i></a>' . $displayft . '</div></td>
                                                         <td>' . $rep[1] . '</td>
                                                         <td>' . $ref_no . '</td>
                                                         <td>' . $title_name . '</td>                                                        
@@ -173,8 +184,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND
                                                         <td>' . $arr_notes . '</td>
                                                         <td>' . $dpt_notes . '</td>
                                                         <td>' . $rep_notes . '</td>
-                                                        <td>' . $acc_notes . '</td>                                                       
-                                                        <td><a href="reservation-details-rep.php?id=' . $id . '"><i class="fa fa-search" data-toggle="tooltip" data-placement="top" title="Click to change rep: ' . $rep[1] . '"></i></a>' . $displayft . '</div></td>
+                                                        <td>' . $acc_notes . '</td>
                                                 </tr>';
                                             }
                                         ?>
@@ -182,6 +192,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND
                                         <?php else: ?>
                                         <thead>
                                             <tr>
+                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                                 <th>Rep</th>
                                                 <th>Ref#</th>
                                                 <th>Title</th>
@@ -205,7 +216,6 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND
                                                 <th>Hotel Notes</th>
                                                 <th>rep Notes</th>
                                                 <th>Acc Notes</th>
-                                                <th>&nbsp;&nbsp;&nbsp;&nbsp;</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -336,7 +346,7 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+<script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
@@ -345,19 +355,127 @@ $reservations = mysql_query("SELECT * FROM bgi_reservations WHERE status = 1 AND
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
         
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
-        <script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+<!--<script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>-->
         <script type="text/javascript" src="js/plugins/tableexport/tableExport.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/jquery.base64.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/html2canvas.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/sprintf.js"></script>
         <script type="text/javascript" src="js/plugins/tableexport/jspdf/jspdf.js"></script>
-        <script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>        
-        <!-- END THIS PAGE PLUGINS-->  
+        <script type="text/javascript" src="js/plugins/tableexport/jspdf/libs/base64.js"></script>
+<script type="text/javascript" src="js/plugins/moment.min.js"></script>
+<script type="text/javascript" src="js/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- END THIS PAGE PLUGINS-->
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
+<script type="text/javascript" src="js/jquery.redirect.js"></script>
         <!-- END TEMPLATE -->
-    <!-- END SCRIPTS -->                 
+    <!-- END SCRIPTS -->
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function() {
+        $('#res-arrivals').DataTable( {
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            fixedHeader: true,
+            "dom": 'T<"clear">lBfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+
+            ]
+        } );
+
+        //Code for DatePicker Submit
+        $("body").on("click",".range_inputs > button.applyBtn",function(e){
+            console.log("im working");
+            var fromDate = $(this).parents(".range_inputs").find("div.daterangepicker_start_input > input#max").val();
+            var toDate = $(this).parents(".range_inputs").find("div.daterangepicker_end_input > input#min").val();
+            var postFilterData = {
+                fromDate:fromDate,
+                toDate:toDate
+            };
+            var postURL = window.location.href;
+            $.redirect(postURL,postFilterData,'POST','_SELF');
+        });
+
+        /* Add a click handler to the rows */
+        $("#res-arrivals tbody tr").on('click',function(event) {
+            $("#res-arrivals tbody tr").removeClass('row_selected');
+            $(this).addClass('row_selected');
+        });
+
+    } );
+
+
+    $(function(){
+
+        /* reportrange */
+        if($("#reportrange").length > 0){
+            $("#reportrange").daterangepicker({
+                ranges: {
+                    'Today': [moment(), moment()],
+                    //'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    //'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    //'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    //'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    //'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens: 'left',
+                buttonClasses: ['btn btn-default'],
+                applyClass: 'btn-small btn-primary',
+                cancelClass: 'btn-small',
+                format: 'YYYY-MM-DD',
+                separator: ' to ',
+                startDate: moment().subtract('days', 29),
+                endDate: moment()
+            },function(start, end) {
+                $('#reportrange span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'));
+            });
+
+            <?php
+
+            if(isset($dateRangeText) and !empty($dateRangeText)){
+                echo "$(\"#reportrange span\").html('".$dateRangeText."');";
+                echo "console.log('".$dateRangeText."')";
+            }else{
+                echo "$(\"#reportrange span\").html(moment().subtract('days', 29).format('MMMM D, YYYY') + ' - ' + moment().format('MMMM D, YYYY'));";
+            }
+
+            ?>
+        }
+
+        /* end reportrange */
+
+    });
+</script>
     </body>
 </html>

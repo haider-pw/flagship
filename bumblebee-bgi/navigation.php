@@ -18,11 +18,11 @@ if ($ft_count > 0){
     $showftnotify = '';
 }
 ?>
-<li class="xn-title">Navigation - BGI <span class="flag-icon flag-icon-bb"></span></li>
+<li class="xn-title">Navigation - BGI <span class="flag-icon flag-icon-us"></span></li>
 <li class="active">
     <a href="dashboard.php"><span class="fa fa-desktop"></span> <span class="xn-text">Dashboard</span></a>                        
 </li> 
-<?php if ($user->levelCheck("9,7,6,5,3,2")) : ?>
+<?php if ($user->levelCheck("9,2")) : ?>
 <li class="xn-openable"><!-- reservations drop down -->
     <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Reservations</span></a>
     <ul>
@@ -31,16 +31,18 @@ if ($ft_count > 0){
         <li class="xn-openable"><!-- Flight control dropdown -->
             <a href="#"><span class="fa fa-users"></span> <span class="xn-text">Rep Assignment</span></a>
             <ul>
-                <li><a href="assign-reservation-schedules.php"><span class="glyphicon glyphicon-transfer"></span> Assign</a></li>
+                <li><a href="assign-reservation-schedules.php"><span class="glyphicon glyphicon-transfer"></span> Assign Airport Reps</a></li>
+                <li><a href="assign_hotel_reps.php"><span class="glyphicon glyphicon-transfer"></span> Assign Hotel Reps</a></li>
                 <li><a href="reservation-schedules.php"><span class="fa fa-random"></span> View rep assignments</a></li>
             </ul>
         </li>
+        <li><a href="arrival-reconfirmation.php"><span class="glyphicon glyphicon-transfer"></span> Hotel Reconfirmation</a></li>
     </ul>
 </li>
 <?php else: ?>
 <li hidden></li>
 <?php endif; ?>
-<?php if ($user->levelCheck("9,7,6,5,3")) : ?>
+<?php if ($user->levelCheck("9,2")) : ?>
 <li class="xn-openable"><!-- fast track drop down -->
     <a href="#"><span class="fa fa-files-o"></span> <span class="xn-text">Fast Track</span><?php echo $showftnotify; ?></a>
     <ul>
@@ -58,22 +60,34 @@ if ($ft_count > 0){
 <?php else: ?>
 <li hidden></li>
 <?php endif; ?>
-<?php if ($user->levelCheck("9,7,6,5,4,3,2")) : ?>
+<?php if ($user->levelCheck("9,2")) : ?>
 <li class="xn-openable"><!-- Reports dropdown -->
             <a href="#"><span class="fa fa-bar-chart-o"></span> <span class="xn-text">Reports</span></a>
             <ul>
-                <li><a href="transport-queue.php"><span class="fa fa-truck"></span> View Transport Queue</a></li>
-				<li><a href="transport-report.php"><span class="fa fa-truck"></span> Transport Report</a></li>
-                <li><a href="arrival-reconfirmation.php"><span class="glyphicon glyphicon-transfer"></span> Hotel Reconfirmation</a></li>
-				<li><a href="view-cancellations.php"><span class="fa fa-calendar"></span> View Cancellations</a></li>
-                <li><a href="bug-report.php"><span class="fa fa-bug"></span> Report a Bug</a></li>
+                <li class="xn-openable"><!-- Reports dropdown -->
+                    <a href="#"><span class="fa fa-bar-chart-o"></span> <span class="xn-text"> Ground Handling</span></a>
+                    <ul>
+                        <li><a href="ground-handling-adhoc.php?sect=gh"><span class="fa fa-list"></span> All Reports (ad hocs)</a></li>
+                        <li><a href="cancellations.php?sect=gh"><span class="fa fa-chain-broken"></span> Cancellations</a></li>
+                    </ul>
+                </li>
+                <li class="xn-openable"><!-- Reports dropdown -->
+                    <a href="#"><span class="fa fa-bar-chart-o"></span> <span class="xn-text"> FSFT</span></a>
+                    <ul>
+                        <li><a href="ground-handling-adhoc.php?sect=fsft"><span class="fa fa-list"></span> All Reports (ad hocs)</a></li>
+                        <li><a href="cancellations.php?sect=fsft"><span class="fa fa-chain-broken"></span> Cancellations </a></li>
+                    </ul>
+                </li>
+			<!-- 	<li><a href="view-cancellations.php"><span class="fa fa-calendar"></span>Cancellations</a></li> -->
             </ul>
         </li>
+
+ <li><a href="bug-report.php"><span class="fa fa-bug"></span> Report a Bug</a></li>
 <?php else: ?>
 <li hidden></li>
 <?php endif; ?>
-<?php if ($user->levelCheck("9,7,6,5,3,2,1")) : ?>
-<li class="xn-openable"><!-- Data Center -->
+<?php if ($user->levelCheck("9,2,1")) : ?>
+<!-- <li class="xn-openable">
     <a href="#"><span class="fa fa-cloud"></span> <span class="xn-text">Data Center</span></a>
     <ul>
         <li><a href="location-list.php"><span class="fa fa-building-o"></span> Locations</a></li>
@@ -82,7 +96,7 @@ if ($ft_count > 0){
         <li><a href="touroperator-list.php"><span class="fa fa-globe"></span> Tour Operators</a></li>
 		<li><a href="rep-list.php"><span class="fa fa-users"></span> Reps</a></li>
     </ul>
-</li>
+</li> -->
 <?php else: ?>
 <li hidden></li>
 <?php endif; ?>

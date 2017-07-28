@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -20,7 +20,7 @@ $loggedinas = $row->fname . ' ' . $row->lname;
 $transport = mysql_fetch_row(mysql_query("SELECT * FROM bgi_transport WHERE id_transport='" . QuoteSmart($_GET['id']) . "'"));
 $transport_id = $_GET['id'];
 
-$vehicles = mysql_query("SELECT * FROM bgi_vehicles WHERE id_transport = $transport_id");
+$vehicles = mysql_query("SELECT * FROM skb_vehicles WHERE id_transport = $transport_id");
     
 site_header('Transport Details');
 
@@ -88,6 +88,7 @@ ob_end_flush();
                                 </div>
                                 <div class="panel-body">                                                                        
                                     <div class="form-group col-xs-7"><!-- Location name record field -->
+                                        <label for="transport-name">Transport Name</label>
                                         <input type="text" class="form-control" placeholder="transport name" id="transport-name" name="transport_name" value="<?php echo $transport[1]; ?>">
                                     </div>
                                 <div class="panel-footer">
@@ -106,7 +107,7 @@ ob_end_flush();
                                 </div>
                                 <div class="panel-body">
                                 <form name="frmTransport" method="post" action="<?php $_PHP_SELF ?>">
-                                    <table id="transport-listing" class="table table-hover datatable">
+                                    <table id="transport-listing" class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Vehicle Number</th>
@@ -170,12 +171,21 @@ ob_end_flush();
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <!--<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>-->
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>           
         <!-- END PLUGINS -->
         
         <!-- THIS PAGE PLUGINS -->
         <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/dataTables.tableTools.js"></script>
         <script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>             
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap-file-input.js"></script>
@@ -185,7 +195,12 @@ ob_end_flush();
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
     <?php
@@ -201,6 +216,35 @@ ob_end_flush();
                         echo '<script> alert("Vehicle successfully removed"); </script>';
                         }
         }
-    ?>      
+    ?>
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function() {
+        $('#transport-listing').DataTable( {
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "dom": 'T<"clear">lBfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+
+            ]
+        });
+    });
+</script>
     </body>
 </html>

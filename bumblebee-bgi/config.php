@@ -27,7 +27,7 @@ $site_title_deliminator = ' - '; // Deliminator that appears in between the site
 $language               = 'english'; // Default language of your website
 $prefix                 = 'fs_'; // Prefix of database tables. e.g. websitesbb_
 $user_log_limit         = 30;
-$uri                    = 'http://25.114.31.88/'; // URL of your website. e.g. http://sunlinc.net/
+$uri                    = 'http://25.88.101.58/'; // URL of your website. e.g. http://sunlinc.net/
 
 /********************************************************************/
 // ALLOWED IMAGE TYPES (use MIME value) //
@@ -47,10 +47,10 @@ $allowed_types = array('image/jpeg', 'image/pjpeg', 'image/png', 'image/gif');
 // TABLE CONFIGURATION //
 
 $tab = array(
-	'bgi_users'        => $prefix . 'users',
+	'fll_users'        => $prefix . 'users',
 	'bgi_guest'        => $prefix . 'guest',
-	'bgi_admins_logs'  => $prefix . 'admins_logs',
-	'bgi_levels'       => $prefix . 'levels',
+	'fll_admins_logs'  => $prefix . 'admins_logs',
+	'fll_levels'       => $prefix . 'levels',
 	'bgi_reservations' => $prefix . 'reservations',
     'bgi_arrivals'     => $prefix . 'arrivals',
     'bgi_departures'   => $prefix . 'departures',

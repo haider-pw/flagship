@@ -10,10 +10,10 @@ include ('header.php');
 if(isset($_GET['id']))
 {   
 $transport_id=$_GET['id'];
-$vehiclerows = mysql_query("SELECT * FROM bgi_vehicles WHERE id_transport='$transport_id'");
+$vehiclerows = mysql_query("SELECT * FROM skb_vehicles WHERE id_transport='$transport_id'");
 $vehicle_count = mysql_num_rows($vehiclerows);
 if ($vehicle_count > 0){
-    $sql=mysql_query("delete bgi_transport, bgi_vehicles from bgi_transport, bgi_vehicles where bgi_transport.id_transport='$transport_id' and bgi_vehicles.id_transport='$transport_id'");
+    $sql=mysql_query("delete bgi_transport, skb_vehicles from bgi_transport, skb_vehicles where bgi_transport.id_transport='$transport_id' and skb_vehicles.id_transport='$transport_id'");
 } else {
     $sql=mysql_query("delete from bgi_transport where id_transport='$transport_id'");
 }

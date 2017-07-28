@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -17,7 +17,7 @@ ob_start();
 include('header.php');
 include('select.class.php');
 $loggedinas = $row->fname . ' ' . $row->lname;
-$vehicle = mysql_fetch_row(mysql_query("SELECT * FROM bgi_vehicles WHERE id_vehicle='" . QuoteSmart($_GET['id']) . "'"));
+$vehicle = mysql_fetch_row(mysql_query("SELECT * FROM skb_vehicles WHERE id_vehicle='" . QuoteSmart($_GET['id']) . "'"));
 $vehicle_id = $_GET['id'];
 $transport_id = $_GET['transport'];
 $transport_name = $_GET['transport_name'];
@@ -30,7 +30,7 @@ if(isset($_POST['update']))
     //Sanitize data
     $vehicle_name = QuoteSmart($_POST['vehicle_name']);
          
-	$sql = "UPDATE bgi_vehicles ". 
+	$sql = "UPDATE skb_vehicles ". 
         "SET name = '$vehicle_name' ". 
         "WHERE id_vehicle = '$vehicle_id'";
         $retval = mysql_query( $sql, $conn );
@@ -87,6 +87,7 @@ ob_end_flush();
                                 </div>
                                 <div class="panel-body">                                                                        
                                     <div class="form-group col-xs-7"><!-- Vehicle name record field -->
+                                        <label for="vehicle-name">Vehicle #</label>
                                         <input type="text" class="form-control" placeholder="Vehicle #" id="vehicle-name" name="vehicle_name" value="<?php echo $vehicle[2]; ?>" autofocus="true">
                                     </div>
                                 <div class="panel-footer">
@@ -138,7 +139,7 @@ ob_end_flush();
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <!--<script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>-->
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>           
         <!-- END PLUGINS -->
         
@@ -152,7 +153,12 @@ ob_end_flush();
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS -->  
                 

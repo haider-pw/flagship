@@ -2,7 +2,7 @@
   define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
   
-  if (!$user->levelCheck("2,3,4,5,6,7,9,1"))
+  if (!$user->levelCheck("2,9,1"))
       redirect_to("index.php");
       
   $row = $user->getUserData();
@@ -21,7 +21,7 @@ $bugs = mysql_query("SELECT * FROM bgi_bugs");
 
 if(isset($_POST['addbug']))
 {
-
+    include("./custom_updates/bugEmailTemplate.php");
     
 //Sanitize data
 
@@ -30,7 +30,7 @@ if(isset($_POST['addbug']))
     $details = QuoteSmart($_POST['bug_details']);
     $loggedinas = $row->fname . ' ' . $row->lname;
     
-    $to = 'alvin.herbert@sunlinc.net, nicole.moody@sunlinc.net';
+    $to = 'nicole.moody@sunlinc.net';
     $subject = 'Bug Reported [Flagship BGI]';
 
     $headers = 'From: gentoo@flagship.sunlinc' . "\r\n" .
@@ -42,7 +42,16 @@ if(isset($_POST['addbug']))
 
     $message= 'A new bug has been reported by ' . $loggedinas . '';
 
-    mail($to, $subject, $message, $headers);
+   $return =  sendBugEmail($to,'',$subject,$message);
+
+    if(is_string($return)){
+        $returnArray = explode("::",$return);
+        if($returnArray[0] === 'OK'){
+            $mailSent = true;
+        }elseif($returnArray[0] === 'FAIL'){
+            $mailSent = false;
+        }
+    }
          
 	$sql = "INSERT INTO bgi_bugs ". 
         "(bug_title, page, details, reporter) ". 
@@ -62,33 +71,21 @@ if(isset($_POST['addbug']))
             {
                 die('Could not enter data: ' . mysql_error());
             }
-            echo "<script>window.location='bug-report.php?ok=1'</script>";
             mysql_close($conn);
+
+    //Before Redirection Send an email to the user..
+
+//            $actual_link = "http://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+            if($mailSent === true){
+                echo "<script>window.location='bug-report.php?ok=1'</script>";
+            }else{
+                echo "<script>window.location='bug-report.php?emailFail=1'</script>";
+            }
 	}
 ob_end_flush();
 ?>
 
-                    <script type="text/javascript">
-               //<![CDATA[
-                function disp_confirm() {
-                    var name=confirm("Pressing OK will Clear all data.")
-                    if(name==true) {
-                        return true;
-                    }
-                    else {
-                        return false;
-                    }
-                    }
-                //]]>
-                </script> 
-                <script type="text/javascript" language="javascript" class="init">
-    $(document).ready(function() {
-	   $('#bug-listing').DataTable( {
-            "order": [[ 1, "asc" ]],
-            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]]
-	       } );
-    } );
-</script>   
+
                     <?php include ('profile.php'); ?>
                    <?php include ('navigation.php'); ?>
                 <!-- END X-NAVIGATION -->
@@ -134,7 +131,7 @@ ob_end_flush();
                                 </div>
                                 <div class="panel-body">
                                 <form name="frmRep" method="post" action="<?php $_PHP_SELF ?>">
-                                    <table id="bug-listing" class="table table-hover datatable">
+                                    <table id="bug-listing" class="table table-hover">
                                         <thead>
                                             <tr>
                                                 <th>Bug</th>
@@ -194,14 +191,17 @@ ob_end_flush();
                                 </div>
                                 <div class="panel-body">                                                                        
                                     <div class="form-group col-xs-7"><!-- Bug Title -->
+                                        <label for="title">Title</label>
                                         <input type="text" class="form-control" placeholder="Bug title" id="title" name="title" autofocus="true">
                                     </div>
                                     <div class="form-group col-xs-7"><!-- Page Name -->
+                                        <label for="page-name">Page Url</label>
                                         <input type="text" class="form-control text-lowercase" placeholder="What page was the bug found on? | e.g. reservations.php" id="page-name" name="page_name">
                                         <span class="help-block"><strong>Copy and paste the bug url into the box above.</strong></span>
                                     </div>
                                     <div class="form-group">
-                                        <div class="col-xs-7">                                            
+                                        <div class="col-xs-7">
+                                            <label for="bug-details">Bug Details</label>
                                             <textarea class="form-control" rows="5" id="bug-details" name="bug_details" placeholder="Include as many details about the problem found here"></textarea>
                                         </div>
                                     </div>
@@ -274,26 +274,87 @@ ob_end_flush();
     <!-- START SCRIPTS -->
         <!-- START PLUGINS -->
         <script type="text/javascript" src="js/plugins/jquery/jquery.min.js"></script>
-        <script type="text/javascript" src="js/plugins/jquery/jquery-ui.min.js"></script>
+        <script type="text/javascript" src="js/plugins/jquery-ui/jquery-ui.min.js"></script>
         <script type="text/javascript" src="js/plugins/bootstrap/bootstrap.min.js"></script>        
         <!-- END PLUGINS -->
         
         <!-- START THIS PAGE PLUGINS-->        
         <script type='text/javascript' src='js/plugins/icheck/icheck.min.js'></script>
         <script type="text/javascript" src="js/plugins/mcustomscrollbar/jquery.mCustomScrollbar.min.js"></script>
-        <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>      
+        <script type="text/javascript" src="js/plugins/datatables/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" href="css/buttons.dataTables.min.css" type="text/css">
+<script type="text/javascript" src="js/plugins/datatables/dataTables.buttons.min.js"></script>
+<script type="text/javascript" src="js/plugins/datatables/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.flash.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jszip/2.5.0/jszip.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/pdfmake.min.js"></script>
+<script type="text/javascript" src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
+<script type="text/javascript" src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
         <!-- END THIS PAGE PLUGINS-->  
         
         <!-- START TEMPLATE -->      
         <script type="text/javascript" src="js/plugins.js"></script>        
-        <script type="text/javascript" src="js/actions.js"></script>        
+        <script type="text/javascript" src="js/actions.js"></script>
+
+
+<!--  Script for Inactivity-->
+<script type="text/javascript" src="assets/store.js/store.min.js"></script>
+<script type="text/javascript" src="assets/idleTimeout/jquery-idleTimeout.min.js"></script>
+<script type="text/javascript" src="js/customScripting.js"></script>
         <!-- END TEMPLATE -->
     <!-- END SCRIPTS --> 
     <?php 
 $ok= isset($_GET['ok']);
-if($ok)  {
-    echo '<script> alert("Bug successfully recorded"); </script>';
+$failedEmail= isset($_GET['emailFail']);
+    if(!empty($failedEmail)){
+        echo '<script> alert("Bug successfully recorded, But Could Not Sent Email"); </script>';
+    }else if(!empty($ok))  {
+    echo '<script> alert("Bug successfully recorded, and successfully Sent Email."); </script>';
     }
-    ?>                
-    </body>
+    ?>
+<script type="text/javascript">
+    //<![CDATA[
+    function disp_confirm() {
+        var name=confirm("Pressing OK will Clear all data.")
+        if(name==true) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    //]]>
+</script>
+<script type="text/javascript" language="javascript" class="init">
+    $(document).ready(function() {
+        $('#bug-listing').DataTable( {
+            "order": [[ 1, "asc" ]],
+            "aLengthMenu": [[10, 15, 25, 35, 50, 100, -1], [10, 15, 25, 35, 50, 100, "All"]],
+            "dom": 'T<"clear">lBfrtip',
+            "buttons": [
+                {
+                    extend: 'excel',
+                    text: 'Export current page',
+                    exportOptions: {
+                        modifier: {
+                            page: 'current'
+                        }
+                    }
+                },
+                {
+                    extend: 'excel',
+                    text: 'Export all pages',
+                    exportOptions: {
+                        modifier: {
+                            page: 'all'
+                        }
+                    }
+                }
+
+            ]
+        } );
+    } );
+</script>
+</body>
 </html>

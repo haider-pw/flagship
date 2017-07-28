@@ -6,7 +6,7 @@
  */
 define("_VALID_PHP", true);
   require_once("../admin-panel-bgi/init.php");
-  
+ // echo '<pre>'; print_r($user); exit;
   if ($user->logged_in)
       redirect_to("dashboard.php");
 	  
@@ -18,8 +18,8 @@ define("_VALID_PHP", true);
   if ($result)
       : redirect_to("dashboard.php");
   endif;
-  endif; 
-  
+  endif;
+error_reporting(E_ALL &~ E_DEPRECATED);
 ?>
 <?php include_once('header.php'); ?>
 <!DOCTYPE html>
@@ -45,7 +45,7 @@ define("_VALID_PHP", true);
             <div class="login-box animated fadeInDown">
                 <div class="login-logo"></div>
                 <div class="login-body">
-                    <div class="login-title"><strong>Welcome</strong>, Please login <span class="flag-icon flag-icon-bb"></div>
+                    <div class="login-title"><strong>Welcome</strong>, Please login <span class="flag-icon flag-icon-us"></div>
                     <form action="<?php $_PHP_SELF ?>" class="form-horizontal" method="post">
                     <div class="form-group">
                         <div class="col-md-12">
