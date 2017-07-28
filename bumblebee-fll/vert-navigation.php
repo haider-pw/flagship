@@ -22,7 +22,7 @@
                         <form>
                             <select id="destination_select" class="form-control">
                                 <option value="" selected>FLL - Florida</option>
-                                <option value="<?php echo $uri;?>bumblebee-bgi/">BGI - Barbados</option>
+                                <option value="http://localhost/flagship_bgi/bumblebee-bgi/">BGI - Barbados</option>
                                 <option value="<?php echo $uri;?>bumblebee-anu/">ANU - Antigua</option>
                                 <option value="<?php echo $uri;?>bumblebee-gnd/">GND - Grenada</option>
                                 <option value="<?php echo $uri;?>bumblebee-skb/">SKB - St.Kitts & Nevis</option>

@@ -49,11 +49,14 @@ $selectedRepTypesArray = array();
 while($repTypeRow=mysql_fetch_array($get_reptype)){
     $selectedRepTypesArray[] = $repTypeRow['id'];
 }
-/*echo '<pre>';
-var_dump($getArrivalQuery);
-var_dump($repTypeQuery);
-echo '</pre>';
-exit;*/
+
+
+$excursion_name = $reservation[27];
+$excursion_date = $reservation[28];
+$excursion_pickup = $reservation[29];
+$excursion_confirm_by = $reservation[30];
+$excursion_confirm_date = $reservation[31];
+$excursion_guests = $reservation[32];
 
 $flagship_ref = $reservation[1];
 $transport_arr = mysql_query("SELECT * FROM fll_resdrivers WHERE ref_no_sys='$flagship_ref' AND res_type=1");
@@ -84,7 +87,7 @@ if(isset($_POST['update']))
     $arr_pickup         = QuoteSmart($_POST['arr_pickup']);
     $arr_dropoff        = QuoteSmart($_POST['arr_dropoff']);
     $room_type          = QuoteSmart($_POST['room_type']);
-    $rep_type           = QuoteSmart($_POST['rep_type']);
+    $rep_type           = QuoteSmart(implode(', ',$_POST['rep_type']));
     $client_reqs        = QuoteSmart(implode(', ',$_POST['client_reqs']));
     $infant_seats       = QuoteSmart($_POST['infant_seats']);
     $child_seats        = QuoteSmart($_POST['child_seats']);
@@ -99,6 +102,15 @@ if(isset($_POST['update']))
     $user_action = "update arrival details: #ref:$flagship_ref";
    // echo '<pre>'; print_r($_POST); echo '</pre>'; exit;
     if($section == 'gh'){
+        //Excursion
+        $excursion_name = QuoteSmart(@$_POST['excursion_name']);
+        $excursion_date = QuoteSmart(@$_POST['excursion_date']);
+        $excursion_pickup = QuoteSmart(@$_POST['excursion_pickup']);
+        $excursion_confirm_by = QuoteSmart(@$_POST['excursion_confirm_by']);
+        $excursion_confirm_date = QuoteSmart(@$_POST['excursion_confirm_date']);
+        $excursion_guests = QuoteSmart(@$_POST['excursion_guests']);
+
+
          $ftres = empty($_POST['ftres']) ? 0 : 1;
         if ($ftres > 0){
             $ftnotify = 1;
@@ -110,17 +122,24 @@ if(isset($_POST['update']))
     
     $sql = "UPDATE fll_arrivals ".
     "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no'";
-    if($section == 'gh') 
-        $sql .= ", fast_track = '$ftnotify'";
+    if($section == 'gh') {
+        $sql .= ", excursion_name = '$excursion_name', excursion_date = '$excursion_date', excursion_pickup = '$excursion_pickup', excursion_confirm_by = '$excursion_confirm_by', excursion_confirm_date = '$excursion_confirm_date', excursion_guests = '$excursion_guests'  , fast_track = '$ftnotify'";
+    }
     $sql .= " WHERE id = '$reservation[0]'";
     $retval = mysql_query( $sql, $conn );
 
     //check if its main arrival.
     if ($reservation[24] == 1){
     $sql_1 = "UPDATE fll_reservations ".
-    "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no'".
-    "WHERE ref_no_sys = '$reservation[1]'";
+    "SET arr_date = '$arr_date', arr_time = '$arr_time', arr_flight_no = '$arr_flight_no', flight_class = '$flight_class', arr_transport = '$arr_transport', arr_driver = '$arr_driver', arr_vehicle = '$arr_vehicle_no', arr_pickup = '$arr_pickup', arr_dropoff = '$arr_dropoff', room_type = '$room_type', rep_type = '$rep_type', client_reqs = '$client_reqs', arr_transport_notes = '$arr_transport_notes', arr_hotel_notes = '$arr_hotel_notes', infant_seats = '$infant_seats', child_seats = '$child_seats', booster_seats = '$booster_seats', vouchers = '$vouchers', cold_towel = '$cold_towels', bottled_water = '$bottled_water', rooms = '$rooms', room_no = '$room_no'";
+    
+
+    $sql_1 .= "WHERE ref_no_sys = '$reservation[1]'";
     $retval1 = mysql_query( $sql_1, $conn );
+    }
+     if($ftnotify == 1){
+        $sql_12 = "UPDATE fll_reservations SET `ftnotify` = 1 WHERE ref_no_sys = '$reservation[1]'";
+        mysql_query( $sql_12, $conn );
     }
     
     //Log user action
@@ -139,7 +158,10 @@ if(isset($_POST['update']))
             {
                 die('Could not enter data: ' . mysql_error());
             }
-            echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=5'</script>";         
+            if($section == 'fsft')
+                echo "<script>window.location='ftreservation-details.php?id=".$reservation_id."&ok=5'</script>";
+            else 
+                echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=5'</script>";
         mysql_close($conn);
         
 	}
@@ -427,6 +449,36 @@ if(isset($_POST['update']))
                                                 <input type="number" min=0 max=99 class="form-control" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats" value="<?php echo $reservation[18]; ?>">
                                             </div>
                                     </div>
+                                    <?php 
+                                        if($section == 'gh'){ 
+                                            if($excursion_date != '0000-00-00') 
+                                                $excursion_date = date('Y-m-d',strtotime($excursion_date));
+                                            else $excursion_date = date('Y-m-d');
+                                            if($excursion_confirm_date  != '0000-00-00')
+                                                $excursion_confirm_date = date('Y-m-d',strtotime($excursion_confirm_date));
+                                            else $excursion_confirm_date = date('Y-m-d');
+                                            ?>
+                                            <div class="form-group">
+                                                <div class="form-inline col-xs-6 col-sm-12">
+                                                    <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name" name="excursion_name" placeholder="Excursion Name" value="<?=$excursion_name?>">
+                                                    <label class="right20">Excursion Date</label><input type="text" class="right20 form-control datepicker" id="excursion_date" name="excursion_date" placeholder="Excursion Date" value="<?=$excursion_date?>">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-inline col-xs-6 col-sm-12">
+                                                    <label class="right20">Pickup Time</label><input type="text" class="form-control timepicker24" id="pickup_time" name="pickup_time" placeholder="Pickup Time" value="<?=$excursion_pickup?>">
+                                                    <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by" name="excursion_confirm_by" placeholder="Confirmed By Whom" value="<?=$excursion_confirm_by?>">
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-inline col-xs-6 col-sm-12">
+                                                    <label class="right20">Date of Confirmation</label><input type="text" class="form-control datepicker" id="excursion_confirm_date" name="excursion_confirm_date" placeholder="Excursion Confirm Date" 
+                                                    value="<?=$excursion_confirm_date?>">
+                                                    <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests" name="excursion_guests" placeholder="Number of Guests" value="<?=$excursion_guests?>">
+                                                </div>
+                                            </div>
+                                        <?php }
+                                    ?>
                                 <div class="panel-footer">
                                     <script>
                                         function goBack() {
@@ -508,6 +560,8 @@ if(isset($_POST['update']))
      $('.select2').select2({
         minimumInputLength: 3
     });
+
+
 </script>
 
         <?php

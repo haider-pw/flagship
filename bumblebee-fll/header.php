@@ -46,6 +46,9 @@ function site_header($title) {
         input{
         text-transform: capitalize; 
         }
+        .dataTables_length{z-index:1;position:relative;}
+        input[type="text"], input[type="number"], input[type="password"], select{ min-height:32px; margin:1px 0; }
+        input[type="number"]{padding:5px;min-width:141px!important}
         </style>            
     </head>
     <body>

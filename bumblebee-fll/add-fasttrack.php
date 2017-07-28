@@ -1766,14 +1766,13 @@ if (isset($_POST['addreservation'])) {
                             <div class="form-group">
                                 <div class="form-inline col-xs-8"><!-- first name / last name fields -->
 
-                                    <label>First name</label> <input type="text" class="form-control text-capitalize"
-                                                                     placeholder="First name" id="first-name"
+                                    <label>First name</label> <input type="text" class="form-control text-capitalize" autocomplete="off" placeholder="First name" id="first-name"
                                                                      name="first_name" value="" required>
                                     <label class="left20">Last name</label> <input type="text"
                                                                                    class="form-control right20 text-capitalize"
                                                                                    placeholder="Last name"
                                                                                    id="last-name" name="last_name"
-                                                                                   value="" required>
+                                                                                   value="" autocomplete="off"  required>
                                     <div class="form-group col-xs-3"><!-- title selection -->
                                         <select class="form-control select" id="title-name" name="title_name">
                                             <option>Select title</option>
@@ -1798,7 +1797,7 @@ if (isset($_POST['addreservation'])) {
                             <div class="form-group col-xs-7"><!-- Passenger name record field -->
                                 <label>Passenger name record (PNR)</label>
                                 <input type="text" class="form-control" placeholder="Passenger name record (PNR)"
-                                       id="pnr" name="pnr" value="">
+                                       id="pnr" name="pnr" autocomplete="off"  value="">
                             </div>
 
                             <div class="form-group col-xs-7"><!-- tour operator selection -->
@@ -1860,7 +1859,7 @@ if (isset($_POST['addreservation'])) {
                                 <div class="form-group">
                                     <div class="form-inline col-xs-12">
                                         <!-- guest first name / guest last name fields -->
-                                        <label class="left20">First name</label> <input type="text"
+                                        <label class="left20">First name</label> <input type="text" autocomplete="off" 
                                                                                         class="form-control right20 text-capitalize"
                                                                                         placeholder="First name"
                                                                                         id="guest-first-name"
@@ -1869,7 +1868,7 @@ if (isset($_POST['addreservation'])) {
                                         <label>Last name</label> <input type="text"
                                                                         class="form-control right20 text-capitalize"
                                                                         placeholder="Last name" id="guest-last-name"
-                                                                        name="guest_last_name[]" value="">
+                                                                        name="guest_last_name[]" value="" autocomplete="off" >
                                         <label>PNR</label> <input type="text" class="form-control"
                                                                   placeholder="Guest PNR" id="guest-pnr"
                                                                   name="guest_pnr[]" value="">
@@ -2026,39 +2025,26 @@ if (isset($_POST['addreservation'])) {
                                 </div>
                                 <div class="form-group">
                                     <div class="form-inline col-xs-9">
-                                        <label class="right20">Cold Towels</label><input type="number" min=0 max=99
-                                                                                         class="right20 form-control numericCol"
-                                                                                         id="cold-towels"
-                                                                                         name="cold_towels" value=""
-                                                                                         placeholder="Cold Towels">
-                                        <label class="right20">Bottled Water</label><input type="number" min=0 max=99
-                                                                                           class="right20 form-control numericCol"
-                                                                                           id="bottled-water"
-                                                                                           name="bottled_water" value=""
-                                                                                           placeholder="Bottled Water">
-                                        <label class="right20">Vouchers</label><input type="number" min=0 max=99
-                                                                                      class="form-control numericCol"
-                                                                                      id="vouchers" name="vouchers"
-                                                                                      value="" placeholder="Vouchers">
+                                        <label class="right20">Cold Towels</label>
+                                        <input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels" name="cold_towels" value="" placeholder="Cold Towels">
+
+                                        <label class="right20">Bottled Water</label>
+                                        <input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water" name="bottled_water" value="" placeholder="Bottled Water">
+
+                                        <label class="right20">Vouchers</label>
+                                        <input type="number" min=0 max=99 class="form-control numericCol" id="vouchers" name="vouchers" value="" placeholder="Vouchers">
                                     </div>
                                 </div>
                                 <div class="form-group">
                                     <div class="form-inline col-xs-9">
-                                        <label class="right20">Infant Seats</label><input type="number" min=0 max=99
-                                                                                          class="right20 form-control numericCol"
-                                                                                          id="infant-seats"
-                                                                                          name="infant_seats" value=""
-                                                                                          placeholder="Infant Seats">
-                                        <label class="right20">Child Seats</label><input type="number" min=0 max=99
-                                                                                         class="right20 form-control numericCol"
-                                                                                         id="child-seats"
-                                                                                         name="child_seats" value=""
-                                                                                         placeholder="Child Seats">
-                                        <label class="right20">Booster Seats</label><input type="number" min=0 max=99
-                                                                                           class="form-control numericCol"
-                                                                                           id="booster-seats"
-                                                                                           name="booster_seats" value=""
-                                                                                           placeholder="Booster Seats">
+                                        <label class="right20">Infant Seats</label>
+                                        <input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats" name="infant_seats" value="" placeholder="Infant Seats">
+
+                                        <label class="right20">Child Seats</label>
+                                        <input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats" name="child_seats" value="" placeholder="Child Seats">
+
+                                        <label class="right20">Booster Seats</label>
+                                        <input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats" name="booster_seats" value="" placeholder="Booster Seats">
                                     </div>
                                 </div>
                             </div>
@@ -2080,8 +2066,9 @@ if (isset($_POST['addreservation'])) {
                                              data-date-format="mm-dd-yyyy">
                                             <input type="text" class="form-control datepicker" name="dpt_date"
                                                    id="dpt-date" placeholder="Departure date"/>
-                                            <span class="input-group-addon add-on"><span
-                                                    class="glyphicon glyphicon-calendar"></span></span>
+                                            <span class="input-group-addon add-on">
+                                                <span class="glyphicon glyphicon-calendar"></span>
+                                            </span>
                                         </div>
                                     </div>
                                 </div>

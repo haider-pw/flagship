@@ -26,7 +26,7 @@ site_header('Add Reservations');
 
 
 /*echo '<pre>';
-var_dump($_POST);
+print_r($_POST);
 exit;*/
 
 if(isset($_POST['addreservation']))
@@ -85,6 +85,10 @@ if(isset($_POST['addreservation']))
         $pickup_time            = QuoteSmart(@$_POST['pickup_time']);
         $dpt_notes              = QuoteSmart(@$_POST['dpt_notes']);
         $dpt_transport_notes    = QuoteSmart(@$_POST['dpt_transport_notes']);
+        // requrirement
+        $dpt_vouchers          = QuoteSmart(@$_POST['dpt_vouchers']);
+        $dpt_cold_towels            = QuoteSmart(@$_POST['dpt_cold_towels']);
+        $dpt_bottled_water            = QuoteSmart(@$_POST['dpt_bottled_water']);
     }else{
         $dpt_date               = '0000-00-00';
         $dpt_time               = "";
@@ -96,6 +100,9 @@ if(isset($_POST['addreservation']))
         $dpt_dropoff            = "";
         $pickup_time            = "";
         $dpt_notes              = "";
+        $dpt_vouchers           = "";
+        $dpt_cold_towels        = "";
+        $dpt_bottled_water      = "";
     }
 
     //if arrivals
@@ -530,6 +537,10 @@ if(isset($_POST['addreservation']))
     $dpt_dropoff1           = QuoteSmart(@$_POST['dpt_dropoff1']);
     $pickup_time1           = QuoteSmart(@$_POST['pickup_time1']);
     $dpt_transport_notes1   = QuoteSmart(@$_POST['dpt_transport_notes1']);
+    // requrirement
+    $dpt_vouchers1          = QuoteSmart(@$_POST['dpt_vouchers1']);
+    $dpt_cold_towels1           = QuoteSmart(@$_POST['dpt_cold_towels1']);
+    $dpt_bottled_water1            = QuoteSmart(@$_POST['dpt_bottled_water1']);
     //JetCenter 1
     if(isset($_POST['jetCenter1'])){
         $jetCenter1   = 1;
@@ -549,6 +560,10 @@ if(isset($_POST['addreservation']))
     $dpt_dropoff2           = QuoteSmart(@$_POST['dpt_dropoff2']);
     $pickup_time2           = QuoteSmart(@$_POST['pickup_time2']);
     $dpt_transport_notes2   = QuoteSmart(@$_POST['dpt_transport_notes2']);
+    // requrirement
+    $dpt_vouchers2          = QuoteSmart(@$_POST['dpt_vouchers2']);
+    $dpt_cold_towels2           = QuoteSmart(@$_POST['dpt_cold_towels2']);
+    $dpt_bottled_water2           = QuoteSmart(@$_POST['dpt_bottled_water2']);
     //JetCenter 2
     if(isset($_POST['jetCenter2'])){
         $jetCenter2   = 1;
@@ -568,6 +583,10 @@ if(isset($_POST['addreservation']))
     $dpt_dropoff3           = QuoteSmart(@$_POST['dpt_dropoff3']);
     $pickup_time3           = QuoteSmart(@$_POST['pickup_time3']);
     $dpt_transport_notes3   = QuoteSmart(@$_POST['dpt_transport_notes3']);
+    // requrirement
+    $dpt_vouchers3         = QuoteSmart(@$_POST['dpt_vouchers3']);
+    $dpt_cold_towels3          = QuoteSmart(@$_POST['dpt_cold_towels3']);
+    $dpt_bottled_water3           = QuoteSmart(@$_POST['dpt_bottled_water3']);
     //JetCenter 3
     if(isset($_POST['jetCenter3'])){
         $jetCenter3   = 1;
@@ -1181,31 +1200,31 @@ if(isset($_POST['addreservation']))
     //If Depends on the checkbox, if not selected, then departures queries would execute.
     if($departures){
         $sql_9 = "INSERT INTO fll_departures ".
-            "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center, fast_track) ".
-            "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter', '$ftdepres')";
+            "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes, dpt_main, dpt_jet_center, fast_track, dpt_vouchers, dpt_bottled_water, dpt_cold_towel) ".
+            "VALUES ('$fsref', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_flight_class', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_transport_notes', '$dpt_main','$jetCenter', '$ftdepres','$dpt_vouchers','$dpt_bottled_water','$dpt_cold_towels')";  
         $retval9 = mysql_query( $sql_9, $conn );
 
         $departure1active = QuoteSmart($_POST['departure1active']);
         if($departure1active == 1){
             $sql_10 = "INSERT INTO fll_departures ".
-                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track) ".
-                "VALUES ('$fsref', '$dpt_date1', '$dpt_time1', '$dpt_flight_no1', '$dpt_flight_class1', '$dpt1_transport', '$dpt_driver1', '$dpt_vehicle_no1', '$dpt_pickup1', '$dpt_dropoff1', '$pickup_time1', '$dpt_transport_notes1','$jetCenter1', '$ftdepres1')";
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track, dpt_vouchers, dpt_bottled_water, dpt_cold_towel) ".
+                "VALUES ('$fsref', '$dpt_date1', '$dpt_time1', '$dpt_flight_no1', '$dpt_flight_class1', '$dpt1_transport', '$dpt_driver1', '$dpt_vehicle_no1', '$dpt_pickup1', '$dpt_dropoff1', '$pickup_time1', '$dpt_transport_notes1','$jetCenter1', '$ftdepres1','$dpt_vouchers1','$dpt_bottled_water1','$dpt_cold_towels1')";
             $retval10 = mysql_query( $sql_10, $conn );
         }
 
         $departure2active = QuoteSmart($_POST['departure2active']);
         if($departure2active == 1){
             $sql_11 = "INSERT INTO fll_departures ".
-                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track) ".
-                "VALUES ('$fsref', '$dpt_date2', '$dpt_time2', '$dpt_flight_no2', '$dpt_flight_class2', '$dpt2_transport', '$dpt_driver2', '$dpt_vehicle_no2', '$dpt_pickup2', '$dpt_dropoff2', '$pickup_time2', '$dpt_transport_notes2','$jetCenter2', '$ftdepres2')";
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track, dpt_vouchers, dpt_bottled_water, dpt_cold_towel) ".
+                "VALUES ('$fsref', '$dpt_date2', '$dpt_time2', '$dpt_flight_no2', '$dpt_flight_class2', '$dpt2_transport', '$dpt_driver2', '$dpt_vehicle_no2', '$dpt_pickup2', '$dpt_dropoff2', '$pickup_time2', '$dpt_transport_notes2','$jetCenter2', '$ftdepres2','$dpt_vouchers2','$dpt_bottled_water2','$dpt_cold_towels2')";
             $retval11 = mysql_query( $sql_11, $conn );
         }
 
         $departure3active = QuoteSmart($_POST['departure3active']);
         if($departure3active == 1){
             $sql_12 = "INSERT INTO fll_departures ".
-                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track) ".
-                "VALUES ('$fsref', '$dpt_date3', '$dpt_time3', '$dpt_flight_no3', '$dpt_flight_class3', '$dpt3_transport', '$dpt_driver3', '$dpt_vehicle_no3', '$dpt_pickup3', '$dpt_dropoff3', '$pickup_time3', '$dpt_transport_notes3','$jetCenter3', '$ftdepres3')";
+                "(ref_no_sys, dpt_date, dpt_time, dpt_flight_no, flight_class, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_transport_notes,dpt_jet_center, fast_track, dpt_vouchers, dpt_bottled_water, dpt_cold_towel) ".
+                "VALUES ('$fsref', '$dpt_date3', '$dpt_time3', '$dpt_flight_no3', '$dpt_flight_class3', '$dpt3_transport', '$dpt_driver3', '$dpt_vehicle_no3', '$dpt_pickup3', '$dpt_dropoff3', '$pickup_time3', '$dpt_transport_notes3','$jetCenter3', '$ftdepres3','$dpt_vouchers3','$dpt_bottled_water3','$dpt_cold_towels3')";
             $retval12 = mysql_query( $sql_12, $conn );
         }
     }
@@ -1311,8 +1330,8 @@ if(isset($_POST['addreservation']))
 
     //Put all the remaining stuff into the database
 	$sql = "INSERT INTO fll_reservations ". 
-        "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, ftnotify, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle) ".
-        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$arr0_room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$ftnotify', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$arr0_room_no', '$total_guests','$luggageVehicle')";
+        "(title_name, first_name, last_name, pnr, tour_operator, operator_code, tour_ref_no, adult, child, infant, tour_notes, fast_track, arr_date, arr_time, arr_flight_no, flight_class, arr_transport, arr_driver, arr_vehicle, arr_pickup, arr_dropoff, room_type, rep_type, client_reqs, dpt_date, dpt_time, dpt_flight_no, dpt_transport, dpt_driver, dpt_vehicle, dpt_pickup, dpt_dropoff, dpt_pickup_time, dpt_notes, creation_date, created_by, ref_no_sys, arr_transport_notes, dpt_transport_notes, arr_hotel_notes, ftnotify, infant_seats, child_seats, booster_seats, vouchers, cold_towel, bottled_water, dpt_flight_class, rooms, room_no, total_guests, luggage_vehicle, dpt_vouchers, dpt_bottled_water, dpt_cold_towel) ".
+        "VALUES ('$title_name', '$first_name', '$last_name', '$pnr', '$tour_oper', '$oper_code', '$tour_ref_no', '$adults', '$children', '$infants', '$tour_notes', '$ftres', '$arr_date', '$arr_time', '$arr_flight_no', '$flight_class', '$arr_transport', '$arr_driver', '$arr_vehicle_no', '$arr_pickup', '$arr_dropoff', '$arr0_room_type', '$rep_type', '$client_reqs', '$dpt_date', '$dpt_time', '$dpt_flight_no', '$dpt_transport', '$dpt_driver', '$dpt_vehicle_no', '$dpt_pickup', '$dpt_dropoff', '$pickup_time', '$dpt_notes', NOW(), '$loggedinas', '$fsref', '$arr_transport_notes', '$dpt_transport_notes', '$arr_hotel_notes', '$ftnotify', '$infant_seats', '$child_seats', '$booster_seats', '$vouchers', '$cold_towels', '$bottled_water', '$dpt_flight_class', '$rooms', '$arr0_room_no', '$total_guests','$luggageVehicle','$dpt_vouchers','$dpt_bottled_water','$dpt_cold_towels')";
         $retval = mysql_query( $sql, $conn );
         $insertId = mysql_query('SELECT LAST_INSERT_ID()');
         $insertId = mysql_fetch_array($insertId);
@@ -1379,6 +1398,13 @@ if(isset($_POST['addreservation']))
                     $(".clientreqs3").toggle();
                 }        
             });
+
+
+            // for departure need requirement
+            $('.dpt_client_reqs').click(function(){
+                var eleClass =$(this).attr('value'); 
+                $('.'+eleClass).toggle();
+            })
         });
     </script>
 
@@ -2096,8 +2122,8 @@ if(isset($_POST['addreservation']))
                                 <div class="panel-body">                                                                        
                                     <div class="form-group">                                         
                                         <div class="form-inline col-xs-8"><!-- first name / last name fields -->
-                                            <label class="left20">First name</label> <input type="text" class="form-control right20 text-capitalize" placeholder="First name" id="first-name" name="first_name" value="" required>
-                                            <label>Last name</label> <input type="text" class="form-control text-capitalize" placeholder="Last name" id="last-name" name="last_name" value="" required>
+                                            <label class="left20">First name</label> <input type="text" autocomplete="off" class="form-control right20 text-capitalize" placeholder="First name" id="first-name" name="first_name" value="" required>
+                                            <label>Last name</label> <input type="text" class="form-control text-capitalize" placeholder="Last name" id="last-name" autocomplete="off" name="last_name" value="" required>
                                             <div class="form-group col-xs-3"><!-- title selection -->
                                             <select class="form-control select" id="title-name" name="title_name">
                                                 <option value="">Select title</option>
@@ -2117,7 +2143,7 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group col-xs-7"><!-- Passenger name record field -->
                                         <label>Passenger name record (PNR)</label>
-                                        <input type="text" class="form-control" placeholder="Passenger name record (PNR)" id="pnr" name="pnr" value="">
+                                        <input type="text" class="form-control" autocomplete="off" placeholder="Passenger name record (PNR)" id="pnr" name="pnr" value="">
                                     </div>
                                     
                                     <div class="form-group col-xs-7"><!-- tour operator selection -->                                       
@@ -2126,11 +2152,11 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="form-group col-xs-7"><!-- operator code field -->
                                         <label>Operator code/Brand</label>
-                                        <input type="text" class="form-control" placeholder="operator code / brand" id="oper-code" name="oper_code" value="">
+                                        <input type="text" class="form-control" autocomplete="off" placeholder="operator code / brand" id="oper-code" name="oper_code" value="">
                                     </div>
                                     <div class="form-group col-xs-7"><!-- reference number field -->
                                         <label>Reference number</label>
-                                        <input type="text" class="form-control" placeholder="reference number" id="tour-ref-no" name="tour_ref_no" value="">
+                                        <input type="text" class="form-control" autocomplete="off" placeholder="reference number" id="tour-ref-no" name="tour_ref_no" value="">
                                     </div>
                                     <div class="form-group">                                         
                                             <div class="form-inline col-xs-10"><!-- number of persons traveling -->
@@ -2151,10 +2177,10 @@ if(isset($_POST['addreservation']))
                                 <h5>Guest Details</h5>
                                     <div class="form-group">                                         
                                         <div class="form-inline col-xs-12"><!-- guest first name / guest last name fields -->
-                                            <label class="left20">First name</label> <input type="text" class="form-control right20 text-capitalize" placeholder="First name" id="guest-first-name" name="guest_first_name[]" value="">
-                                            <label>Last name</label> <input type="text" class="form-control right20 text-capitalize" placeholder="Last name" id="guest-last-name" name="guest_last_name[]" value="">
+                                            <label class="left20">First name</label> <input type="text" class="form-control right20 text-capitalize" placeholder="First name" id="guest-first-name" name="guest_first_name[]" value="" autocomplete="off">
+                                            <label>Last name</label> <input type="text" class="form-control right20 text-capitalize" placeholder="Last name" id="guest-last-name" name="guest_last_name[]" value="" autocomplete="off">
                                             <label>PNR</label> <input type="text" class="form-control" placeholder="Guest PNR" id="guest-pnr" name="guest_pnr[]" value="">
-                                            <div class="form-group col-xs-2">
+                                            <div class="form-group col-xs-2" autocomplete="off">
                                                                     <select class="form-control select" id="guest-title-name" name="guest_title_name[]">
                                                                         <option value="">Select title</option>
                                                                         <option>Mr</option>
@@ -2172,7 +2198,7 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <div class="clearfix"></div>
                                     <div class="form-group">                                         
-                                        <div class="form-inline col-xs-8"><!-- guest first name / guest last name fields -->
+                                        <div class="form-inline col-xs-12"><!-- guest first name / guest last name fields -->
                                             <label class="checkbox-inline right20 label_checkboxitem">
                                             <input type="checkbox" id="guest-adult" name="guest_adult[]"> Adult
                                             </label>
@@ -2565,33 +2591,33 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <?php */ ?>
                                     <div class="form-group">                                         
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-12">
                                                 <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels1" name="cold_towels1" value="" placeholder="Cold Towels">
                                                 <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water1" name="bottled_water1" value="" placeholder="Bottled Water">
                                                 <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="vouchers1" name="vouchers1" value="" placeholder="Vouchers">
                                             </div>
                                     </div>
                                     <div class="form-group">                                         
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-12">
                                                 <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats1" name="infant_seats1" value="" placeholder="Infant Seats">
                                                 <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats1" name="child_seats1" value="" placeholder="Child Seats">
                                                 <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats1" name="booster_seats1" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name1" name="excursion_name1" placeholder="Excursion Name">
                                             <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date1" name="excursion_date1" placeholder="Excursion Date">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Pickup Time</label><input type="text" class="form-control" id="pickup_time1" name="pickup_time1" placeholder="Pickup Time">
                                             <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by1" name="excursion_confirm_by1" placeholder="Confirmed By Whom">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date1" name="excursion_confirm_date1" placeholder="Excursion Confirm Date">
                                             <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests1" name="excursion_guests1" placeholder="Number of Guests">
                                         </div>
@@ -2783,33 +2809,33 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <?php */ ?>
                                     <div class="form-group">                                         
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-12">
                                                 <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels2" name="cold_towels2" value="" placeholder="Cold Towels">
                                                 <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water2" name="bottled_water2" value="" placeholder="Bottled Water">
                                                 <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="vouchers2" name="vouchers2" value="" placeholder="Vouchers">
                                             </div>
                                     </div>
                                     <div class="form-group">                                         
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-12">
                                                 <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats2" name="infant_seats2" value="" placeholder="Infant Seats">
                                                 <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats2" name="child_seats2" value="" placeholder="Child Seats">
                                                 <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats2" name="booster_seats2" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name2" name="excursion_name2" placeholder="Excursion Name">
                                             <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date2" name="excursion_date2" placeholder="Excursion Date">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Pickup Time</label><input type="text" class="form-control" id="pickup_time2" name="pickup_time2" placeholder="Pickup Time">
                                             <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by2" name="excursion_confirm_by2" placeholder="Confirmed By Whom">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date2" name="excursion_confirm_date2" placeholder="Excursion Confirm Date">
                                             <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests2" name="excursion_guests2" placeholder="Number of Guests">
                                         </div>
@@ -2995,33 +3021,33 @@ if(isset($_POST['addreservation']))
                                     </div>
                                     <?php */ ?>
                                     <div class="form-group">                                         
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-12">
                                                 <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="cold-towels3" name="cold_towels3" value="" placeholder="Cold Towels">
                                                 <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="bottled-water3" name="bottled_water3" value="" placeholder="Bottled Water">
                                                 <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="vouchers3" name="vouchers3" value="" placeholder="Vouchers">
                                             </div>
                                     </div>
                                     <div class="form-group">                                         
-                                            <div class="form-inline col-xs-6">
+                                            <div class="form-inline col-xs-12">
                                                 <label class="right20">Infant Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="infant-seats3" name="infant_seats3" value="" placeholder="Infant Seats">
                                                 <label class="right20">Child Seats</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="child-seats3" name="child_seats3" value="" placeholder="Child Seats">
                                                 <label class="right20">Booster Seats</label><input type="number" min=0 max=99 class="form-control numericCol" id="booster-seats3" name="booster_seats3" value="" placeholder="Booster Seats">
                                             </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Excursion Name</label><input type="text" class="right20 form-control" id="excursion_name3" name="excursion_name3" placeholder="Excursion Name">
                                             <label class="right20">Excursion Date</label><input type="text" class="right20 form-control" id="excursion_date3" name="excursion_date3" placeholder="Excursion Date">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Pickup Time</label><input type="text" class="form-control" id="pickup_time3" name="pickup_time3" placeholder="Pickup Time">
                                             <label class="right20">Confirmed By Whom</label><input type="text" class="form-control" id="excursion_confirm_by3" name="excursion_confirm_by3" placeholder="Confirmed By Whom">
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <div class="form-inline col-xs-6">
+                                        <div class="form-inline col-xs-12">
                                             <label class="right20">Date of Confirmation</label><input type="text" class="form-control" id="excursion_confirm_date3" name="excursion_confirm_date3" placeholder="Excursion Confirm Date">
                                             <label class="right20">Number of Guests</label><input type="number" class="form-control" id="excursion_guests3" name="excursion_guests3" placeholder="Number of Guests">
                                         </div>
@@ -3400,7 +3426,7 @@ if(isset($_POST['addreservation']))
                                 <h4>Departure Details <label class="checkbox-inline label_checkboxitem" style="margin-left:10px;padding-top: 0;">
                                         <input type="checkbox" id="departuresDivCheckBox" name="departuresDivCheckBox"> No Flight Details
                                     </label> </h4>
-                            <div id="departuresDiv">
+                            <div id="departuresDiv" style="padding:0 15px">
                                 <div class="form-group">
                                     <div class="form-inline left20">
                                         <!-- departure date -->
@@ -3488,6 +3514,22 @@ if(isset($_POST['addreservation']))
                                     <label>
                                         <input type="checkbox" name="jetCenter" value="jetCenter"> IAM Jet Center
                                     </label>
+                                        <br />
+                                    <div class="form-group col-lg-12">
+                                        <label>
+                                            <input type="checkbox" class="dpt_client_reqs" value="dpt_clientreqs"> Add Requirements
+                                        </label>
+                                        <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Check this box to assign additional requirements"></i>
+                                    </div>
+                                    <div class="form-group dpt_clientreqs reqs-box">
+                                        <div class="form-inline col-xs-6 col-sm-12">
+                                            <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="dpt_vouchers" name="dpt_vouchers" value="" placeholder="Vouchers">
+                                            <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_cold-towels" name="dpt_cold_towels" value="" placeholder="Cold Towels">
+                                            <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_bottled-water" name="dpt_bottled_water" value="" placeholder="Bottled Water">
+                                        </div>
+                                    </div>
+
+                               <br />
                                     <div class="clearfix"></div>
                                     <br />
                                     <div><button id="departure1" class="btn btn-warning">Add Departure</button></div>
@@ -3613,6 +3655,20 @@ if(isset($_POST['addreservation']))
                                     <label>
                                         <input type="checkbox" name="jetCenter1" value="jetCenter"> IAM Jet Center
                                     </label>
+                                        <br />
+                                    <div class="form-group col-lg-12">
+                                        <label>
+                                            <input type="checkbox" class="dpt_client_reqs" value="dpt_clientreqs1"> Add Requirements
+                                        </label>
+                                        <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Check this box to assign additional requirements"></i>
+                                    </div>
+                                    <div class="form-group dpt_clientreqs1 reqs-box">
+                                        <div class="form-inline col-xs-6 col-sm-12">
+                                            <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="dpt_vouchers1" name="dpt_vouchers1" value="" placeholder="Vouchers">
+                                            <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_cold-towels1" name="dpt_cold_towels1" value="" placeholder="Cold Towels">
+                                            <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_bottled-water1" name="dpt_bottled_water1" value="" placeholder="Bottled Water">
+                                        </div>
+                                    </div>
                                     <div class="clearfix"></div>
                                     <br />
                                      <div><button id="remdeparture1" class="btn btn-danger right20">Remove Departure</button> <button id="departure2" class="btn btn-warning">Add Departure</button></div>
@@ -3739,6 +3795,20 @@ if(isset($_POST['addreservation']))
                                     <label>
                                         <input type="checkbox" name="jetCenter2" value="jetCenter"> IAM Jet Center
                                     </label>
+                                        <br />
+                                    <div class="form-group col-lg-12">
+                                        <label>
+                                            <input type="checkbox" class="dpt_client_reqs" value="dpt_clientreqs2"> Add Requirements
+                                        </label>
+                                        <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Check this box to assign additional requirements"></i>
+                                    </div>
+                                    <div class="form-group dpt_clientreqs2 reqs-box">
+                                        <div class="form-inline col-xs-6 col-sm-12">
+                                            <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="dpt_vouchers2" name="dpt_vouchers2" value="" placeholder="Vouchers">
+                                            <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_cold-towels2" name="dpt_cold_towels2" value="" placeholder="Cold Towels">
+                                            <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_bottled-water2" name="dpt_bottled_water2" value="" placeholder="Bottled Water">
+                                        </div>
+                                    </div>
                                     <br />
                                      <div><button id="remdeparture2" class="btn btn-danger right20">Remove Departure</button> <button id="departure3" class="btn btn-warning">Add Departure</button></div>
                                     </div>
@@ -3864,6 +3934,20 @@ if(isset($_POST['addreservation']))
                                     <label>
                                         <input type="checkbox" name="jetCenter3" value="jetCenter"> IAM Jet Center
                                     </label>
+                                        <br />
+                                    <div class="form-group col-lg-12">
+                                        <label>
+                                            <input type="checkbox" class="dpt_client_reqs" value="dpt_clientreqs3"> Add Requirements
+                                        </label>
+                                        <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="Check this box to assign additional requirements"></i>
+                                    </div>
+                                    <div class="form-group dpt_clientreqs3 reqs-box">
+                                        <div class="form-inline col-xs-6 col-sm-12">
+                                            <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="dpt_vouchers3" name="dpt_vouchers3" value="" placeholder="Vouchers">
+                                            <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_cold-towels3" name="dpt_cold_towels3" value="" placeholder="Cold Towels">
+                                            <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_bottled-water3" name="dpt_bottled_water3" value="" placeholder="Bottled Water">
+                                        </div>
+                                    </div>
                                     <div class="clearfix"></div>
                                     <br />
                                      <div><button id="remdeparture3" class="btn btn-danger right20">Remove Departure</button>
@@ -3872,7 +3956,7 @@ if(isset($_POST['addreservation']))
                                     <!-- end departure 3 -->
                                     </div> <!--DepartureFlight-->
                                     <hr /> 
-                                <div class="form-group"><!-- accounting notes -->
+                                <div class="form-group" style="padding: 0 15px;"><!-- accounting notes -->
                                         <div class="col-xs-7">
                                             <label>Accounting notes</label>                                            
                                             <textarea class="form-control text-lowercase" rows="5" id="dpt-notes" name="dpt_notes" placeholder="Accounting notes: additional accounting comments and details here"></textarea>

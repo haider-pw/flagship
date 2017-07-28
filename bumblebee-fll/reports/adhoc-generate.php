@@ -394,20 +394,20 @@ if(isset($TotalRows) and $TotalRows > 0){
                         }
                     }
                 }
-
-
         } else {
-            array_push($rIds, $data['Id']);
             if(isset($data['Guest_id'])) array_push($guestIds, $data['Guest_id']);
             // here code start to show main reservation twice
-            $repeatReservation = [];
-            foreach($currentKeys as $akey){
-                if(in_array($akey, $reservationCols))
-                    $repeatReservation[$akey] = $data[$akey];
-                else 
-                    $repeatReservation[$akey] = '';
+            if(!in_array($data['Id'], $rIds)){
+                array_push($rIds, $data['Id']);
+                $repeatReservation = [];
+                foreach($currentKeys as $akey){
+                    if(in_array($akey, $reservationCols))
+                        $repeatReservation[$akey] = $data[$akey];
+                    else 
+                        $repeatReservation[$akey] = '';
+                }
+                $testArray[] = $repeatReservation; 
             }
-            $testArray[] = $repeatReservation; 
             $testArray[$newKey] = $data;
         }
     }

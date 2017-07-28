@@ -24,18 +24,18 @@ include('header.php');
 site_header('Reservation List - Arrivals');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM fll_reservations R INNER JOIN fll_departures D on R.ref_no_sys = D.ref_no_sys WHERE (R.fast_track = 1 or R.ftnotify = 1) AND R.status = 1 AND D.fast_track = 1 GROUP BY R.id";
+$reservationQuery = "SELECT * FROM fll_reservations R INNER JOIN fll_departures D on R.ref_no_sys = D.ref_no_sys WHERE (R.fast_track = 1 or D.fast_track = 1) AND R.status = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
 
     if(validateDate($fromDate) and validateDate($toDate)){
-        $reservationQuery .= " AND (dpt_date BETWEEN '".$fromDate."' AND '".$toDate."')";
+        $reservationQuery .= " AND (R.dpt_date BETWEEN '".$fromDate."' AND '".$toDate."')";
         $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
     }
 
 }
-
+$reservations .= "  GROUP BY R.id";
 $reservations = mysql_query($reservationQuery);
 if(mysql_errno()){
     echo mysql_error();
@@ -98,8 +98,8 @@ if(mysql_errno()){
                             <form name="reportselect">
                             <select name="menu" onChange="window.document.location.href=this.options[this.selectedIndex].value;" value="GO" class="form-control">
                                 <option selected="selected">Departures</option>
-                                <option value="view-ftreservations-arr.php">Arrivals &amp; Departures</option>
-                                <option value="view-ftreservations.php">Arrivals</option>-reservations-dpt.php">Departures</option>
+                                <option value="view-ftreservations.php">Arrivals &amp; Departures</option>
+                                <option value="view-ftreservations-arr.php">Arrivals</option>-reservations-dpt.php">Departures</option>
                                 <option value="view-ftflight-arr.php">Arrival Flight</option>
                             </select>
                             </form>

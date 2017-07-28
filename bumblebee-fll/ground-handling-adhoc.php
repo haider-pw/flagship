@@ -257,7 +257,7 @@ else {
                                             <strong>Price</strong>
                                             </li>
                                             <?php } ?>
-                                            <input type="hidden" class="guest_id" name="R.G.id::Guest_id" <?=in_array('R.G.id::Guest_id', $selectedCheckBoxesNames)?'checked':''?> />
+                                            <input type="hidden" class="guest_id" name="R.G.id::Guest_id" value="1"  <?=in_array('R.G.id::Guest_id', $selectedCheckBoxesNames)?'checked':''?> />
                                         </ul>
                                     </div>
                                 </div>
@@ -616,6 +616,22 @@ else {
                                                     <input type="checkbox" value="1" name="R.D.dpt_jet_center::Dept_Jet_Center" <?=in_array('R.D.dpt_jet_center::Dept_Jet_Center', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Jet Center</strong>
                                                 </li>
+                                                <?php
+                                                    if($_REQUEST['sect']  == 'gh'){ ?>
+                                                     <li class="list-group-item">
+                                                        <input type="checkbox" value="1" name="R.D.dpt_vouchers::Dept_Voucher" <?=in_array('R.D.dpt_vouchers::Dept_Voucher', $selectedCheckBoxesNames)?'checked':''?> />
+                                                        <strong>Voucher</strong>
+                                                    </li>
+                                                     <li class="list-group-item">
+                                                        <input type="checkbox" value="1" name="R.D.dpt_cold_towel::Dept_Cold_Towel" <?=in_array('R.D.dpt_cold_towel::Dept_Cold_Towel', $selectedCheckBoxesNames)?'checked':''?> />
+                                                        <strong>Cold Towel</strong>
+                                                    </li>
+                                                     <li class="list-group-item">
+                                                        <input type="checkbox" value="1" name="R.D.dpt_bottled_water::Dept_Bottled_Water" <?=in_array('R.D.dpt_bottled_water::Dept_Bottled_Water', $selectedCheckBoxesNames)?'checked':''?> />
+                                                        <strong>Bottled Water</strong>
+                                                    </li>
+                                                   <?php }
+                                                 ?>
                                                 <li class="list-group-item">
                                                     <input type="checkbox" value="1" name="R.dpt_notes::Accounting_Notes" <?=in_array('R.dpt_notes::Accounting_Notes', $selectedCheckBoxesNames)?'checked':''?> />
                                                     <strong>Accounting Notes</strong>

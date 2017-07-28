@@ -45,7 +45,10 @@ $reptypeselect = mysql_query("SELECT * FROM fll_reptype ORDER BY id ASC");
 $roomtypeselect = mysql_query("SELECT * FROM fll_roomtypes WHERE id_location='" . $reservation[10] . "' ORDER BY id_room ASC");
 
 $iamstatus = "";
-
+$vouchers = $reservation[17];
+$cold_towel = $reservation[18];
+$bottled_water = $reservation[19];
+//echo '<pre>'; print_r($reservation); exit;
 if(!$reservation) {
     echo "<script>window.location='view-reservations.php'</script>";
 	exit;
@@ -68,6 +71,9 @@ if(isset($_POST['update']))
     $dpt_pickup_time         = QuoteSmart($_POST['pickup_time']);
     $dpt_dropoff        = QuoteSmart($_POST['dpt_dropoff']);   
     $dpt_transport_notes = QuoteSmart($_POST['dpt_transport_notes']);     
+    $dpt_vouchers = QuoteSmart($_POST['dpt_vouchers']);     
+    $dpt_cold_towels = QuoteSmart($_POST['dpt_cold_towels']);     
+    $dpt_bottled_water = QuoteSmart($_POST['dpt_bottled_water']);     
     $user_action = "update arrival details: #ref:$flagship_ref";
 
     if($section == 'gh'){
@@ -78,19 +84,27 @@ if(isset($_POST['update']))
             $ftnotify = 0;
         }
     }
-    
+   // echo $ftnotify; exit;
     $sql = "UPDATE fll_departures ".
     "SET dpt_date = '$dpt_date', dpt_time = '$dpt_time', dpt_flight_no = '$dpt_flight_no', flight_class = '$flight_class', dpt_transport = '$dpt_transport', dpt_driver = '$dpt_driver', dpt_vehicle = '$dpt_vehicle_no', dpt_pickup = '$dpt_pickup', dpt_dropoff = '$dpt_dropoff', dpt_pickup_time = '$dpt_pickup_time', dpt_transport_notes = '$dpt_transport_notes'";
     if($section == 'gh') 
-        $sql .= ", fast_track = '$ftnotify'";
+        $sql .= ", dpt_vouchers = '$dpt_vouchers', dpt_cold_towel = '$dpt_cold_towels', dpt_bottled_water = '$dpt_bottled_water', fast_track = '$ftnotify'";
     $sql .= " WHERE id = '$reservation[0]'";
     $retval = mysql_query( $sql, $conn );
     
     if ($reservation[14] == 1){
     $sql_1 = "UPDATE fll_reservations ".
-    "SET dpt_date = '$dpt_date', dpt_time = '$dpt_time', dpt_flight_no = '$dpt_flight_no', flight_class = '$flight_class', dpt_transport = '$dpt_transport', dpt_driver = '$dpt_driver', dpt_vehicle = '$dpt_vehicle_no', dpt_pickup = '$dpt_pickup', dpt_dropoff = '$dpt_dropoff', dpt_pickup_time = '$dpt_pickup_time', dpt_transport_notes = '$dpt_transport_notes'".
-    "WHERE ref_no_sys = '$reservation[1]'";
+    "SET dpt_date = '$dpt_date', dpt_time = '$dpt_time', dpt_flight_no = '$dpt_flight_no', flight_class = '$flight_class', dpt_transport = '$dpt_transport', dpt_driver = '$dpt_driver', dpt_vehicle = '$dpt_vehicle_no', dpt_pickup = '$dpt_pickup', dpt_dropoff = '$dpt_dropoff', dpt_pickup_time = '$dpt_pickup_time', dpt_transport_notes = '$dpt_transport_notes'";
+    if($section == 'gh'){
+        $sql_1 .= ", dpt_vouchers = '$dpt_vouchers', dpt_cold_towel = '$dpt_cold_towels', dpt_bottled_water = '$dpt_bottled_water'";
+    }
+    
+    $sql_1 .= " WHERE ref_no_sys = '$reservation[1]'";
     $retval1 = mysql_query( $sql_1, $conn );
+    } 
+    if($ftnotify == 1){
+        $sql_12 = "UPDATE fll_reservations SET `ftnotify` = 1 WHERE ref_no_sys = '$reservation[1]'";
+        mysql_query( $sql_12, $conn );
     }
     //Log user action
     $sql_2 = "INSERT INTO fll_activity ". 
@@ -108,7 +122,10 @@ if(isset($_POST['update']))
             {
                 die('Could not enter data: ' . mysql_error());
             }
-            echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=8'</script>";         
+            if($section == 'fsft')
+                echo "<script>window.location='ftreservation-details.php?id=".$reservation_id."&ok=5'</script>";
+            else 
+                echo "<script>window.location='reservation-details.php?id=".$reservation_id."&ok=5'</script>";        
         mysql_close($conn);
         
 	}
@@ -326,7 +343,20 @@ if(isset($_POST['update']))
                                             }
                                                 echo "</select>"
                                             ?>
-                                    </div>    
+                                    </div>   
+                                    <?php if($section == 'gh') { ?>
+                                    <div class="form-group col-lg-12">
+                                        <label>Add Requirements
+                                        </label>
+                                    </div>
+                                    <div class="form-group dpt_clientreqs">
+                                        <div class="form-inline col-xs-6 col-sm-12">
+                                            <label class="right20">Vouchers</label><input type="number" min=0 max=99 class="form-control numericCol" id="dpt_vouchers" name="dpt_vouchers" value="<?=$vouchers?>" placeholder="Vouchers">
+                                            <label class="right20">Cold Towels</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_cold-towels" name="dpt_cold_towels" value="<?=$cold_towel?>" placeholder="Cold Towels">
+                                            <label class="right20">Bottled Water</label><input type="number" min=0 max=99 class="right20 form-control numericCol" id="dpt_bottled-water" name="dpt_bottled_water" value="<?=$bottled_water?>" placeholder="Bottled Water">
+                                        </div>
+                                    </div> 
+                                    <?php } ?>
                                 <div class="panel-footer">
                                     <script>
                                         function goBack() {

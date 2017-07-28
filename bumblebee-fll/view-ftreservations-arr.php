@@ -24,26 +24,26 @@ include('header.php');
 site_header('Reservation List - Arrivals');
 
 //Grab all reservation info
-$reservationQuery = "SELECT * FROM fll_reservations R INNER JOIN fll_arrivals A on R.ref_no_sys = A.ref_no_sys WHERE (R.fast_track = 1 OR R.ftnotify = 1) AND R.status = 1 AND A.fast_track = 1 GROUP BY R.id";
+$reservationQuery = "SELECT * FROM fll_reservations R INNER JOIN fll_arrivals A on R.ref_no_sys = A.ref_no_sys WHERE (R.fast_track = 1 OR A.fast_track = 1) AND R.status = 1";
 if(isset($_POST['fromDate'])){
     $fromDate = $_POST['fromDate'];
     $toDate = $_POST['toDate'];
 
     if(validateDate($fromDate) and validateDate($toDate)){
-        $reservationQuery .= " AND arr_date BETWEEN '".$fromDate."' AND '".$toDate."'";
+        $reservationQuery .= " AND R.arr_date BETWEEN '".$fromDate."' AND '".$toDate."'";
         $dateRangeText = date('F d, Y',strtotime($fromDate)). ' - ' .date('F d, Y',strtotime($toDate));
     }
 
 }
-$reservationQuery .= " ORDER BY R.id DESC";
-//echo $reservationQuery;
+$reservationQuery .= " GROUP BY R.id ORDER BY R.id DESC";
+//echo $reservationQuery;exit;
 //Grab all reservation info
 $reservations = mysql_query($reservationQuery);
 /*echo '<pre>';
 while($row = mysql_fetch_array($reservations)){
     print_r($row);
 }
-exit;*/
+*/
 if(mysql_errno()){
     echo mysql_error();
 }
